@@ -4,19 +4,43 @@
 package org.csc335;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class App extends Application {
 
   @Override
   public void start(Stage stage) {
-    String javaVersion = System.getProperty("java.version");
-    String javafxVersion = System.getProperty("javafx.version");
-    Label l = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-    Scene scene = new Scene(new StackPane(l), 640, 480);
+    GridPane gp = new GridPane();
+    Scene scene = new Scene(gp, 520, 520);
+
+    gp.add(new Tile(), 0, 0);
+    gp.add(new Tile(), 1, 0);
+    gp.add(new Tile(), 2, 0);
+    gp.add(new Tile(), 3, 0);
+    gp.add(new Tile(), 0, 1);
+    gp.add(new Tile(), 1, 1);
+    gp.add(new Tile(), 2, 1);
+    gp.add(new Tile(), 3, 1);
+    gp.add(new Tile(), 0, 2);
+    gp.add(new Tile(), 1, 2);
+    gp.add(new Tile(), 2, 2);
+    gp.add(new Tile(), 3, 2);
+    gp.add(new Tile(), 0, 3);
+    gp.add(new Tile(), 1, 3);
+    gp.add(new Tile(), 2, 3);
+    gp.add(new Tile(), 3, 3);
+
+    gp.setAlignment(Pos.CENTER);
+    gp.setStyle("-fx-background-color: #9c8b7c");
+
+    stage.setMaxWidth(520);
+    stage.setMinWidth(520);
+    stage.setMaxHeight(520);
+    stage.setMinHeight(520);
+
     stage.setScene(scene);
     stage.show();
   }
