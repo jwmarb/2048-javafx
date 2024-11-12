@@ -14,12 +14,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.net.MalformedURLException;
 
 public class App extends Application {
@@ -49,9 +49,7 @@ public class App extends Application {
     modeTwo.setFont(new Font("Verdana", 20));
     modeTwo.setStyle("-fx-background-color: #f0b505");
 
-    Image image = new Image(
-        new File("C:\\Users\\bluev\\school\\TestingGradle\\app\\src\\main\\java\\org\\example\\2048.png")
-            .toURI().toURL().toExternalForm());
+    Image image = new Image(new File("app\\build\\resources\\graphics\\2048.png").toURI().toURL().toExternalForm());
     ImageView imageView = new ImageView(image);
     imageView.setFitHeight(200);
     imageView.setFitWidth(250);
