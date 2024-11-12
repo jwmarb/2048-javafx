@@ -3,4 +3,8 @@
 
 # Ignore Gradle build output directory
 build
-/bin/
+
+
+# ignore auto-generated bin and vscode settings
+bin/
+settings.json

@@ -5,41 +5,66 @@ package org.csc335;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import java.io.File;
+import java.net.MalformedURLException;
 
 public class App extends Application {
 
   @Override
-  public void start(Stage stage) {
-    GridPane gp = new GridPane();
-    Scene scene = new Scene(gp, 520, 520);
+  public void start(Stage primarystage) throws MalformedURLException {
+    StackPane root = new StackPane();
+    root.setStyle("-fx-background-color: #bd702b");
+    Scene scene = new Scene(root, 520, 520);
+    Stage stage = new Stage();
 
-    gp.add(new Tile(), 0, 0);
-    gp.add(new Tile(), 1, 0);
-    gp.add(new Tile(), 2, 0);
-    gp.add(new Tile(), 3, 0);
-    gp.add(new Tile(), 0, 1);
-    gp.add(new Tile(), 1, 1);
-    gp.add(new Tile(), 2, 1);
-    gp.add(new Tile(), 3, 1);
-    gp.add(new Tile(), 0, 2);
-    gp.add(new Tile(), 1, 2);
-    gp.add(new Tile(), 2, 2);
-    gp.add(new Tile(), 3, 2);
-    gp.add(new Tile(), 0, 3);
-    gp.add(new Tile(), 1, 3);
-    gp.add(new Tile(), 2, 3);
-    gp.add(new Tile(), 3, 3);
+    Text title = new Text("2048 Game");
+    title.setTextAlignment(TextAlignment.CENTER);
+    title.setFont(Font.font("Verdana", 50));
 
-    gp.setAlignment(Pos.CENTER);
-    gp.setStyle("-fx-background-color: #9c8b7c");
+    Text modeSelect = new Text("Select a gamemode");
+    modeSelect.setTextAlignment(TextAlignment.CENTER);
+    modeSelect.setFont(Font.font("Verdana", 20));
 
-    stage.setMaxWidth(520);
-    stage.setMinWidth(520);
-    stage.setMaxHeight(520);
-    stage.setMinHeight(520);
+    Button modeOne = new Button("Mode One");
+    modeOne.setAlignment(Pos.CENTER);
+    modeOne.setFont(new Font("Verdana", 20));
+    modeOne.setStyle("-fx-background-color: #f0b505");
+
+    Button modeTwo = new Button("Mode Two");
+    modeTwo.setAlignment(Pos.CENTER);
+    modeTwo.setFont(new Font("Verdana", 20));
+    modeTwo.setStyle("-fx-background-color: #f0b505");
+
+    Image image = new Image(new File("app\\build\\resources\\graphics\\2048.png").toURI().toURL().toExternalForm());
+    ImageView imageView = new ImageView(image);
+    imageView.setFitHeight(200);
+    imageView.setFitWidth(250);
+
+    root.getChildren().add(title);
+    root.getChildren().add(modeSelect);
+    root.getChildren().add(modeOne);
+    root.getChildren().add(modeTwo);
+    root.getChildren().add(imageView);
+
+    StackPane.setAlignment(title, Pos.TOP_CENTER);
+    StackPane.setAlignment(modeSelect, Pos.BOTTOM_CENTER);
+    StackPane.setAlignment(modeOne, Pos.BOTTOM_LEFT);
+    StackPane.setAlignment(modeTwo, Pos.BOTTOM_RIGHT);
+    StackPane.setAlignment(imageView, Pos.CENTER);
 
     stage.setScene(scene);
     stage.show();
