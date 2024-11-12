@@ -27,7 +27,7 @@ public class App extends Application {
   @Override
   public void start(Stage primarystage) throws MalformedURLException {
     StackPane root = new StackPane();
-    root.setStyle("-fx-background-color: #bd702b");
+    root.setStyle("-fx-background-color: #faf8f0");
     Scene scene = new Scene(root, 520, 520);
     Stage stage = new Stage();
 
@@ -42,12 +42,12 @@ public class App extends Application {
     Button modeOne = new Button("Mode One");
     modeOne.setAlignment(Pos.CENTER);
     modeOne.setFont(new Font("Verdana", 20));
-    modeOne.setStyle("-fx-background-color: #f0b505");
+    modeOne.setStyle("-fx-background-color: #eae7d9");
 
     Button modeTwo = new Button("Mode Two");
     modeTwo.setAlignment(Pos.CENTER);
     modeTwo.setFont(new Font("Verdana", 20));
-    modeTwo.setStyle("-fx-background-color: #f0b505");
+    modeTwo.setStyle("-fx-background-color: #eae7d9");
 
     Image image = new Image(new File("app\\build\\resources\\graphics\\2048.png").toURI().toURL().toExternalForm());
     ImageView imageView = new ImageView(image);
