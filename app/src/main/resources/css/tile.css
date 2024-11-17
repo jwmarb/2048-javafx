@@ -1,0 +1,8 @@
+.tile {
+  -fx-background-color: #bdac97;
+  -fx-padding: 5px;
+  -fx-background-insets: 6;
+  -fx-background-radius: 12;
+  -fx-pref-width: 128;
+  -fx-pref-height: 128;
+}

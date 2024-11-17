@@ -3,9 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import org.csc335.controllers.Tile?>
+<?import org.csc335.controllers.GameBoard?>
 
-<VBox>
-  <children>
-    <Label text="Hello World!" />
-  </children>
-</VBox>
+<GameBoard />
