@@ -9,6 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
+/**
+ * Represents the game board in a grid layout.
+ */
 public class GameBoard extends GridPane {
   private Tile[][] board;
 
@@ -27,6 +30,9 @@ public class GameBoard extends GridPane {
     this.initEventListeners();
   }
 
+  /**
+   * Initializes the event listeners for key presses and releases.
+   */
   private void initEventListeners() {
     Navigation.setOnKeyPressed(new EventHandler<KeyEvent>() {
       @Override
@@ -42,9 +48,14 @@ public class GameBoard extends GridPane {
         System.out.printf("RELEASED: %s\n", event.getCode().getName());
       }
     });
-
   }
 
+  /**
+   * Creates a 4x4 board of Tile objects, adds them to the grid layout, and
+   * returns the board.
+   *
+   * @return A 2D array representing the game board
+   */
   private Tile[][] makeBoard() {
     Tile[][] temp = new Tile[4][4];
     for (int row = 0; row < 4; row++) {

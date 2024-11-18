@@ -2,11 +2,55 @@ package org.csc335.entity;
 
 import java.util.Optional;
 
+/**
+ * Enum representing possible values for tiles in 2048.
+ */
 public enum TileValue {
-  T2, T4, T8, T16, T32, T64, T128, T256, T512, T1024, T2048;
+  /** Represents a tile with a value of 2. */
+  T2,
 
-  // since the enum is ordered, uses its ordinal value to shift 2 left to
-  // yield the value represented by the enum
+  /** Represents a tile with a value of 4. */
+  T4,
+
+  /** Represents a tile with a value of 8. */
+  T8,
+
+  /** Represents a tile with a value of 16. */
+  T16,
+
+  /** Represents a tile with a value of 32. */
+  T32,
+
+  /** Represents a tile with a value of 64. */
+  T64,
+
+  /** Represents a tile with a value of 128. */
+  T128,
+
+  /** Represents a tile with a value of 256. */
+  T256,
+
+  /** Represents a tile with a value of 512. */
+  T512,
+
+  /** Represents a tile with a value of 1024. */
+  T1024,
+
+  /** Represents a tile with a value of 2048. */
+  T2048;
+
+  /**
+   * Returns the integer value represented by this {@link TileValue}.
+   *
+   * <p>
+   * The value is determined by shifting 2 left by the ordinal position of
+   * the enum constant. This approach leverages the fact that the enum constants
+   * are ordered and their ordinal positions correspond to powers of two.
+   * </p>
+   *
+   * @return The integer value represented by this {@link TileValue}.
+   */
+
   public int value() {
     return 2 << this.ordinal();
   }
@@ -16,11 +60,21 @@ public enum TileValue {
     return this.value() + "";
   }
 
+  /**
+   * Converts a string representation of a tile value into its corresponding
+   * {@link TileValue} enum instance.
+   *
+   * @param value the string representation of the tile value
+   * @return an Optional containing the corresponding TileValue if the string is
+   *         valid, or an empty Optional otherwise
+   */
   public static Optional<TileValue> fromString(String value) {
     try {
       int parsed = Integer.parseInt(value);
+      // Calculate the log base 2 and adjust for array indexing
       return Optional.of(values()[(int) (Math.log(parsed) / Math.log(2)) - 1]);
     } catch (Exception e) {
+      // Return an empty Optional if parsing fails
       return Optional.empty();
     }
   }

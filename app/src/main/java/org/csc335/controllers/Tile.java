@@ -17,6 +17,10 @@ import java.util.Optional;
 
 import org.csc335.entity.TileValue;
 
+/**
+ * A controller class for a Tile in the game. The Tile is represented by a VBox
+ * and contains a Label that displays the value of the tile.
+ */
 public class Tile extends VBox {
 
   private Optional<TileValue> tileValue;
@@ -27,19 +31,34 @@ public class Tile extends VBox {
   @FXML
   private Label label;
 
+  /**
+   * Returns the current value of the tile. Reserved for FXML attributes.
+   *
+   * @return the current value of the tile as a string
+   */
   public String getValue() {
     return this.value.get();
   }
 
+  /**
+   * Sets the value of the tile. Reserved for FXML attributes.
+   *
+   * @param value the new value to be set on the tile
+   */
   public void setValue(String value) {
     this.value.set(value);
   }
 
+  /**
+   * Sets the value of the tile using a TileValue object. Converts the TileValue
+   * to a string before setting to set the FXML attribute.
+   *
+   * @param value the new TileValue to be set on the tile
+   */
   public void setValue(TileValue value) {
     this.value.set(value.toString());
   }
 
-  // Construct GUI Element (default value of empty)
   public Tile() {
     super();
     this.value = new SimpleStringProperty();
@@ -60,27 +79,43 @@ public class Tile extends VBox {
     this.changeTileClass();
   }
 
+  /**
+   * Changes the CSS class of the tile based on its value.
+   */
   private void changeTileClass() {
+    // Remove all existing classes from the tile
     this.getStyleClass().removeAll();
+
+    // Add base class to all tiles
     this.getStyleClass().add("tile-base");
+
+    // If a tile value is present, add the corresponding CSS class
     if (this.tileValue.isPresent()) {
       this.getStyleClass().add("tile-" + this.tileValue.get().toString());
     } else {
+      // If no value is present, add the blank tile class
       this.getStyleClass().add("tile-blank");
     }
   }
 
+  /**
+   * Changes the CSS and text of the label based on the current tile value.
+   */
   private void changeLabelClass() {
-    Tile.this.label.getStyleClass().clear();
-    if (Tile.this.tileValue.isPresent()) {
-      String value = Tile.this.tileValue.get().toString();
-      Tile.this.label.setText(value);
-      Tile.this.label.getStyleClass().add("value-" + value);
+    Tile.this.label.getStyleClass().clear(); // Clear any existing styles on the label
+
+    if (Tile.this.tileValue.isPresent()) { // Check if there is a tile value present
+      String value = Tile.this.tileValue.get().toString(); // Convert TileValue to string
+      Tile.this.label.setText(value); // Set the label text to the value
+      Tile.this.label.getStyleClass().add("value-" + value); // Add CSS class based on the value
     } else {
-      Tile.this.label.setText("");
+      Tile.this.label.setText(""); // If no value, clear the label text
     }
   }
 
+  /**
+   * Initializes listeners for changes to the tile's value property.
+   */
   private void initListeners() {
     ChangeListener<String> valueListener = new ChangeListener<String>() {
       public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
