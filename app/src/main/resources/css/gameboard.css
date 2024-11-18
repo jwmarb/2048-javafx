@@ -1,3 +1,9 @@
 .gameboard {
   -fx-alignment: center;
+  -fx-background-radius: 12;
+  -fx-background-color: #9c8b7c;
+  -fx-min-width: 560;
+  -fx-max-width: 560;
+  -fx-min-height: 560;
+  -fx-max-height: 560;
 }

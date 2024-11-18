@@ -2,6 +2,8 @@ package org.csc335.controllers;
 
 import java.io.IOException;
 
+import org.csc335.navigation.Navigation;
+
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.input.KeyEvent;
@@ -15,8 +17,7 @@ public class GameBoard extends GridPane {
     loader.setRoot(this);
     loader.setController(this);
     super.getStylesheets().add(this.getClass().getResource("/css/gameboard.css").toExternalForm());
-    super.getStyleClass().add("gameboard");
-
+    // super.getStyleClass().add("gameboard");
     try {
       loader.load();
     } catch (IOException e) {
@@ -27,15 +28,17 @@ public class GameBoard extends GridPane {
   }
 
   private void initEventListeners() {
-    super.setOnKeyPressed(new EventHandler<KeyEvent>() {
+    Navigation.setOnKeyPressed(new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
+        // TODO: do stuff while key is pressed
         System.out.printf("PRESSED: %s\n", event.getCode().getName());
       }
     });
-    super.setOnKeyReleased(new EventHandler<KeyEvent>() {
+    Navigation.setOnKeyReleased(new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
+        // TODO: do stuff when key gets released
         System.out.printf("RELEASED: %s\n", event.getCode().getName());
       }
     });
