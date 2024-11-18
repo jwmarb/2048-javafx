@@ -8,9 +8,7 @@
 
 <fx:root type="javafx.scene.layout.GridPane" xmlns:fx="http://javafx.com/fxml/1" hgap="10" vgap="10"
   styleClass="gameboard">
-  <GridPane>
-    <padding>
-      <Insets top="10" right="10" bottom="10" left="10" />
-    </padding>
-  </GridPane>
+  <padding>
+    <Insets top="10" right="10" bottom="10" left="10" />
+  </padding>
 </fx:root>
