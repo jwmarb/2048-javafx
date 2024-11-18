@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.csc335.controllers.GameBoard?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml/1">
+  <center>
+    <GameBoard fx:id="gameBoard" />
+  </center>
+</fx:root>

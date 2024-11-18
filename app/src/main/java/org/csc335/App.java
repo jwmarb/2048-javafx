@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+import org.csc335.controllers.Game;
 import org.csc335.controllers.GameBoard;
 import org.csc335.navigation.Navigation;
 
@@ -21,7 +22,7 @@ public class App extends Application {
 
     Navigation.setStage(stage);
 
-    Navigation.navigate(new GameBoard());
+    Navigation.navigate(new Game());
     // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/stories/TileStory.fxml")));
   }
 
