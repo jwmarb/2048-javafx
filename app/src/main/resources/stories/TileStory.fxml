@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.csc335.controllers.Tile?>
+<?import org.csc335.controllers.GameBoard?>
+
+<!-- 
+
+A story component that shows us what each of the tiles looks like.
+
+In the context of design, particularly user experience (UX) and user interface (UI) design, a
+"story component" refers to elements that help tell or enhance the narrative around a product or
+feature-in this case, the 2048 game.
+ 
+-->
+
+<VBox alignment="center">
+  <GameBoard xmlns:fx="http://javafx.com/fxml/1">
+    <Tile value="2" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+    <Tile value="4" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+    <Tile value="8" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+    <Tile value="16" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+    <Tile value="32" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <Tile value="64" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <Tile value="128" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+    <Tile value="256" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+    <Tile value="512" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <Tile value="1024" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <Tile value="2048" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+    <Tile value="" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+    <Tile value="" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <Tile value="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+    <Tile value="" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+    <Tile value="" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+  </GameBoard>
+</VBox>
