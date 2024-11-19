@@ -6,6 +6,7 @@ package org.csc335;
 import java.io.IOException;
 
 import org.csc335.controllers.Game;
+import org.csc335.controllers.GameBoard;
 import org.csc335.navigation.Navigation;
 
 import javafx.application.Application;
@@ -25,6 +26,9 @@ public class App extends Application {
 
     Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/view/2048menu.fxml")));
     // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/stories/TileStory.fxml")));
+
+    // GameBoard g = new GameBoard();
+    // g.printBoard();
   }
 
   public static void main(String[] args) {

@@ -1,6 +1,7 @@
 package org.csc335.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.csc335.navigation.Navigation;
 
@@ -27,7 +28,115 @@ public class GameBoard extends GridPane {
       throw new RuntimeException(e);
     }
     this.board = makeBoard();
+    generateRandomValues();
     this.initEventListeners();
+  }
+
+
+  private void generateRandomValues() {
+    ArrayList<Tile> emptyTiles = new ArrayList<>();
+
+    for (int row = 0; row < board.length; row++) {
+      for (int col = 0; col < board.length; col++) {
+        if (board[row][col].getValue() == null) {
+          emptyTiles.add(board[row][col]);
+        }
+      }
+    }
+
+    // int randomIndex = (int)(Math.random()*emptyTiles.size());
+
+    
+    if (!emptyTiles.isEmpty()) {
+      int randomIndex = (int)(Math.random()*emptyTiles.size());
+      Tile randomTile = emptyTiles.get(randomIndex);
+      
+      double chance = Math.random();
+
+      if (chance < .75) {
+        randomTile.setValue("2");
+      } else {
+        randomTile.setValue("4");
+      }
+    }
+
+  }
+
+  public void printBoard() {
+    // System.out.println("The following is an agumented matrix with a vector: ");
+    for (int row = 0; row < board.length; row++) {
+        System.out.print("[");
+        for (int col = 0; col < board[row].length; col++) {
+            if (col < board[row].length) {
+                System.out.printf("%4s", board[row][col].getValue());
+            } else {
+                System.out.printf("%4s", board[row][col].getValue());
+            }
+        }
+        System.out.println(" ]");
+    }
+  }
+
+  private void shift(Direction direction) {
+    if (Direction.UP == direction) {
+      up();
+    } else if (Direction.LEFT == direction) {
+      left();
+    }
+  }
+
+  
+  // the directions
+  private void up() {
+    for (int row = board.length-1; row > 0; row--) {
+      for (int col = 0; col < board[row].length; col++) {
+
+        String currTileVal = board[row][col].getValue();
+        String tileAboveVal = board[row-1][col].getValue();
+
+        if (tileAboveVal == null) {
+          board[row-1][col].setValue(currTileVal);
+          board[row][col] = new Tile();
+        } else if (currTileVal == null) {
+          continue;
+        } else {
+          if (currTileVal.equals(tileAboveVal)) {
+            String newVal = Integer.parseInt(currTileVal) + Integer.parseInt(tileAboveVal) + "";
+            board[row-1][col].setValue(newVal);
+
+            board[row][col] = new Tile();
+          }
+
+        }
+    
+      }
+    }
+  }
+
+  private void left() {
+    
+    for (int col = board[0].length-1; col > 0; col--) {
+      for (int row = 0; row < board.length; row++) {
+        String currTileVal = board[row][col].getValue();
+        String tileLeftVal = board[row][col-1].getValue();
+        
+        if (tileLeftVal == null) {
+          board[row][col-1].setValue(currTileVal);
+          board[row][col] = new Tile();
+        } else if (currTileVal == null) {
+          continue;
+        } else {
+          if (currTileVal.equals(tileLeftVal)) {
+            String newVal = Integer.parseInt(currTileVal) + Integer.parseInt(tileLeftVal) + "";
+            board[row][col-1].setValue(newVal);
+
+            board[row][col] = new Tile();
+          }
+
+        }
+      }
+    }
+    
   }
 
   /**
@@ -39,6 +148,10 @@ public class GameBoard extends GridPane {
       public void handle(KeyEvent event) {
         // TODO: do stuff while key is pressed
         System.out.printf("PRESSED: %s\n", event.getCode().getName());
+        Direction direction = Direction.fromVal(event.getCode().getName());
+        shift(direction);
+        generateRandomValues();
+        printBoard();
       }
     });
     Navigation.setOnKeyReleased(new EventHandler<KeyEvent>() {
