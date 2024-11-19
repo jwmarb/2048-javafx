@@ -2,8 +2,21 @@
 
 <?import org.csc335.controllers.GameBoard?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
 
 <fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml/1">
+  <top>
+    <HBox styleClass="top-container">
+      <VBox styleClass="score-container">
+        <Label styleClass="score-label" text="Score" />
+        <Label styleClass="numeric-label" text="0" fx:id="score" />
+      </VBox>
+      <VBox styleClass="highscore-container">
+        <Label styleClass="score-label" text="Best" />
+        <Label styleClass="numeric-label" text="0" fx:id="best" />
+      </VBox>
+    </HBox>
+  </top>
   <center>
     <GameBoard fx:id="gameBoard" />
   </center>
