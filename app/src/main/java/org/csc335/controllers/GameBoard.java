@@ -61,6 +61,10 @@ public class GameBoard extends GridPane {
       } else {
         randomTile.setValue(TileValue.T4);
       }
+    } else {
+      // TODO: make it so the game will report an end screen or something
+      System.out.println("GAME END");
+      System.exit(0);
     }
   }
 
