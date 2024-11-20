@@ -38,8 +38,8 @@ public class Tile extends VBox {
    */
   public String getValue() {
     return this.value.get();
-    }
-    
+  }
+
   /**
    * returns tile value enum
    * 
@@ -50,9 +50,10 @@ public class Tile extends VBox {
   public TileValue getTileValue() {
     return this.tileValue.orElse(null);
   }
-  
+
   /**
    * returns bool, true if no value (blank), false otherwise
+   * 
    * @return boolean representing if tile is blank or not
    */
   public boolean isBlank() {
@@ -78,21 +79,22 @@ public class Tile extends VBox {
     this.value.set(value.toString());
   }
 
-  // TODO: something for joesph. want methods that work here to deal direct w/ tile insread of setting attributes
+  // TODO: something for joesph. want methods that work here to deal direct w/
+  // tile insread of setting attributes
   public void makeBlank() {
-    this.tileValue = Optional.empty();
     this.value.set(null); // set it to empty
   }
+
   // public void merge() {
-  //   this.tileValue = Optional.of(tileValue.get().next());
-  //   this.value.set(this.tileValue.toString()); // update String
+  // this.tileValue = Optional.of(tileValue.get().next());
+  // this.value.set(this.tileValue.toString()); // update String
   // }
   // public static void swap(Tile t1, Tile t2) {
-  //   Optional<TileValue> temp = t1.tileValue;
-  //   t1.tileValue = t2.tileValue;
-  //   t1.setValue(t1.tileValue.get());
-  //   t2.tileValue = temp;
-  //   t2.setValue(t2.tileValue.get());
+  // Optional<TileValue> temp = t1.tileValue;
+  // t1.tileValue = t2.tileValue;
+  // t1.setValue(t1.tileValue.get());
+  // t2.tileValue = temp;
+  // t2.setValue(t2.tileValue.get());
   // }
 
   public Tile() {
@@ -120,7 +122,7 @@ public class Tile extends VBox {
    */
   private void changeTileClass() {
     // Remove all existing classes from the tile
-    this.getStyleClass().removeAll();
+    this.getStyleClass().clear();
 
     // Add base class to all tiles
     this.getStyleClass().add("tile-base");
@@ -132,6 +134,7 @@ public class Tile extends VBox {
       // If no value is present, add the blank tile class
       this.getStyleClass().add("tile-blank");
     }
+
   }
 
   /**

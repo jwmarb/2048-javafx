@@ -54,7 +54,7 @@ public enum TileValue {
    */
 
   // public static TileValue mergedValue(TileValue t) {
-  //   return values()[t.ordinal() + 1]; // returns the next one
+  // return values()[t.ordinal() + 1]; // returns the next one
   // }
 
   // next power of 2
@@ -80,6 +80,9 @@ public enum TileValue {
    *         valid, or an empty Optional otherwise
    */
   public static Optional<TileValue> fromString(String value) {
+    if (value == null) {
+      return Optional.empty();
+    }
     try {
       int parsed = Integer.parseInt(value);
       // Calculate the log base 2 and adjust for array indexing

@@ -19,7 +19,6 @@ public class GameBoard extends GridPane {
   // debug flag so we can turn the print statements on and off
   private final boolean PRINT_STATEMENT_FLAG = true;
 
-
   private Tile[][] board;
 
   public GameBoard() {
@@ -38,13 +37,12 @@ public class GameBoard extends GridPane {
     this.initEventListeners();
   }
 
-
   private void generateRandomValues() {
     ArrayList<Tile> emptyTiles = new ArrayList<>();
 
     for (int row = 0; row < board.length; row++) {
       for (int col = 0; col < board.length; col++) {
-        if (board[row][col].getValue() == null) {
+        if (board[row][col].isBlank()) {
           emptyTiles.add(board[row][col]);
         }
       }
@@ -52,17 +50,16 @@ public class GameBoard extends GridPane {
 
     // int randomIndex = (int)(Math.random()*emptyTiles.size());
 
-    
     if (!emptyTiles.isEmpty()) {
-      int randomIndex = (int)(Math.random()*emptyTiles.size());
+      int randomIndex = (int) (Math.random() * emptyTiles.size());
       Tile randomTile = emptyTiles.get(randomIndex);
-      
+
       double chance = Math.random();
 
       if (chance < .75) {
-        randomTile.setValue("2");
+        randomTile.setValue(TileValue.T2);
       } else {
-        randomTile.setValue("4");
+        randomTile.setValue(TileValue.T4);
       }
     }
   }
@@ -70,15 +67,15 @@ public class GameBoard extends GridPane {
   public void printBoard() {
     // System.out.println("The following is an agumented matrix with a vector: ");
     for (int row = 0; row < board.length; row++) {
-        System.out.print("[");
-        for (int col = 0; col < board[row].length; col++) {
-            if (col < board[row].length) {
-                System.out.printf("%4s", board[row][col].getValue());
-            } else {
-                System.out.printf("%4s", board[row][col].getValue());
-            }
+      System.out.print("[");
+      for (int col = 0; col < board[row].length; col++) {
+        if (col < board[row].length) {
+          System.out.printf("%4s", board[row][col].getValue());
+        } else {
+          System.out.printf("%4s", board[row][col].getValue());
         }
-        System.out.println(" ]");
+      }
+      System.out.println(" ]");
     }
   }
 
@@ -86,7 +83,7 @@ public class GameBoard extends GridPane {
    * shift logic
    */
   private void shift(Direction direction) {
-    switch(direction) {
+    switch (direction) {
       case UP:
         up();
         break;
@@ -126,7 +123,7 @@ public class GameBoard extends GridPane {
         } else {
           // they cannot be merged -> swap nextTile w/ the tile after firsttile
           // firstTile + 1 can ONLY be either blank ot nextTile so it will work
-          swap(board[first+1][col], nextTile);
+          swap(board[first + 1][col], nextTile);
           first++;
         }
         next++;
@@ -136,8 +133,8 @@ public class GameBoard extends GridPane {
 
   private void down() {
     for (int col = 0; col < board.length; col++) {
-      int first = board.length-1;
-      int next = board.length-2;
+      int first = board.length - 1;
+      int next = board.length - 2;
 
       while (next >= 0) {
         Tile nextTile = board[next][col];
@@ -157,7 +154,7 @@ public class GameBoard extends GridPane {
         } else {
           // they cannot be merged -> swap nextTile w/ the tile after firsttile
           // firstTile + 1 can ONLY be either blank ot nextTile so it will work
-          swap(board[first-1][col], nextTile);
+          swap(board[first - 1][col], nextTile);
           first--;
         }
         next--;
@@ -188,7 +185,7 @@ public class GameBoard extends GridPane {
         } else {
           // they cannot be merged -> swap nextTile w/ the tile after firsttile
           // firstTile + 1 can ONLY be either blank ot nextTile so it will work
-          swap(board[row][first+1], nextTile);
+          swap(board[row][first + 1], nextTile);
           first++;
         }
         next++;
@@ -198,8 +195,8 @@ public class GameBoard extends GridPane {
 
   private void right() {
     for (int row = 0; row < board.length; row++) {
-      int first = board.length-1;
-      int next = board.length-2;
+      int first = board.length - 1;
+      int next = board.length - 2;
 
       while (next >= 0) {
         Tile nextTile = board[row][next];
@@ -219,7 +216,7 @@ public class GameBoard extends GridPane {
         } else {
           // they cannot be merged -> swap nextTile w/ the tile after firsttile
           // firstTile + 1 can ONLY be either blank ot nextTile so it will work
-          swap(board[row][first-1], nextTile);
+          swap(board[row][first - 1], nextTile);
           first--;
         }
         next--;
@@ -241,12 +238,12 @@ public class GameBoard extends GridPane {
       @Override
       public void handle(KeyEvent event) {
         // TODO: do stuff while key is pressed
-        if(PRINT_STATEMENT_FLAG)
+        if (PRINT_STATEMENT_FLAG)
           System.out.printf("PRESSED: %s\n", event.getCode().getName());
         Direction direction = Direction.fromVal(event.getCode().getName());
         shift(direction);
         generateRandomValues();
-        if(PRINT_STATEMENT_FLAG)
+        if (PRINT_STATEMENT_FLAG)
           printBoard();
       }
     });
@@ -254,15 +251,11 @@ public class GameBoard extends GridPane {
       @Override
       public void handle(KeyEvent event) {
         // TODO: do stuff when key gets released
-        if(PRINT_STATEMENT_FLAG)
+        if (PRINT_STATEMENT_FLAG)
           System.out.printf("RELEASED: %s\n", event.getCode().getName());
       }
     });
   }
-
-
-
-
 
   /**
    * Creates a 4x4 board of Tile objects, adds them to the grid layout, and
