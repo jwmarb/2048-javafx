@@ -233,60 +233,6 @@ public class GameBoard extends GridPane {
     t2.setValue(temp);
   }
 
-  
-  // // the directions
-  // private void up() {
-  //   for (int row = board.length-1; row > 0; row--) {
-  //     for (int col = 0; col < board[row].length; col++) {
-
-  //       String currTileVal = board[row][col].getValue();
-  //       String tileAboveVal = board[row-1][col].getValue();
-
-  //       if (tileAboveVal == null) {
-  //         board[row-1][col].setValue(currTileVal);
-  //         board[row][col] = new Tile();
-  //       } else if (currTileVal == null) {
-  //         continue;
-  //       } else {
-  //         if (currTileVal.equals(tileAboveVal)) {
-  //           String newVal = Integer.parseInt(currTileVal) + Integer.parseInt(tileAboveVal) + "";
-  //           board[row-1][col].setValue(newVal);
-
-  //           board[row][col] = new Tile();
-  //         }
-
-  //       }
-    
-  //     }
-  //   }
-  // }
-
-  // private void left() {
-    
-  //   for (int col = board[0].length-1; col > 0; col--) {
-  //     for (int row = 0; row < board.length; row++) {
-  //       String currTileVal = board[row][col].getValue();
-  //       String tileLeftVal = board[row][col-1].getValue();
-        
-  //       if (tileLeftVal == null) {
-  //         board[row][col-1].setValue(currTileVal);
-  //         board[row][col] = new Tile();
-  //       } else if (currTileVal == null) {
-  //         continue;
-  //       } else {
-  //         if (currTileVal.equals(tileLeftVal)) {
-  //           String newVal = Integer.parseInt(currTileVal) + Integer.parseInt(tileLeftVal) + "";
-  //           board[row][col-1].setValue(newVal);
-
-  //           board[row][col] = new Tile();
-  //         }
-
-  //       }
-  //     }
-  //   }
-    
-  // }
-
   /**
    * Initializes the event listeners for key presses and releases.
    */
