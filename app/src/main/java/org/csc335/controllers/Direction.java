@@ -8,18 +8,23 @@ public enum Direction {
     // values
     RIGHT, LEFT, UP, DOWN;
 
-    // look up
-    private static final Map<String, Direction> lookup = new HashMap<>();
-    static {
-        lookup.put("Right", RIGHT);
-        lookup.put("Left", LEFT);
-        lookup.put("Up", UP);
-        lookup.put("Down", DOWN);
-    }
-
     // converting string to enum
     public static Direction fromVal(String direction) {
-        return lookup.getOrDefault(direction, null);
+        switch(direction) {
+            case "W":
+            case "Up":
+                return UP;
+            case "S":
+            case "Down":
+                return DOWN;
+            case "A":
+            case "Left":
+                return LEFT;
+            case "D":
+            case "Right":
+                return RIGHT;
+            default:
+                return null;
+        }
     }
-
 }

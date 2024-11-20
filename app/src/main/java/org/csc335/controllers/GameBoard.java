@@ -69,7 +69,6 @@ public class GameBoard extends GridPane {
   }
 
   public void printBoard() {
-    // System.out.println("The following is an agumented matrix with a vector: ");
     for (int row = 0; row < board.length; row++) {
       System.out.print("[");
       for (int col = 0; col < board[row].length; col++) {
@@ -246,7 +245,9 @@ public class GameBoard extends GridPane {
           System.out.printf("PRESSED: %s\n", event.getCode().getName());
         Direction direction = Direction.fromVal(event.getCode().getName());
         shift(direction);
-        generateRandomValues();
+        if (direction != null) {
+          generateRandomValues();
+        }
         if (PRINT_STATEMENT_FLAG)
           printBoard();
       }
