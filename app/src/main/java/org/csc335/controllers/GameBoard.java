@@ -18,6 +18,7 @@ public class GameBoard extends GridPane {
 
   // debug flag so we can turn the print statements on and off
   private final boolean PRINT_STATEMENT_FLAG = true;
+  private ArrayList<Tile> emptyTiles = new ArrayList<>();
 
   private Tile[][] board;
 
@@ -33,13 +34,30 @@ public class GameBoard extends GridPane {
       throw new RuntimeException(e);
     }
     this.board = makeBoard();
-    generateRandomValues();
+    initialTileSetup();
     this.initEventListeners();
   }
 
-  private void generateRandomValues() {
-    ArrayList<Tile> emptyTiles = new ArrayList<>();
+  private void initialTileSetup() {
+    updateBlankTiles();
 
+    int idx1 = (int) (Math.random() * emptyTiles.size());
+    int idx2;
+    do {
+      idx2 = (int) (Math.random() * emptyTiles.size());
+    } while (idx2 == idx1);
+
+    //Tile randomTile = emptyTiles.get(randomIndex);
+    emptyTiles.get(idx1).setValue(
+      (Math.random() < 0.75) ? TileValue.T2 : TileValue.T4
+    );
+    emptyTiles.get(idx2).setValue(
+      (Math.random() < 0.75) ? TileValue.T2 : TileValue.T4
+    );
+  }
+
+  private void updateBlankTiles() {
+    emptyTiles = new ArrayList<>(); // make it empty again
     for (int row = 0; row < board.length; row++) {
       for (int col = 0; col < board.length; col++) {
         if (board[row][col].isBlank()) {
@@ -47,190 +65,118 @@ public class GameBoard extends GridPane {
         }
       }
     }
+  }
 
-    // int randomIndex = (int)(Math.random()*emptyTiles.size());
+  private void generateRandomValues() {
+    int randomIndex = (int) (Math.random() * emptyTiles.size());
+    Tile randomTile = emptyTiles.get(randomIndex);
 
-    if (!emptyTiles.isEmpty()) {
-      int randomIndex = (int) (Math.random() * emptyTiles.size());
-      Tile randomTile = emptyTiles.get(randomIndex);
+    double chance = Math.random();
 
-      double chance = Math.random();
-
-      if (chance < .75) {
-        randomTile.setValue(TileValue.T2);
-      } else {
-        randomTile.setValue(TileValue.T4);
-      }
+    if (chance < .75) {
+      randomTile.setValue(TileValue.T2);
     } else {
-      // TODO: make it so the game will report an end screen or something
-      System.out.println("GAME END");
-      System.exit(0);
+      randomTile.setValue(TileValue.T4);
     }
   }
 
   public void printBoard() {
+    System.out.println("+----+----+----+----+");
     for (int row = 0; row < board.length; row++) {
-      System.out.print("[");
+      System.out.print("|");
       for (int col = 0; col < board[row].length; col++) {
-        if (col < board[row].length) {
-          System.out.printf("%4s", board[row][col].getValue());
-        } else {
-          System.out.printf("%4s", board[row][col].getValue());
-        }
+        String value = board[row][col].getValue();
+        value = (value == null) ? "" : value;
+        System.out.printf("%4s|", value);
       }
-      System.out.println(" ]");
+      System.out.println("\n+----+----+----+----+");
     }
   }
 
   /*
    * shift logic
+   * returns true if anything actaully happened on board
    */
-  private void shift(Direction direction) {
+  private boolean shift(Direction direction) {
     switch (direction) {
       case UP:
-        up();
-        break;
+        return shiftOperation(true, true);
       case DOWN:
-        down();
-        break;
+        return shiftOperation(false, true);
       case LEFT:
-        left();
-        break;
+        return shiftOperation(true, false);
       case RIGHT:
-        right();
-        break;
+        return shiftOperation(false, false);
       case null:
     }
+    return false;
   }
 
-  private void up() {
-    for (int col = 0; col < board.length; col++) {
-      int first = 0;
-      int next = 1;
+  /*
+   * @param collapseTowards0: true if up/left, false if down, right
+   */
+  private boolean shiftOperation(boolean collapseTowards0, boolean loopOverCols) {
+    boolean somethingHappened = false;
 
-      while (next < board.length) {
-        Tile nextTile = board[next][col];
+    // toMerge is general name for what we collapse (rows or cols)
+    for (int toMerge = 0; toMerge < board.length; toMerge++) {
+
+      final int OFFSET = (collapseTowards0) ? 1 : -1;
+
+      // determine starting point within row/column
+      int first = (collapseTowards0) ? 0 : board.length - 1;
+      int next = (collapseTowards0) ? 1 : board.length - 2;
+
+      while (true) {
+        boolean loopCondition = (collapseTowards0) ? next < board.length : next >= 0;
+        if (!loopCondition)
+          break;
+
+        // if loop over cols, we need loop idx to be in col pos!
+        Tile nextTile = (loopOverCols) ? board[next][toMerge] : board[toMerge][next];
+
         if (nextTile.isBlank()) {
-          next++;
+          next += OFFSET;
           continue;
         }
 
-        Tile firstTile = board[first][col];
-        if (nextTile.getValue().equals(firstTile.getValue())) {
+        // if loop over cols, we need loop idx to be in col pos!
+        Tile firstTile = (loopOverCols) ? board[first][toMerge] : board[toMerge][first];
+
+        if (nextTile.getValue().equals(firstTile.getValue())) { // we can merge them!
+          somethingHappened = true;
+
           firstTile.setValue(firstTile.getTileValue().next());
           nextTile.makeBlank();
-          first++;
-        } else if (firstTile.isBlank()) {
+          first += OFFSET;
+        } else if (firstTile.isBlank()) { // move tile to new spot
+          somethingHappened = true;
+
           firstTile.setValue(nextTile.getValue());
           nextTile.makeBlank();
         } else {
-          // they cannot be merged -> swap nextTile w/ the tile after firsttile
-          // firstTile + 1 can ONLY be either blank ot nextTile so it will work
-          swap(board[first + 1][col], nextTile);
-          first++;
+          // unroll ternary so it doesn't look so bad
+          int row = (!loopOverCols) ? toMerge : (first + OFFSET);
+          int col = (loopOverCols) ? toMerge : (first + OFFSET);
+
+          if (swap(board[row][col], nextTile)) {
+            somethingHappened = true;
+          }
+
+          first += OFFSET;
         }
-        next++;
+        next += OFFSET;
       }
     }
+    return somethingHappened;
   }
 
-  private void down() {
-    for (int col = 0; col < board.length; col++) {
-      int first = board.length - 1;
-      int next = board.length - 2;
-
-      while (next >= 0) {
-        Tile nextTile = board[next][col];
-        if (nextTile.isBlank()) {
-          next--;
-          continue;
-        }
-
-        Tile firstTile = board[first][col];
-        if (nextTile.getValue().equals(firstTile.getValue())) {
-          firstTile.setValue(firstTile.getTileValue().next());
-          nextTile.makeBlank();
-          first--;
-        } else if (firstTile.isBlank()) {
-          firstTile.setValue(nextTile.getValue());
-          nextTile.makeBlank();
-        } else {
-          // they cannot be merged -> swap nextTile w/ the tile after firsttile
-          // firstTile + 1 can ONLY be either blank ot nextTile so it will work
-          swap(board[first - 1][col], nextTile);
-          first--;
-        }
-        next--;
-      }
-    }
-  }
-
-  private void left() {
-    for (int row = 0; row < board.length; row++) {
-      int first = 0;
-      int next = 1;
-
-      while (next < board.length) {
-        Tile nextTile = board[row][next];
-        if (nextTile.isBlank()) {
-          next++;
-          continue;
-        }
-
-        Tile firstTile = board[row][first];
-        if (nextTile.getValue().equals(firstTile.getValue())) {
-          firstTile.setValue(firstTile.getTileValue().next());
-          nextTile.makeBlank();
-          first++;
-        } else if (firstTile.isBlank()) {
-          firstTile.setValue(nextTile.getValue());
-          nextTile.makeBlank();
-        } else {
-          // they cannot be merged -> swap nextTile w/ the tile after firsttile
-          // firstTile + 1 can ONLY be either blank ot nextTile so it will work
-          swap(board[row][first + 1], nextTile);
-          first++;
-        }
-        next++;
-      }
-    }
-  }
-
-  private void right() {
-    for (int row = 0; row < board.length; row++) {
-      int first = board.length - 1;
-      int next = board.length - 2;
-
-      while (next >= 0) {
-        Tile nextTile = board[row][next];
-        if (nextTile.isBlank()) {
-          next--;
-          continue;
-        }
-
-        Tile firstTile = board[row][first];
-        if (nextTile.getValue().equals(firstTile.getValue())) {
-          firstTile.setValue(firstTile.getTileValue().next());
-          nextTile.makeBlank();
-          first--;
-        } else if (firstTile.isBlank()) {
-          firstTile.setValue(nextTile.getValue());
-          nextTile.makeBlank();
-        } else {
-          // they cannot be merged -> swap nextTile w/ the tile after firsttile
-          // firstTile + 1 can ONLY be either blank ot nextTile so it will work
-          swap(board[row][first - 1], nextTile);
-          first--;
-        }
-        next--;
-      }
-    }
-  }
-
-  private void swap(Tile t1, Tile t2) {
+  // returns true if a swap ACTUALLY happened (t1 != t1)
+  private boolean swap(Tile t1, Tile t2) {
     String temp = t1.getValue();
     t1.setValue(t2.getValue());
     t2.setValue(temp);
+    return t1 != t2;
   }
 
   /**
@@ -240,18 +186,37 @@ public class GameBoard extends GridPane {
     Navigation.setOnKeyPressed(new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
-        // TODO: do stuff while key is pressed
+
+        Direction direction = Direction.fromVal(event.getCode().getName());
+
+        // don't do anything if key is not WASD or up/down/left/right
+        if (direction == null) {
+          return;
+        }
+
         if (PRINT_STATEMENT_FLAG)
           System.out.printf("PRESSED: %s\n", event.getCode().getName());
-        Direction direction = Direction.fromVal(event.getCode().getName());
-        shift(direction);
-        if (direction != null) {
+
+        boolean somethingHappened = shift(direction);
+
+        // update blan tile list -> we can see if game is done
+        updateBlankTiles();
+
+        // TODO: make this reportable to gui somehow
+        if (emptyTiles.isEmpty()) { // game is done
+          System.out.println("GAME END");
+          System.exit(0);
+        }
+        
+        if (somethingHappened) {
           generateRandomValues();
         }
+        
         if (PRINT_STATEMENT_FLAG)
           printBoard();
       }
     });
+
     Navigation.setOnKeyReleased(new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
