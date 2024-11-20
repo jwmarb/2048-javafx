@@ -2,6 +2,8 @@ package org.csc335.entity;
 
 import java.util.Optional;
 
+import org.csc335.controllers.Tile;
+
 /**
  * Enum representing possible values for tiles in 2048.
  */
@@ -50,6 +52,15 @@ public enum TileValue {
    *
    * @return The integer value represented by this {@link TileValue}.
    */
+
+  // public static TileValue mergedValue(TileValue t) {
+  //   return values()[t.ordinal() + 1]; // returns the next one
+  // }
+
+  // next power of 2
+  public TileValue next() {
+    return values()[ordinal() + 1];
+  }
 
   public int value() {
     return 2 << this.ordinal();

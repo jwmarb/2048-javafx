@@ -3,6 +3,7 @@ package org.csc335.controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.csc335.entity.TileValue;
 import org.csc335.navigation.Navigation;
 
 import javafx.event.EventHandler;
@@ -14,6 +15,11 @@ import javafx.scene.layout.GridPane;
  * Represents the game board in a grid layout.
  */
 public class GameBoard extends GridPane {
+
+  // debug flag so we can turn the print statements on and off
+  private final boolean PRINT_STATEMENT_FLAG = true;
+
+
   private Tile[][] board;
 
   public GameBoard() {
@@ -59,7 +65,6 @@ public class GameBoard extends GridPane {
         randomTile.setValue("4");
       }
     }
-
   }
 
   public void printBoard() {
@@ -77,67 +82,210 @@ public class GameBoard extends GridPane {
     }
   }
 
+  /*
+   * shift logic
+   */
   private void shift(Direction direction) {
-    if (Direction.UP == direction) {
-      up();
-    } else if (Direction.LEFT == direction) {
-      left();
+    switch(direction) {
+      case UP:
+        up();
+        break;
+      case DOWN:
+        down();
+        break;
+      case LEFT:
+        left();
+        break;
+      case RIGHT:
+        right();
+        break;
+      case null:
     }
   }
 
-  
-  // the directions
   private void up() {
-    for (int row = board.length-1; row > 0; row--) {
-      for (int col = 0; col < board[row].length; col++) {
+    for (int col = 0; col < board.length; col++) {
+      int first = 0;
+      int next = 1;
 
-        String currTileVal = board[row][col].getValue();
-        String tileAboveVal = board[row-1][col].getValue();
-
-        if (tileAboveVal == null) {
-          board[row-1][col].setValue(currTileVal);
-          board[row][col] = new Tile();
-        } else if (currTileVal == null) {
+      while (next < board.length) {
+        Tile nextTile = board[next][col];
+        if (nextTile.isBlank()) {
+          next++;
           continue;
-        } else {
-          if (currTileVal.equals(tileAboveVal)) {
-            String newVal = Integer.parseInt(currTileVal) + Integer.parseInt(tileAboveVal) + "";
-            board[row-1][col].setValue(newVal);
-
-            board[row][col] = new Tile();
-          }
-
         }
-    
+
+        Tile firstTile = board[first][col];
+        if (nextTile.getValue().equals(firstTile.getValue())) {
+          firstTile.setValue(firstTile.getTileValue().next());
+          nextTile.makeBlank();
+          first++;
+        } else if (firstTile.isBlank()) {
+          firstTile.setValue(nextTile.getValue());
+          nextTile.makeBlank();
+        } else {
+          // they cannot be merged -> swap nextTile w/ the tile after firsttile
+          // firstTile + 1 can ONLY be either blank ot nextTile so it will work
+          swap(board[first+1][col], nextTile);
+          first++;
+        }
+        next++;
+      }
+    }
+  }
+
+  private void down() {
+    for (int col = 0; col < board.length; col++) {
+      int first = board.length-1;
+      int next = board.length-2;
+
+      while (next >= 0) {
+        Tile nextTile = board[next][col];
+        if (nextTile.isBlank()) {
+          next--;
+          continue;
+        }
+
+        Tile firstTile = board[first][col];
+        if (nextTile.getValue().equals(firstTile.getValue())) {
+          firstTile.setValue(firstTile.getTileValue().next());
+          nextTile.makeBlank();
+          first--;
+        } else if (firstTile.isBlank()) {
+          firstTile.setValue(nextTile.getValue());
+          nextTile.makeBlank();
+        } else {
+          // they cannot be merged -> swap nextTile w/ the tile after firsttile
+          // firstTile + 1 can ONLY be either blank ot nextTile so it will work
+          swap(board[first-1][col], nextTile);
+          first--;
+        }
+        next--;
       }
     }
   }
 
   private void left() {
-    
-    for (int col = board[0].length-1; col > 0; col--) {
-      for (int row = 0; row < board.length; row++) {
-        String currTileVal = board[row][col].getValue();
-        String tileLeftVal = board[row][col-1].getValue();
-        
-        if (tileLeftVal == null) {
-          board[row][col-1].setValue(currTileVal);
-          board[row][col] = new Tile();
-        } else if (currTileVal == null) {
+    for (int row = 0; row < board.length; row++) {
+      int first = 0;
+      int next = 1;
+
+      while (next < board.length) {
+        Tile nextTile = board[row][next];
+        if (nextTile.isBlank()) {
+          next++;
           continue;
-        } else {
-          if (currTileVal.equals(tileLeftVal)) {
-            String newVal = Integer.parseInt(currTileVal) + Integer.parseInt(tileLeftVal) + "";
-            board[row][col-1].setValue(newVal);
-
-            board[row][col] = new Tile();
-          }
-
         }
+
+        Tile firstTile = board[row][first];
+        if (nextTile.getValue().equals(firstTile.getValue())) {
+          firstTile.setValue(firstTile.getTileValue().next());
+          nextTile.makeBlank();
+          first++;
+        } else if (firstTile.isBlank()) {
+          firstTile.setValue(nextTile.getValue());
+          nextTile.makeBlank();
+        } else {
+          // they cannot be merged -> swap nextTile w/ the tile after firsttile
+          // firstTile + 1 can ONLY be either blank ot nextTile so it will work
+          swap(board[row][first+1], nextTile);
+          first++;
+        }
+        next++;
       }
     }
-    
   }
+
+  private void right() {
+    for (int row = 0; row < board.length; row++) {
+      int first = board.length-1;
+      int next = board.length-2;
+
+      while (next >= 0) {
+        Tile nextTile = board[row][next];
+        if (nextTile.isBlank()) {
+          next--;
+          continue;
+        }
+
+        Tile firstTile = board[row][first];
+        if (nextTile.getValue().equals(firstTile.getValue())) {
+          firstTile.setValue(firstTile.getTileValue().next());
+          nextTile.makeBlank();
+          first--;
+        } else if (firstTile.isBlank()) {
+          firstTile.setValue(nextTile.getValue());
+          nextTile.makeBlank();
+        } else {
+          // they cannot be merged -> swap nextTile w/ the tile after firsttile
+          // firstTile + 1 can ONLY be either blank ot nextTile so it will work
+          swap(board[row][first-1], nextTile);
+          first--;
+        }
+        next--;
+      }
+    }
+  }
+
+  private void swap(Tile t1, Tile t2) {
+    String temp = t1.getValue();
+    t1.setValue(t2.getValue());
+    t2.setValue(temp);
+  }
+
+  
+  // // the directions
+  // private void up() {
+  //   for (int row = board.length-1; row > 0; row--) {
+  //     for (int col = 0; col < board[row].length; col++) {
+
+  //       String currTileVal = board[row][col].getValue();
+  //       String tileAboveVal = board[row-1][col].getValue();
+
+  //       if (tileAboveVal == null) {
+  //         board[row-1][col].setValue(currTileVal);
+  //         board[row][col] = new Tile();
+  //       } else if (currTileVal == null) {
+  //         continue;
+  //       } else {
+  //         if (currTileVal.equals(tileAboveVal)) {
+  //           String newVal = Integer.parseInt(currTileVal) + Integer.parseInt(tileAboveVal) + "";
+  //           board[row-1][col].setValue(newVal);
+
+  //           board[row][col] = new Tile();
+  //         }
+
+  //       }
+    
+  //     }
+  //   }
+  // }
+
+  // private void left() {
+    
+  //   for (int col = board[0].length-1; col > 0; col--) {
+  //     for (int row = 0; row < board.length; row++) {
+  //       String currTileVal = board[row][col].getValue();
+  //       String tileLeftVal = board[row][col-1].getValue();
+        
+  //       if (tileLeftVal == null) {
+  //         board[row][col-1].setValue(currTileVal);
+  //         board[row][col] = new Tile();
+  //       } else if (currTileVal == null) {
+  //         continue;
+  //       } else {
+  //         if (currTileVal.equals(tileLeftVal)) {
+  //           String newVal = Integer.parseInt(currTileVal) + Integer.parseInt(tileLeftVal) + "";
+  //           board[row][col-1].setValue(newVal);
+
+  //           board[row][col] = new Tile();
+  //         }
+
+  //       }
+  //     }
+  //   }
+    
+  // }
 
   /**
    * Initializes the event listeners for key presses and releases.
@@ -147,21 +295,28 @@ public class GameBoard extends GridPane {
       @Override
       public void handle(KeyEvent event) {
         // TODO: do stuff while key is pressed
-        System.out.printf("PRESSED: %s\n", event.getCode().getName());
+        if(PRINT_STATEMENT_FLAG)
+          System.out.printf("PRESSED: %s\n", event.getCode().getName());
         Direction direction = Direction.fromVal(event.getCode().getName());
         shift(direction);
         generateRandomValues();
-        printBoard();
+        if(PRINT_STATEMENT_FLAG)
+          printBoard();
       }
     });
     Navigation.setOnKeyReleased(new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
         // TODO: do stuff when key gets released
-        System.out.printf("RELEASED: %s\n", event.getCode().getName());
+        if(PRINT_STATEMENT_FLAG)
+          System.out.printf("RELEASED: %s\n", event.getCode().getName());
       }
     });
   }
+
+
+
+
 
   /**
    * Creates a 4x4 board of Tile objects, adds them to the grid layout, and
