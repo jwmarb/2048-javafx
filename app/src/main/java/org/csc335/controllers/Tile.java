@@ -90,8 +90,6 @@ public class Tile extends VBox {
     this.value.set(value.toString());
   }
 
-  // TODO: something for joesph. want methods that work here to deal direct w/
-  // tile insread of setting attributes
   public void makeBlank() {
     this.value.set(null); // set it to empty
   }
@@ -108,18 +106,6 @@ public class Tile extends VBox {
     final Tile otherTile = (Tile) other;
     return this.getTileValue() == otherTile.getTileValue();
   }
-
-  // public void merge() {
-  // this.tileValue = Optional.of(tileValue.get().next());
-  // this.value.set(this.tileValue.toString()); // update String
-  // }
-  // public static void swap(Tile t1, Tile t2) {
-  // Optional<TileValue> temp = t1.tileValue;
-  // t1.tileValue = t2.tileValue;
-  // t1.setValue(t1.tileValue.get());
-  // t2.tileValue = temp;
-  // t2.setValue(t2.tileValue.get());
-  // }
 
   public Tile() {
     super();
