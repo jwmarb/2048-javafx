@@ -16,10 +16,14 @@ import javafx.scene.layout.GridPane;
  */
 public class GameBoard extends GridPane {
 
-  // debug flag so we can turn the print statements on and off
-  private final boolean PRINT_STATEMENT_FLAG = true;
-  private ArrayList<Tile> emptyTiles = new ArrayList<>();
+  // debug flags so we can turn the print statements on and off
+  private final boolean PRINT_BOARD_FLAG = false;
+  private final boolean PRINT_KEYS_FLAG = false;
+  private final boolean GAME_END_DEBUG = true;
+  private final boolean PRINT_SCORE_FLAG = true;
 
+  private ArrayList<Tile> emptyTiles = new ArrayList<>();
+  private int score;
   private Tile[][] board;
 
   public GameBoard() {
@@ -147,6 +151,9 @@ public class GameBoard extends GridPane {
           somethingHappened = true;
 
           firstTile.setValue(firstTile.getTileValue().next());
+
+          score += firstTile.getIntValue();
+
           nextTile.makeBlank();
           first += OFFSET;
         } else if (firstTile.isBlank()) { // move tile to new spot
@@ -180,6 +187,42 @@ public class GameBoard extends GridPane {
   }
 
   /**
+   * nasty brute-force checker for if the game is done. looks to see if any adjacent tiles have
+   * the same value (which means player has a move). Returns true if player cannot make any moves.
+   * 
+   * @return true if player cannot make another move, false otherwise
+   */
+  private boolean testGameEndMethod() {
+    for (int r = 0; r < board.length; r++) {
+      for (int c = 0; c < board[0].length; c++) {
+        Tile thisTile = board[r][c];
+
+        Tile[] toCompare = new Tile[4];
+
+        if (r+1 < board.length) {
+          toCompare[0] = board[r+1][c];
+        }
+        if (r-1 >= 0) {
+          toCompare[1] = board[r-1][c];
+        }
+        if (c+1 < board[0].length) {
+          toCompare[2] = board[r][c+1];
+        }
+        if (c-1 >= 0) {
+          toCompare[3] = board[r][c-1];
+        }
+
+        for (Tile t : toCompare) {
+          if (thisTile.equals(t)) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  /**
    * Initializes the event listeners for key presses and releases.
    */
   private void initEventListeners() {
@@ -194,25 +237,37 @@ public class GameBoard extends GridPane {
           return;
         }
 
-        if (PRINT_STATEMENT_FLAG)
+        if (PRINT_KEYS_FLAG)
           System.out.printf("PRESSED: %s\n", event.getCode().getName());
 
         boolean somethingHappened = shift(direction);
 
-        // update blan tile list -> we can see if game is done
-        updateBlankTiles();
+        if (PRINT_SCORE_FLAG)
+          System.out.println("SCORE: " + score);
+        
 
-        // TODO: make this reportable to gui somehow
-        if (emptyTiles.isEmpty()) { // game is done
-          System.out.println("GAME END");
-          System.exit(0);
-        }
+        // update blank tile list -> we can see if game is done
+        updateBlankTiles();
         
         if (somethingHappened) {
           generateRandomValues();
+
+          // this is the size BEFORE adding the new tile -> means that right now all tiles are filled
+          if (emptyTiles.size() == 1) {
+            if (testGameEndMethod()) {
+              if (GAME_END_DEBUG) {
+                System.out.println("Something Happened? " + somethingHappened);
+                System.out.printf("PRESSED: %s\n", event.getCode().getName());
+              }
+              System.out.println("GAME END");
+              printBoard();
+
+              System.exit(0);
+            }
+          }
         }
-        
-        if (PRINT_STATEMENT_FLAG)
+ 
+        if (PRINT_BOARD_FLAG)
           printBoard();
       }
     });
@@ -220,8 +275,7 @@ public class GameBoard extends GridPane {
     Navigation.setOnKeyReleased(new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
-        // TODO: do stuff when key gets released
-        if (PRINT_STATEMENT_FLAG)
+        if (PRINT_KEYS_FLAG)
           System.out.printf("RELEASED: %s\n", event.getCode().getName());
       }
     });

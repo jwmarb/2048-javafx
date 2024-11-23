@@ -50,6 +50,17 @@ public class Tile extends VBox {
   public TileValue getTileValue() {
     return this.tileValue.orElse(null);
   }
+  /**
+   * returns the value of the tile as an int. If blank tile, returns 0.
+   * 
+   * @return integer value representing the number the tile is
+   */
+  public int getIntValue() {
+    if (isBlank()) {
+      return 0;
+    }
+    return tileValue.get().value();
+  }
 
   /**
    * returns bool, true if no value (blank), false otherwise
@@ -83,6 +94,19 @@ public class Tile extends VBox {
   // tile insread of setting attributes
   public void makeBlank() {
     this.value.set(null); // set it to empty
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == null) {
+      return false;
+    }
+    if (other.getClass() != this.getClass()) {
+      return false;
+    }
+
+    final Tile otherTile = (Tile) other;
+    return this.getTileValue() == otherTile.getTileValue();
   }
 
   // public void merge() {
