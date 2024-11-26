@@ -1,6 +1,7 @@
 package org.csc335.controllers;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import org.csc335.entity.TileValue;
@@ -19,12 +20,14 @@ public class GameBoard extends GridPane {
   private ArrayList<Tile> emptyTiles = new ArrayList<>();
   private Tile[][] board;
   private Game parent;
+  private Audio sound;
 
-  public GameBoard() {
+  public GameBoard() throws URISyntaxException {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/GameBoard.fxml"));
     loader.setRoot(this);
     loader.setController(this);
     super.getStylesheets().add(this.getClass().getResource("/css/gameboard.css").toExternalForm());
+    sound = new Audio();
     // super.getStyleClass().add("gameboard");
     try {
       loader.load();
@@ -154,6 +157,7 @@ public class GameBoard extends GridPane {
 
           nextTile.makeBlank();
           first += OFFSET;
+          sound.playMergeSound();
         } else if (firstTile.isBlank()) { // move tile to new spot
           somethingHappened = true;
 
