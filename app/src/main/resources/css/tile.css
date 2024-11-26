@@ -1,9 +1,15 @@
 .tile-base {
   /* -fx-background-insets: 6; */
   -fx-background-radius: 12;
-  -fx-pref-width: 128;
-  -fx-pref-height: 128;
+  -fx-pref-width: 116;
+  -fx-pref-height: 116;
   -fx-alignment: center;
+  -fx-transition: -fx-opacity 1s;
+  -fx-opacity: 1;
+}
+
+.tile-base:hover {
+  -fx-opacity: 0.7;
 }
 
 .tile-blank {
