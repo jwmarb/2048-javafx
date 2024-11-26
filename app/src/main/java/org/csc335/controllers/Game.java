@@ -1,10 +1,13 @@
 package org.csc335.controllers;
 
+import org.controlsfx.control.PopOver;
 import org.csc335.entity.GameMode;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 public class Game extends BorderPane {
 
@@ -45,5 +48,14 @@ public class Game extends BorderPane {
   @FXML
   public void newGame() {
 
+  }
+
+  @FXML
+  public void openMenu() {
+    if (this.leftProperty().isNull().get()) {
+      this.setLeft(new DrawerMenu());
+    } else {
+      this.setLeft(null);
+    }
   }
 }

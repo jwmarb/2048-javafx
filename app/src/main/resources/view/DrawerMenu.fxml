@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.csc335.controllers.DrawerMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1"
+  styleClass="drawer-wrapper">
+  <VBox styleClass="drawer-container">
+    <children>
+      <VBox styleClass="drawer-option">
+        <Label text="Traditional" styleClass="drawer-option-title" />
+        <Label text="The classic 2048 mode" styleClass="drawer-option-description" />
+      </VBox>
+    </children>
+  </VBox>
+</fx:root>
