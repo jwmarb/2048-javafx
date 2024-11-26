@@ -1,7 +1,7 @@
 package org.csc335.util;
 
 public class Logger {
-  private static boolean isProduction = true;
+  private static boolean isProduction = false;
 
   private Logger() {
   }
