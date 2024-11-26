@@ -1,7 +1,6 @@
-.top-container {
+.top-center-container {
   -fx-alignment: center;
   -fx-spacing: 24;
-  -fx-padding: 32;
 }
 
 .score-container {

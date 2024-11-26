@@ -1,5 +1,7 @@
 package org.csc335.controllers;
 
+import org.csc335.entity.GameMode;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
@@ -12,7 +14,11 @@ public class Game extends BorderPane {
   @FXML
   private Scoreboard scoreboard;
 
+  private GameMode mode;
+
   public Game() {
+    this.mode = GameMode.TRADITIONAL;
+
     FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/Game.fxml"));
     loader.setRoot(this);
     loader.setController(this);
@@ -29,5 +35,15 @@ public class Game extends BorderPane {
 
   public void addScore(int score) {
     scoreboard.addScore(score);
+  }
+
+  /**
+   * Invoked when the user presses "New game"
+   * 
+   * TODO: Add a warning popup, but for now make this reset the game
+   */
+  @FXML
+  public void newGame() {
+
   }
 }

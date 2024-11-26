@@ -2,12 +2,50 @@
 
 <?import org.csc335.controllers.GameBoard?>
 <?import org.csc335.controllers.Scoreboard?>
+<?import org.csc335.controllers.FAIcon?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
 
 <fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml/1">
   <top>
-    <Scoreboard fx:id="scoreboard" />
+    <GridPane styleClass="top-container" hgap="10">
+      <columnConstraints>
+        <ColumnConstraints halignment="CENTER" />
+        <ColumnConstraints hgrow="ALWAYS" halignment="CENTER" />
+        <ColumnConstraints halignment="CENTER" />
+      </columnConstraints>
+      <VBox styleClass="top-left-wrapper" GridPane.columnIndex="0">
+        <HBox styleClass="top-left-container">
+          <FAIcon icon="bars" styleClass="top-left-container-menu-icon" />
+          <VBox styleClass="game-label-container">
+            <Label text="2048" styleClass="game-label" />
+            <HBox styleClass="game-mode-container, game-mode-traditional">
+              <FAIcon icon="grid" styleClass="game-mode-label" />
+              <Label styleClass="game-mode-label">
+                TRADITIONAL
+              </Label>
+            </HBox>
+            <!-- <HBox styleClass="game-mode-time-trial">
+              <FAIcon icon="stopwatch" styleClass="game-mode-label" />
+              <Label styleClass="game-mode-label">
+                TIME TRIAL
+              </Label>
+            </HBox> -->
+            <!-- <HBox styleClass="game-mode-container, game-mode-move-limit">
+              <FAIcon icon="hand" styleClass="game-mode-label" />
+              <Label styleClass="game-mode-label">
+                MOVE LIMIT
+              </Label>
+            </HBox> -->
+          </VBox>
+        </HBox>
+      </VBox>
+      <Scoreboard GridPane.columnIndex="1" fx:id="scoreboard" />
+      <HBox GridPane.columnIndex="2" styleClass="top-right-container">
+        <Button text="NEW GAME" styleClass="new-game-btn" onAction="#newGame" />
+      </HBox>
+    </GridPane>
   </top>
   <center>
     <GameBoard fx:id="gameBoard" />

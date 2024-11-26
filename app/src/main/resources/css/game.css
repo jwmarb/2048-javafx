@@ -1,4 +1,90 @@
-.gameover-dialog {
-  -fx-pref-width: 200;
-  -fx-pref-height: 200;
+.debug {
+  -fx-background-color: red;
+}
+
+.top-container {
+  -fx-alignment: center;
+  -fx-spacing: 24;
+  -fx-padding: 32;
+}
+
+.top-left-wrapper {
+  -fx-alignment: center;
+}
+
+.top-left-container {
+  -fx-alignment: center;
+  -fx-spacing: 16;
+  -fx-background-radius: 16;
+  -fx-padding: 8 12;
+}
+
+.top-left-container:hover {
+  -fx-background-color: rgb(224, 218, 209);
+  -fx-cursor: hand;
+}
+
+.top-right-container {
+  -fx-alignment: center;
+}
+
+.game-mode-icon {
+  -fx-font-size: 12;
+}
+
+.game-label {
+  -fx-font-size: 32;
+  -fx-font-weight: bold;
+  -fx-padding: -6 0;
+  -fx-text-fill: #756452;
+}
+
+.game-label-container {
+  -fx-alignment: center-left;
+}
+
+.game-mode-container {
+  -fx-font-size: 10;
+  -fx-spacing: 4;
+  -fx-text-fill: white;
+  -fx-padding: 2 4;
+  -fx-font-weight: bold;
+  -fx-background-radius: 6;
+}
+
+.game-mode-traditional {
+  -fx-background-color: #baac9a;
+}
+
+.game-mode-time-trial {
+  -fx-background-color: #d39f9f;
+}
+
+.game-mode-move-limit {
+  -fx-background-color: #9abaad;
+}
+
+.game-mode-label {
+  -fx-font-size: 10;
+  -fx-text-fill: white;
+  -fx-font-weight: bold;
+}
+
+.top-left-container-menu-icon {
+  -fx-font-size: 20;
+  -fx-text-fill: #756452;
+}
+
+.new-game-btn {
+  -fx-padding: 9 13;
+  -fx-text-fill: white;
+  -fx-background-color: #998b7c;
+  -fx-cursor: hand;
+  -fx-font-weight: bold;
+  -fx-font-size: 16;
+  -fx-background-radius: 8;
+}
+
+.new-game-btn:hover {
+  -fx-background-color: rgb(129, 118, 105);
 }

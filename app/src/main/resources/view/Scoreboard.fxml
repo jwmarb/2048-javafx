@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Label?>
 
-<fx:root type="javafx.scene.layout.HBox" styleClass="top-container"
+<fx:root type="javafx.scene.layout.HBox" styleClass="top-center-container"
   xmlns:fx="http://javafx.com/fxml/1">
   <VBox styleClass="score-container">
     <Label styleClass="score-label" text="SCORE" />
