@@ -28,6 +28,7 @@ public class GameBoard extends GridPane {
     loader.setController(this);
     super.getStylesheets().add(this.getClass().getResource("/css/gameboard.css").toExternalForm());
     sound = new Audio();
+    sound.stopMainTheme();
     // super.getStyleClass().add("gameboard");
     try {
       loader.load();
