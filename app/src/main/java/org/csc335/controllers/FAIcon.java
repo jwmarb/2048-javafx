@@ -16,6 +16,9 @@ public class FAIcon extends Label {
    * To implement an icon, simply add the icon name here and its unicode value.
    */
   public static final String BARS = "\uf0c9";
+  public static final String STOPWATCH = "\uf2f2";
+  public static final String GRID = "\uf84c";
+  public static final String HAND = "\uf256";
 
   @FXML
   private StringProperty icon;

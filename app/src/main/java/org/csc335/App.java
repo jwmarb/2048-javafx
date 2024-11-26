@@ -5,22 +5,30 @@ package org.csc335;
 
 import java.io.IOException;
 
+import org.csc335.controllers.Game;
 import org.csc335.navigation.Navigation;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class App extends Application {
   @Override
   public void start(Stage stage) throws IOException {
+    Font.loadFont(this.getClass().getResource("/fonts/fa-brands-400.ttf").toExternalForm(), 12);
+    Font.loadFont(this.getClass().getResource("/fonts/fa-regular-400.ttf").toExternalForm(), 12);
+    Font.loadFont(this.getClass().getResource("/fonts/fa-solid-900.ttf").toExternalForm(), 12);
+    Font.loadFont(this.getClass().getResource("/fonts/fa-v4compatibility.ttf").toExternalForm(), 12);
+
     stage.setTitle("2048 FX");
     stage.setWidth(800);
     stage.setHeight(800);
 
     Navigation.setStage(stage);
 
-    Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/view/2048menu.fxml")));
+    // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/view/2048menu.fxml")));
+    Navigation.navigate(new Game());
     // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/stories/TileStory.fxml")));
 
     // GameBoard g = new GameBoard();
