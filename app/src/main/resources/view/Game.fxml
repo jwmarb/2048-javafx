@@ -8,11 +8,11 @@
   <top>
     <HBox styleClass="top-container">
       <VBox styleClass="score-container">
-        <Label styleClass="score-label" text="Score" />
+        <Label styleClass="score-label" text="SCORE" />
         <Label styleClass="numeric-label" text="0" fx:id="score" />
       </VBox>
       <VBox styleClass="highscore-container">
-        <Label styleClass="score-label" text="Best" />
+        <Label styleClass="score-label" text="BEST" />
         <Label styleClass="numeric-label" text="0" fx:id="best" />
       </VBox>
     </HBox>

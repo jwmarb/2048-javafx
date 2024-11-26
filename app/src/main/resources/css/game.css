@@ -1,31 +1,33 @@
 .top-container {
-    -fx-alignment: center;
-    -fx-padding: 4;
-    -fx-spacing: 50;
+  -fx-alignment: center;
+  -fx-spacing: 24;
+  -fx-padding: 32;
 }
 
 .score-container {
-    -fx-alignment: center;
-    -fx-font-size: 24;
-    -fx-font-weight: bold;
-    -fx-text-fill: #756e64;
+  -fx-alignment: center;
+  -fx-background-color: #eae7d9;
+  -fx-background-radius: 16;
+  -fx-padding: 8 32 4 32;
 }
 
 .highscore-container {
-    -fx-alignment: center;
-    -fx-font-size: 24;
-    -fx-font-weight: bold;
-    -fx-text-fill: #756e64;
+  -fx-alignment: center;
+  -fx-text-fill: #756e64;
+  -fx-padding: 8 32 4 32;
+  -fx-border-color: #eae7d9;
+  -fx-border-width: 2;
+  -fx-border-radius: 16;
 }
 
 .score-label {
-    -fx-font-size: 24;
-    -fx-font-weight: bold;
-    -fx-text-fill: #756e64;
+  -fx-font-size: 14;
+  -fx-font-weight: bold;
+  -fx-text-fill: #756e64;
 }
 
 .numeric-label {
-    -fx-font-size: 36;
-    -fx-font-weight: bold;
-    -fx-text-fill: #756e64;
+  -fx-font-size: 28;
+  -fx-font-weight: bold;
+  -fx-text-fill: #756e64;
 }
