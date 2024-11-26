@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.csc335.controllers.Audio;
 import org.csc335.controllers.Game;
+import org.csc335.controllers.GameBoard;
 import org.csc335.navigation.Navigation;
 
 import javafx.application.Application;
@@ -36,10 +37,15 @@ public class App extends Application {
 
     sound.playMainTheme();
 
+    // TODO: works on console. Gui is cooked. Score is cooked
     // Navigation.navigate(new Game());
     // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/stories/TileStory.fxml")));
-
-    // GameBoard g = new GameBoard();
+    // GameBoard g = null;
+    // try {
+    //   g = new GameBoard();
+    // } catch (Exception e) {
+    //   System.exit(1);
+    // }
     // g.printBoard();
   }
 

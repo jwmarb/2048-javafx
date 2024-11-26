@@ -9,3 +9,4 @@ build
 bin/
 settings.json
 *.class
+.settings/org.eclipse.buildship.core.prefs
