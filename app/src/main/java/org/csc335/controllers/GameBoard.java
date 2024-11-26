@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.csc335.entity.TileValue;
 import org.csc335.navigation.Navigation;
+import org.csc335.util.Logger;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -15,16 +16,9 @@ import javafx.scene.layout.GridPane;
  * Represents the game board in a grid layout.
  */
 public class GameBoard extends GridPane {
-
-  // debug flags so we can turn the print statements on and off
-  private final boolean PRINT_BOARD_FLAG = false;
-  private final boolean PRINT_KEYS_FLAG = false;
-  private final boolean GAME_END_DEBUG = true;
-  private final boolean PRINT_SCORE_FLAG = true;
-
   private ArrayList<Tile> emptyTiles = new ArrayList<>();
-  private int score;
   private Tile[][] board;
+  private Game parent;
 
   public GameBoard() {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/GameBoard.fxml"));
@@ -42,6 +36,10 @@ public class GameBoard extends GridPane {
     this.initEventListeners();
   }
 
+  public void setParent(Game parent) {
+    this.parent = parent;
+  }
+
   private void initialTileSetup() {
     updateBlankTiles();
 
@@ -51,13 +49,11 @@ public class GameBoard extends GridPane {
       idx2 = (int) (Math.random() * emptyTiles.size());
     } while (idx2 == idx1);
 
-    //Tile randomTile = emptyTiles.get(randomIndex);
+    // Tile randomTile = emptyTiles.get(randomIndex);
     emptyTiles.get(idx1).setValue(
-      (Math.random() < 0.75) ? TileValue.T2 : TileValue.T4
-    );
+        (Math.random() < 0.75) ? TileValue.T2 : TileValue.T4);
     emptyTiles.get(idx2).setValue(
-      (Math.random() < 0.75) ? TileValue.T2 : TileValue.T4
-    );
+        (Math.random() < 0.75) ? TileValue.T2 : TileValue.T4);
   }
 
   private void updateBlankTiles() {
@@ -85,15 +81,17 @@ public class GameBoard extends GridPane {
   }
 
   public void printBoard() {
-    System.out.println("+----+----+----+----+");
-    for (int row = 0; row < board.length; row++) {
-      System.out.print("|");
-      for (int col = 0; col < board[row].length; col++) {
-        String value = board[row][col].getValue();
-        value = (value == null) ? "" : value;
-        System.out.printf("%4s|", value);
+    if (Logger.isDevelopment()) {
+      System.out.println("+----+----+----+----+");
+      for (int row = 0; row < board.length; row++) {
+        System.out.print("|");
+        for (int col = 0; col < board[row].length; col++) {
+          String value = board[row][col].getValue();
+          value = (value == null) ? "" : value;
+          System.out.printf("%4s|", value);
+        }
+        System.out.println("\n+----+----+----+----+");
       }
-      System.out.println("\n+----+----+----+----+");
     }
   }
 
@@ -152,7 +150,7 @@ public class GameBoard extends GridPane {
 
           firstTile.setValue(firstTile.getTileValue().next());
 
-          score += firstTile.getIntValue();
+          this.parent.addScore(firstTile.getIntValue());
 
           nextTile.makeBlank();
           first += OFFSET;
@@ -187,8 +185,10 @@ public class GameBoard extends GridPane {
   }
 
   /**
-   * nasty brute-force checker for if the game is done. looks to see if any adjacent tiles have
-   * the same value (which means player has a move). Returns true if player cannot make any moves.
+   * nasty brute-force checker for if the game is done. looks to see if any
+   * adjacent tiles have
+   * the same value (which means player has a move). Returns true if player cannot
+   * make any moves.
    * 
    * @return true if player cannot make another move, false otherwise
    */
@@ -199,17 +199,17 @@ public class GameBoard extends GridPane {
 
         Tile[] toCompare = new Tile[4];
 
-        if (r+1 < board.length) {
-          toCompare[0] = board[r+1][c];
+        if (r + 1 < board.length) {
+          toCompare[0] = board[r + 1][c];
         }
-        if (r-1 >= 0) {
-          toCompare[1] = board[r-1][c];
+        if (r - 1 >= 0) {
+          toCompare[1] = board[r - 1][c];
         }
-        if (c+1 < board[0].length) {
-          toCompare[2] = board[r][c+1];
+        if (c + 1 < board[0].length) {
+          toCompare[2] = board[r][c + 1];
         }
-        if (c-1 >= 0) {
-          toCompare[3] = board[r][c-1];
+        if (c - 1 >= 0) {
+          toCompare[3] = board[r][c - 1];
         }
 
         for (Tile t : toCompare) {
@@ -237,46 +237,38 @@ public class GameBoard extends GridPane {
           return;
         }
 
-        if (PRINT_KEYS_FLAG)
-          System.out.printf("PRESSED: %s\n", event.getCode().getName());
+        Logger.printf("PRESSED: %s\n", event.getCode().getName());
 
         boolean somethingHappened = shift(direction);
 
-        if (PRINT_SCORE_FLAG)
-          System.out.println("SCORE: " + score);
-        
-
         // update blank tile list -> we can see if game is done
         updateBlankTiles();
-        
+
         if (somethingHappened) {
           generateRandomValues();
 
-          // this is the size BEFORE adding the new tile -> means that right now all tiles are filled
+          // this is the size BEFORE adding the new tile -> means that right now all tiles
+          // are filled
           if (emptyTiles.size() == 1) {
             if (testGameEndMethod()) {
-              if (GAME_END_DEBUG) {
-                System.out.println("Something Happened? " + somethingHappened);
-                System.out.printf("PRESSED: %s\n", event.getCode().getName());
-              }
-              System.out.println("GAME END");
+              Logger.println("Something Happened? " + somethingHappened);
+              Logger.printf("PRESSED: %s\n", event.getCode().getName());
+              Logger.println("GAME END");
               printBoard();
 
               System.exit(0);
             }
           }
         }
- 
-        if (PRINT_BOARD_FLAG)
-          printBoard();
+
+        printBoard();
       }
     });
 
     Navigation.setOnKeyReleased(new EventHandler<KeyEvent>() {
       @Override
       public void handle(KeyEvent event) {
-        if (PRINT_KEYS_FLAG)
-          System.out.printf("RELEASED: %s\n", event.getCode().getName());
+        Logger.printf("RELEASED: %s\n", event.getCode().getName());
       }
     });
   }

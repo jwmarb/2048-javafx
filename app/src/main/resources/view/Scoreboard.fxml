@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.csc335.controllers.Scoreboard?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+
+<fx:root type="javafx.scene.layout.HBox" styleClass="top-container"
+  xmlns:fx="http://javafx.com/fxml/1">
+  <VBox styleClass="score-container">
+    <Label styleClass="score-label" text="SCORE" />
+    <Label styleClass="numeric-label" text="0" fx:id="score" />
+  </VBox>
+  <VBox styleClass="highscore-container">
+    <Label styleClass="score-label" text="BEST" />
+    <Label styleClass="numeric-label" text="0" fx:id="best" />
+  </VBox>
+</fx:root>
