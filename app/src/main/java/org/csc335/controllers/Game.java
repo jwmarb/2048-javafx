@@ -81,5 +81,6 @@ public class Game extends BorderPane {
 
   private void notifyDependencies() {
     this.logo.changeMode(this.mode);
+    this.gameBoard.setMode(this.mode);
   }
 }

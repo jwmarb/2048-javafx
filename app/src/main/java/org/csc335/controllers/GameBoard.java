@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.csc335.entity.GameMode;
 import org.csc335.entity.TileValue;
 import org.csc335.listeners.GameBoardListener;
 import org.csc335.navigation.Navigation;
@@ -23,6 +24,7 @@ public class GameBoard extends GridPane {
   private ArrayList<Tile> emptyTiles = new ArrayList<>();
   private Tile[][] board;
   private Audio sound;
+  private GameMode mode;
 
   public GameBoard() throws URISyntaxException {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/GameBoard.fxml"));
@@ -303,5 +305,9 @@ public class GameBoard extends GridPane {
 
   public void addGameBoardListener(GameBoardListener listener) {
     listeners.add(listener);
+  }
+
+  public void setMode(GameMode mode) {
+    this.mode = mode;
   }
 }
