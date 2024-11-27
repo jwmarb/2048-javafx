@@ -37,9 +37,16 @@ public class FAIcon extends Label {
     });
   }
 
-  public void setIcon(String icon)
-      throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
-    this.icon.set((String) FAIcon.class.getField(icon.toUpperCase()).get(null));
+  public void setIcon(String icon) {
+    String iconProp;
+    try {
+      // Try to get the unicode mapping
+      iconProp = (String) FAIcon.class.getField(icon.toUpperCase()).get(null);
+    } catch (Exception e) {
+      // Otherwise use what has been passed in
+      iconProp = icon;
+    }
+    this.icon.set(iconProp);
   }
 
   public StringProperty iconProperty() {

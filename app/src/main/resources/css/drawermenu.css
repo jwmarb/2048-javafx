@@ -8,19 +8,3 @@
   -fx-background-color: #e0dad1;
   -fx-background-radius: 16;
 }
-
-.drawer-option {
-  -fx-padding: 16;
-  -fx-background-radius: 8;
-}
-
-.drawer-option-title {
-  -fx-font-size: 16;
-  -fx-text-fill: #756452;
-  -fx-font-weight: bold;
-}
-
-.drawer-option-description {
-  -fx-font-size: 14;
-  -fx-text-fill: #8f8171;
-}

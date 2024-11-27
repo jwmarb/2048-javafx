@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import org.csc335.controllers.FAIcon?>
+
+<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml/1"
+  styleClass="drawer-option">
+  <FAIcon styleClass="drawer-option-icon" fx:id="icon" />
+  <VBox>
+    <Label styleClass="drawer-option-title" fx:id="title" />
+    <Label styleClass="drawer-option-description" fx:id="description" />
+  </VBox>
+</fx:root>

@@ -1,12 +1,12 @@
 package org.csc335.controllers;
 
 import org.csc335.entity.GameMode;
+import org.csc335.listeners.DrawerMenuActionListener;
+import org.csc335.listeners.DrawerOptionListener;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 
 public class Game extends BorderPane {
 
@@ -16,11 +16,12 @@ public class Game extends BorderPane {
   @FXML
   private Scoreboard scoreboard;
 
+  @FXML
+  private GameLogo logo;
+
   private GameMode mode;
 
   public Game() {
-    this.mode = GameMode.TRADITIONAL;
-
     FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/Game.fxml"));
     loader.setRoot(this);
     loader.setController(this);
@@ -31,6 +32,27 @@ public class Game extends BorderPane {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+
+    this.setMode(GameMode.TRADITIONAL);
+
+    this.logo.addMenuActionListener(new DrawerMenuActionListener() {
+      @Override
+      public void menuClick() {
+        if (Game.this.leftProperty().isNull().get()) {
+          DrawerMenu drawerMenu = new DrawerMenu();
+          Game.this.setLeft(drawerMenu);
+          drawerMenu.addOptionListener(new DrawerOptionListener() {
+            @Override
+            public void selectOption(DrawerOption selected) {
+              Game.this.setMode(selected.getMode());
+            }
+          });
+        } else {
+          Game.this.setLeft(null);
+        }
+      }
+
+    });
 
     this.gameBoard.setParent(this);
   }
@@ -49,12 +71,12 @@ public class Game extends BorderPane {
 
   }
 
-  @FXML
-  public void openMenu() {
-    if (this.leftProperty().isNull().get()) {
-      this.setLeft(new DrawerMenu());
-    } else {
-      this.setLeft(null);
-    }
+  private void setMode(GameMode mode) {
+    this.mode = mode;
+    this.notifyDependencies();
+  }
+
+  private void notifyDependencies() {
+    this.logo.changeMode(this.mode);
   }
 }
