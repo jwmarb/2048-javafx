@@ -20,10 +20,7 @@ public class App extends Application {
 
   @Override
   public void start(Stage stage) throws IOException {
-    Font.loadFont(this.getClass().getResource("/fonts/fa-brands-400.ttf").toExternalForm(), 12);
-    Font.loadFont(this.getClass().getResource("/fonts/fa-regular-400.ttf").toExternalForm(), 12);
     Font.loadFont(this.getClass().getResource("/fonts/fa-solid-900.ttf").toExternalForm(), 12);
-    Font.loadFont(this.getClass().getResource("/fonts/fa-v4compatibility.ttf").toExternalForm(), 12);
 
     sound = new Audio();
 
@@ -42,9 +39,9 @@ public class App extends Application {
     // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/stories/TileStory.fxml")));
     // GameBoard g = null;
     // try {
-    //   g = new GameBoard();
+    // g = new GameBoard();
     // } catch (Exception e) {
-    //   System.exit(1);
+    // System.exit(1);
     // }
     // g.printBoard();
   }
