@@ -3,6 +3,7 @@ package org.csc335.controllers;
 import org.csc335.entity.GameMode;
 import org.csc335.listeners.DrawerMenuActionListener;
 import org.csc335.listeners.DrawerOptionListener;
+import org.csc335.listeners.GameBoardListener;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -54,11 +55,13 @@ public class Game extends BorderPane {
 
     });
 
-    this.gameBoard.setParent(this);
-  }
+    this.gameBoard.addGameBoardListener(new GameBoardListener() {
+      @Override
+      public void scoreChanged(int diff) {
+        Game.this.scoreboard.addScore(diff);
+      }
 
-  public void addScore(int score) {
-    scoreboard.addScore(score);
+    });
   }
 
   /**

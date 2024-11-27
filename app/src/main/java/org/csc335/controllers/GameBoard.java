@@ -3,8 +3,10 @@ package org.csc335.controllers;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.csc335.entity.TileValue;
+import org.csc335.listeners.GameBoardListener;
 import org.csc335.navigation.Navigation;
 import org.csc335.util.Logger;
 
@@ -17,9 +19,9 @@ import javafx.scene.layout.GridPane;
  * Represents the game board in a grid layout.
  */
 public class GameBoard extends GridPane {
+  private List<GameBoardListener> listeners;
   private ArrayList<Tile> emptyTiles = new ArrayList<>();
   private Tile[][] board;
-  private Game parent;
   private Audio sound;
 
   public GameBoard() throws URISyntaxException {
@@ -27,6 +29,7 @@ public class GameBoard extends GridPane {
     loader.setRoot(this);
     loader.setController(this);
     super.getStylesheets().add(this.getClass().getResource("/css/gameboard.css").toExternalForm());
+    this.listeners = new ArrayList<>();
     sound = new Audio();
     sound.stopMainTheme();
     // super.getStyleClass().add("gameboard");
@@ -40,8 +43,10 @@ public class GameBoard extends GridPane {
     this.initEventListeners();
   }
 
-  public void setParent(Game parent) {
-    this.parent = parent;
+  private void notifyScoreChanged(int diff) {
+    for (GameBoardListener listener : this.listeners) {
+      listener.scoreChanged(diff);
+    }
   }
 
   private void initialTileSetup() {
@@ -154,7 +159,7 @@ public class GameBoard extends GridPane {
 
           firstTile.setValue(firstTile.getTileValue().next());
 
-          this.parent.addScore(firstTile.getIntValue());
+          this.notifyScoreChanged(firstTile.getIntValue());
 
           nextTile.makeBlank();
           first += OFFSET;
@@ -294,5 +299,9 @@ public class GameBoard extends GridPane {
       }
     }
     return temp;
+  }
+
+  public void addGameBoardListener(GameBoardListener listener) {
+    listeners.add(listener);
   }
 }
