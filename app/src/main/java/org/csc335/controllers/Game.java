@@ -1,6 +1,5 @@
 package org.csc335.controllers;
 
-import org.controlsfx.control.PopOver;
 import org.csc335.entity.GameMode;
 
 import javafx.fxml.FXML;
