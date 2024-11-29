@@ -7,24 +7,38 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBase?>
+<?import org.csc335.controllers.Pressable?>
+<?import org.csc335.controllers.Dialog?>
 
-<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml/1">
-  <top>
-    <GridPane styleClass="top-container" hgap="10">
-      <columnConstraints>
-        <ColumnConstraints halignment="CENTER" />
-        <ColumnConstraints hgrow="ALWAYS" halignment="CENTER" />
-        <ColumnConstraints halignment="CENTER" />
-      </columnConstraints>
-      <GameLogo GridPane.columnIndex="0" fx:id="logo" />
-      <Scoreboard GridPane.columnIndex="1" fx:id="scoreboard" />
-      <HBox GridPane.columnIndex="2" styleClass="top-right-container">
-        <Button text="NEW GAME" styleClass="new-game-btn" onAction="#newGame" />
-      </HBox>
-    </GridPane>
-  </top>
-  <center>
-    <GameBoard fx:id="gameBoard" />
-  </center>
+<fx:root type="javafx.scene.layout.StackPane" xmlns:fx="http://javafx.com/fxml/1">
+  <BorderPane fx:id="bp">
+    <top>
+      <GridPane styleClass="top-container" hgap="10">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" />
+          <ColumnConstraints hgrow="ALWAYS" halignment="CENTER" />
+          <ColumnConstraints halignment="CENTER" />
+        </columnConstraints>
+        <GameLogo GridPane.columnIndex="0" fx:id="logo" />
+        <Scoreboard GridPane.columnIndex="1" fx:id="scoreboard" />
+        <HBox GridPane.columnIndex="2" styleClass="top-right-container">
+          <Pressable text="NEW GAME" variant="filled" onAction="#newGame" />
+        </HBox>
+      </GridPane>
+    </top>
+    <center>
+      <GameBoard fx:id="gameBoard" />
+    </center>
+  </BorderPane>
+  <!-- <VBox styleClass="overlay-container">
+    <VBox styleClass="dialog-container">
+      <Label text="Game Over!" styleClass="dialog-title" />
+      <Label text="You have no more moves left!"
+        styleClass="dialog-description" wrapText="true" />
+      <VBox VBox.vgrow="ALWAYS" styleClass="dialog-action-container">
+        <Pressable text="PLAY AGAIN" variant="filled" grow="true" />
+        <Pressable text="VIEW LEADERBOARD" variant="outlined" grow="true" />
+      </VBox>
+    </VBox>
+  </VBox> -->
 </fx:root>

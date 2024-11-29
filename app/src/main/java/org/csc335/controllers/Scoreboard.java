@@ -40,4 +40,12 @@ public class Scoreboard extends HBox {
     this.best.setText(String.valueOf(Math.max(this.scoreVal.get(), Integer.parseInt(best.getText()))));
   }
 
+  public int getScore() {
+    return this.scoreVal.get();
+  }
+
+  public void reset() {
+    // todo
+  }
+
 }

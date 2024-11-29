@@ -25,17 +25,16 @@ public class App extends Application {
     sound = new Audio();
 
     stage.setTitle("2048 FX");
-    stage.setWidth(800);
+    stage.setWidth(900);
     stage.setHeight(800);
 
     Navigation.setStage(stage);
 
-    Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/view/2048menu.fxml")));
+    // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/view/2048menu.fxml")));
 
     sound.playMainTheme();
 
-    // TODO: works on console. Gui is cooked. Score is cooked
-    // Navigation.navigate(new Game());
+    Navigation.navigate(new Game());
     // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/stories/TileStory.fxml")));
     // GameBoard g = null;
     // try {

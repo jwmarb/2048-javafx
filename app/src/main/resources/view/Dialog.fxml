@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import org.csc335.controllers.Pressable?>
+
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1"
+  styleClass="overlay-container">
+  <VBox styleClass="dialog-container" fx:id="dialogContainer">
+    <Label styleClass="dialog-title" fx:id="titleLabel" />
+    <Label styleClass="dialog-description" wrapText="true" fx:id="descriptionLabel" />
+    <VBox VBox.vgrow="ALWAYS" styleClass="dialog-action-container">
+      <Pressable fx:id="primaryActionPressable" variant="filled" grow="true"
+        onAction="#primaryAction" />
+      <Pressable fx:id="secondaryActionPressable" variant="outlined" grow="true"
+        onAction="#secondaryAction" />
+    </VBox>
+  </VBox>
+</fx:root>

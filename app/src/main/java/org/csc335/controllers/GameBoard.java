@@ -12,9 +12,11 @@ import org.csc335.navigation.Navigation;
 import org.csc335.util.Logger;
 
 import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 
 /**
  * Represents the game board in a grid layout.
@@ -25,6 +27,7 @@ public class GameBoard extends GridPane {
   private Tile[][] board;
   private Audio sound;
   private GameMode mode;
+  private int moves;
 
   public GameBoard() throws URISyntaxException {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/GameBoard.fxml"));
@@ -43,6 +46,14 @@ public class GameBoard extends GridPane {
     this.board = makeBoard();
     initialTileSetup();
     this.initEventListeners();
+  }
+
+  public int getMoves() {
+    return this.moves;
+  }
+
+  public void reset() {
+    // todo
   }
 
   private void notifyScoreChanged(int diff) {
@@ -257,6 +268,7 @@ public class GameBoard extends GridPane {
         updateBlankTiles();
 
         if (somethingHappened) {
+          GameBoard.this.moves++;
           generateRandomValues();
 
           // this is the size BEFORE adding the new tile -> means that right now all tiles
@@ -268,7 +280,7 @@ public class GameBoard extends GridPane {
               Logger.println("GAME END");
               printBoard();
 
-              System.exit(0);
+              GameBoard.this.notifyGameOver();
             }
           }
         }
@@ -300,6 +312,21 @@ public class GameBoard extends GridPane {
         this.add(tile, col, row);
       }
     }
+
+    temp[0][0].setValue(TileValue.T2);
+    temp[0][1].setValue(TileValue.T4);
+    temp[0][2].setValue(TileValue.T8);
+    temp[0][3].setValue(TileValue.T16);
+    temp[1][3].setValue(TileValue.T2);
+    temp[1][2].setValue(TileValue.T4);
+    temp[1][1].setValue(TileValue.T8);
+    temp[1][0].setValue(TileValue.T16);
+    temp[2][0].setValue(TileValue.T128);
+    temp[2][1].setValue(TileValue.T256);
+    temp[2][2].setValue(TileValue.T8);
+    temp[2][3].setValue(TileValue.T16);
+    temp[3][2].setValue(TileValue.T64);
+    temp[3][3].setValue(TileValue.T32);
     return temp;
   }
 
@@ -309,5 +336,11 @@ public class GameBoard extends GridPane {
 
   public void setMode(GameMode mode) {
     this.mode = mode;
+  }
+
+  private void notifyGameOver() {
+    for (GameBoardListener listener : this.listeners) {
+      listener.gameOver();
+    }
   }
 }

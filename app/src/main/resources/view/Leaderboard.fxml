@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import org.csc335.controllers.Pressable?>
+
+<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml/1">
+  <left>
+    <Pressable text="Back" onAction="#goBack" variant="filled" />
+  </left>
+  <center>
+    <VBox>
+      <Label text="Hello world!" />
+    </VBox>
+  </center>
+</fx:root>
