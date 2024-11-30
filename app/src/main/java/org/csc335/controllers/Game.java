@@ -1,7 +1,6 @@
 package org.csc335.controllers;
 
 import org.csc335.entity.GameMode;
-import org.csc335.entity.Player;
 import org.csc335.listeners.DialogActionListener;
 import org.csc335.listeners.DrawerMenuActionListener;
 import org.csc335.listeners.DrawerOptionListener;
@@ -96,7 +95,7 @@ public class Game extends StackPane {
 
           @Override
           public void secondaryAction() {
-            Navigation.navigate(new Leaderboard().setTop5("leaderboard.txt", new Player("DummyPlayer123", scoreboard.getScore()))); // testing the leaderboard stuff
+            Navigation.navigate(new Leaderboard().setTop10("leaderboard.txt", scoreboard.getScore())); // testing the leaderboard stuff
           }
 
         });

@@ -1,7 +1,6 @@
 package org.csc335.controllers;
 
 import org.csc335.entity.LeaderboardModel;
-import org.csc335.entity.Player;
 import org.csc335.navigation.Navigation;
 
 import javafx.fxml.FXML;
@@ -12,7 +11,7 @@ import javafx.scene.layout.BorderPane;
 public class Leaderboard extends BorderPane {
 
   @FXML
-  private Label top5;
+  private Label top10;
 
   private LeaderboardModel model;
 
@@ -38,12 +37,12 @@ public class Leaderboard extends BorderPane {
   }
 
   // set the top five scores
-  public Leaderboard setTop5(String fileName, Player newPlayer) {
+  public Leaderboard setTop10(String fileName, int newScore) {
     this.model = new LeaderboardModel();
 
-    model.writeNewPlayerScore(fileName,newPlayer);
+    model.writeNewPlayerScore(fileName, newScore);
 
-    this.top5.setText(model.load());
+    this.top10.setText(model.load());
 
     return this;
   }

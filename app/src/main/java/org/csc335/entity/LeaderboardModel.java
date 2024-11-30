@@ -9,75 +9,42 @@ import java.io.BufferedWriter;
 public class LeaderboardModel {
     
     // instance variables
-    private ArrayList<Player> players;
+    private ArrayList<Integer> scores;
 
-    private String top5;
+    private String top10;
 
     public LeaderboardModel() {
-        players = new ArrayList<>();
-    }
-
-    public static void main(String[] args) {
-        Player a = new Player("adam");
-        Player b = new Player("joseph");
-        Player c = new Player("josh");
-        Player d = new Player("trevor");
-        Player e = new Player("nate");
-        Player f = new Player("cameron");
-
-        LeaderboardModel lb = new LeaderboardModel();
-
-        b.setScore(10);
-        c.setScore(20);
-        d.setScore(5);
-        e.setScore(5);
-        // f.setScore(0);
-
-
-        lb.addPlayer(a);
-        lb.addPlayer(b);
-        lb.addPlayer(c);
-        lb.addPlayer(d);
-        lb.addPlayer(e);
-        lb.addPlayer(f);
-        System.out.println(lb.players);
-        System.out.println("The top five scores:");
-        System.out.println(lb.load());
-
-        LeaderboardModel lb1 = new LeaderboardModel();
-        // lb1.addPlayers("C:\\Users\\shehe\\CSC-335\\2048-javafx\\app\\src\\main\\java\\org\\csc335\\leaderboard.txt");
-        lb1.addPlayers("app/src/main/java/org/csc335/leaderboard.txt");
-        System.out.println(lb1.players);
+        scores = new ArrayList<>();
     }
 
     public String load() {
         // ArrayList<Player> top5 = new ArrayList<>();
-        this.top5 = "";
-        int count = 5;
-        for (int i = 0; i < players.size(); i++) {
-            Player player = players.get(i);
+        this.top10 = "";
+        int count = 10;
+        for (int i = 0; i < scores.size(); i++) {
+            int score = scores.get(i);
             if (count > 0) {
-                this.top5 += String.format("%d. %s scored %d points.\n", i+1, player.getName(), player.getScore());
+                this.top10 += String.format("%d.    %d points\n", i+1, score);
                 count--;
             }
         }
 
-        return top5;
+        return top10;
     }
 
     // helper method
-    public void addPlayer(Player newPlayer) {
-        if (players.size() == 0) {
-            players.add(newPlayer);
+    public void addNewScore(int newScore) {
+        if (scores.size() == 0) {
+            scores.add(newScore);
         } else {
-            for (int i = 0; i < this.players.size(); i++) {
-                // System.out.println(players.get(i));
-                if (players.get(i).getScore() < newPlayer.getScore()) {
-                    players.add(i, newPlayer);
+            for (int i = 0; i < this.scores.size(); i++) {
+                // System.out.println(scores.get(i));
+                if (scores.get(i) < newScore) {
+                    scores.add(i, newScore);
                     break;
                 }
-                if (i == this.players.size()-1) {
-                    players.add(newPlayer);
+                if (i == this.scores.size()-1) {
+                    scores.add(newScore);
                     break;
                 }
             }
@@ -85,7 +52,7 @@ public class LeaderboardModel {
     }
 
     // adds players from leaderboard file
-    public void addPlayers(String fileName) {
+    public void addScores(String fileName) {
         File file = new File(fileName);
         Scanner fileReader = null;
 
@@ -93,9 +60,8 @@ public class LeaderboardModel {
             fileReader = new Scanner(file);
 
             while (fileReader.hasNext()) {
-                String[] playerInfo = fileReader.nextLine().split(":");
-                Player player = new Player(playerInfo[0], Integer.parseInt(playerInfo[1]));
-                addPlayer(player);
+                int score = Integer.parseInt(fileReader.nextLine().trim());
+                addNewScore(score);
             }
 
             fileReader.close();
@@ -107,19 +73,19 @@ public class LeaderboardModel {
     }
 
     //write in file
-    public void writeNewPlayerScore(String fileName, Player newPlayer) {
+    public void writeNewPlayerScore(String fileName, int newScore) {
         try {
             
             // get the saved data
-            addPlayers(fileName);
-            System.out.println(players);
-            addPlayer(newPlayer);
-            System.out.println(players);
+            addScores(fileName);
+            System.out.println(scores);
+            addNewScore(newScore);;
+            System.out.println(scores);
 
             BufferedWriter fileWriter = new BufferedWriter(new FileWriter(fileName));
 
-            for (Player player : players) {
-                fileWriter.write(String.format("%s:%d\n", player.getName(), player.getScore()));   
+            for (int score : scores) {
+                fileWriter.write(String.format("%d\n", score));   
             }
 
             fileWriter.close();
