@@ -313,6 +313,7 @@ public class GameBoard extends GridPane {
       }
     }
 
+    /* 
     temp[0][0].setValue(TileValue.T2);
     temp[0][1].setValue(TileValue.T4);
     temp[0][2].setValue(TileValue.T8);
@@ -327,6 +328,7 @@ public class GameBoard extends GridPane {
     temp[2][3].setValue(TileValue.T16);
     temp[3][2].setValue(TileValue.T64);
     temp[3][3].setValue(TileValue.T32);
+    */
     return temp;
   }
 

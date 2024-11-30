@@ -11,6 +11,11 @@ public class Player {
         this.name = name;
     }
 
+    public Player(String name, int score) {
+        this.name = name;
+        this.score = score;
+    }
+
     // accessors and mutators
     public void setScore(int score) {
         this.score = score;
@@ -22,5 +27,9 @@ public class Player {
 
     public String getName() {
         return this.name;
+    }
+
+    public String toString() {
+        return String.format("%s: %d", this.name, this.score);
     }
 }

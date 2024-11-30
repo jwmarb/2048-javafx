@@ -1,0 +1,23 @@
+.leaderboard-container {
+    -fx-background-radius: 12;
+    -fx-background-color: #9c8b7c;
+    -fx-min-width: 500;
+    -fx-max-width: 500;
+    -fx-min-height: 500;
+    -fx-max-height: 500;
+}
+
+.leaderboard-label {
+    -fx-font-size: 20;
+    -fx-text-fill: #756e64;
+}
+
+.leaderboard-title-label {
+    -fx-font-size: 35;
+    -fx-text-fill: #eae7d9;
+}
+
+.leaderboard-label, .leaderboard-title-label {
+    -fx-font-weight: bold;
+    -fx-label-padding: 20px 10px;   
+}
