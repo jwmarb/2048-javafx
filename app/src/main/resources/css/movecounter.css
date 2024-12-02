@@ -1,0 +1,24 @@
+.counter-container {
+  -fx-padding: 16;
+  -fx-background-color: #eae7d9;
+  -fx-background-radius: 16;
+  -fx-font-size: 24;
+  -fx-font-weight: bold;
+  -fx-text-fill: #988876;
+  -fx-alignment: center;
+}
+
+.counter-wrapper {
+  -fx-padding: 32;
+  -fx-alignment: center;
+}
+
+.counter-label {
+  -fx-font-size: 12;
+  -fx-text-fill: #756e64;
+}
+
+.counter {
+  -fx-font-size: 24;
+  -fx-text-fill: #756e64;
+}

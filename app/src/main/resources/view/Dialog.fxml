@@ -9,11 +9,11 @@
   <VBox styleClass="dialog-container" fx:id="dialogContainer">
     <Label styleClass="dialog-title" fx:id="titleLabel" />
     <Label styleClass="dialog-description" wrapText="true" fx:id="descriptionLabel" />
-    <VBox VBox.vgrow="ALWAYS" styleClass="dialog-action-container">
-      <Pressable fx:id="primaryActionPressable" variant="filled" grow="true"
+    <VBox VBox.vgrow="ALWAYS" styleClass="dialog-action-container" fx:id="actionContainer">
+      <!-- <Pressable fx:id="primaryActionPressable" variant="filled" grow="true"
         onAction="#primaryAction" />
       <Pressable fx:id="secondaryActionPressable" variant="outlined" grow="true"
-        onAction="#secondaryAction" />
+        onAction="#secondaryAction" /> -->
     </VBox>
   </VBox>
 </fx:root>

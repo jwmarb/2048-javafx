@@ -3,6 +3,8 @@ package org.csc335.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.event.HyperlinkEvent.EventType;
+
 import org.csc335.listeners.DialogActionListener;
 
 import javafx.animation.FadeTransition;
@@ -12,10 +14,13 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -40,14 +45,6 @@ public class Dialog extends VBox {
     this.description.set(description);
   }
 
-  public void setPrimaryActionText(String text) {
-    this.primaryActionText.set(text.toUpperCase());
-  }
-
-  public void setSecondaryActionText(String text) {
-    this.secondaryActionText.set(text.toUpperCase());
-  }
-
   public String getTitle() {
     return this.title.get();
   }
@@ -56,28 +53,8 @@ public class Dialog extends VBox {
     return this.description.get();
   }
 
-  public String getPrimaryActionText() {
-    return this.primaryActionText.get();
-  }
-
-  public String getSecondaryActionText() {
-    return this.secondaryActionText.get();
-  }
-
   @FXML
   private StringProperty description;
-
-  @FXML
-  private StringProperty primaryActionText;
-
-  @FXML
-  private StringProperty secondaryActionText;
-
-  @FXML
-  private Pressable primaryActionPressable;
-
-  @FXML
-  private Pressable secondaryActionPressable;
 
   @FXML
   private Label titleLabel;
@@ -85,12 +62,13 @@ public class Dialog extends VBox {
   @FXML
   private Label descriptionLabel;
 
-  public Dialog(String title, String description, String primaryActionText, String secondaryActionText) {
+  @FXML
+  private VBox actionContainer;
+
+  public Dialog(String title, String description) {
     super();
     this.description = new SimpleStringProperty();
     this.title = new SimpleStringProperty();
-    this.primaryActionText = new SimpleStringProperty();
-    this.secondaryActionText = new SimpleStringProperty();
 
     FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/Dialog.fxml"));
 
@@ -109,12 +87,8 @@ public class Dialog extends VBox {
     this.listeners = new ArrayList<>();
     this.title.bindBidirectional(this.titleLabel.textProperty());
     this.description.bindBidirectional(this.descriptionLabel.textProperty());
-    this.primaryActionText.bindBidirectional(this.primaryActionPressable.textProperty());
-    this.secondaryActionText.bindBidirectional(this.secondaryActionPressable.textProperty());
     this.setTitle(title);
     this.setDescription(description);
-    this.setPrimaryActionText(primaryActionText);
-    this.setSecondaryActionText(secondaryActionText);
   }
 
   private void setHidden(boolean hidden) {
@@ -132,6 +106,9 @@ public class Dialog extends VBox {
   }
 
   public void show() {
+    for (DialogActionListener listener : this.listeners) {
+      listener.dialogShown();
+    }
     FadeTransition ft = new FadeTransition(Duration.millis(250), this);
     ft.setFromValue(0.0);
     ft.setToValue(1.0);
@@ -174,18 +151,21 @@ public class Dialog extends VBox {
 
   }
 
-  @FXML
-  public void primaryAction() {
-    for (DialogActionListener listener : this.listeners) {
-      listener.primaryAction();
+  public void setActions(Pressable... buttons) {
+    this.actionContainer.getChildren().setAll(buttons);
+
+    for (int i = 0; i < buttons.length; ++i) {
+      final int k = i;
+      buttons[i].setOnAction(new EventHandler<ActionEvent>() {
+
+        @Override
+        public void handle(ActionEvent event) {
+          for (DialogActionListener listener : Dialog.this.listeners) {
+            listener.dialogAction(k);
+          }
+        }
+
+      });
     }
   }
-
-  @FXML
-  public void secondaryAction() {
-    for (DialogActionListener listener : this.listeners) {
-      listener.secondaryAction();
-    }
-  }
-
 }

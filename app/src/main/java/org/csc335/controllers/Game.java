@@ -5,11 +5,14 @@ import org.csc335.listeners.DialogActionListener;
 import org.csc335.listeners.DrawerMenuActionListener;
 import org.csc335.listeners.DrawerOptionListener;
 import org.csc335.listeners.GameBoardListener;
+import org.csc335.listeners.MoveCounterListener;
+import org.csc335.listeners.TimerListener;
 import org.csc335.navigation.Navigation;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
@@ -69,43 +72,89 @@ public class Game extends StackPane {
 
     this.gameBoard.addGameBoardListener(new GameBoardListener() {
       @Override
+      public void tileMoved() {
+        switch (Game.this.mode) {
+          case GameMode.TIME_TRIAL:
+            Timer timer = (Timer) Game.this.bp.getBottom();
+            if (!timer.isTimerActive()) {
+              timer.startTimer();
+            }
+            break;
+          case GameMode.MOVE_LIMIT:
+            MoveCounter counter = (MoveCounter) Game.this.bp.getBottom();
+            counter.totalMovesMade(Game.this.gameBoard.getMoves());
+            break;
+          default:
+            break;
+        }
+      }
+
+      @Override
       public void scoreChanged(int diff) {
         Game.this.scoreboard.addScore(diff);
       }
 
       @Override
       public void gameOver() {
-        Dialog dialog = new Dialog("Game Over!",
-            String.format("You scored %d points in %d moves", Game.this.scoreboard.getScore(),
-                Game.this.gameBoard.getMoves()),
-            "Play Again",
-            "View Leaderboard");
-        dialog.addDialogActionListener(new DialogActionListener() {
-
-          @Override
-          public void dialogHidden() {
-            Game.this.getChildren().remove(dialog);
-          }
-
-          @Override
-          public void primaryAction() {
-            Game.this.resetGame();
-            dialog.hide();
-          }
-
-          @Override
-          public void secondaryAction() {
-            Navigation.navigate(new Leaderboard().setTop10("leaderboard.txt", scoreboard.getScore())); // testing the leaderboard stuff
-          }
-
-        });
-
-        dialog.show();
-
-        Game.this.getChildren().add(dialog);
+        Game.this.gameOver();
       }
 
     });
+  }
+
+  private void gameOver() {
+    final int PLAY_AGAIN = 0;
+    final int QUIT_GAME = 1;
+    final int VIEW_LEADERBOARD = 2;
+
+    Node bottomNode = this.bp.getBottom();
+
+    if (bottomNode instanceof Timer) {
+      ((Timer) bottomNode).stopTimer();
+    }
+
+    Dialog dialog = new Dialog("Game Over!",
+        String.format("You scored %d points in %d moves", Game.this.scoreboard.getScore(),
+            Game.this.gameBoard.getMoves()));
+    dialog.setActions(new Pressable("Play Again", Pressable.FILLED, true),
+        new Pressable("Quit Game", Pressable.OUTLINED, true),
+        new Pressable("View Leaderboard", Pressable.OUTLINED, true));
+
+    Leaderboard.addLeaderboardScore(Game.this.scoreboard.getScore());
+
+    dialog.addDialogActionListener(new DialogActionListener() {
+
+      @Override
+      public void dialogShown() {
+        Game.this.gameBoard.disableKeystrokeRecording();
+      }
+
+      @Override
+      public void dialogHidden() {
+        Game.this.getChildren().remove(dialog);
+        Game.this.gameBoard.enableKeystrokeRecording();
+      }
+
+      @Override
+      public void dialogAction(int childIdx) {
+        switch (childIdx) {
+          case PLAY_AGAIN:
+            Game.this.resetGame();
+            dialog.hide();
+            break;
+          case QUIT_GAME:
+            System.exit(0);
+            break;
+          case VIEW_LEADERBOARD:
+            Navigation.navigate(new Leaderboard());
+            break;
+        }
+      }
+    });
+
+    dialog.show();
+
+    Game.this.getChildren().add(dialog);
   }
 
   /**
@@ -120,6 +169,14 @@ public class Game extends StackPane {
     // TODO: Reset the game here!
     this.gameBoard.reset();
     this.scoreboard.reset();
+    Node bottomChild = this.bp.getBottom();
+
+    if (bottomChild instanceof Timer) {
+      ((Timer) bottomChild).stopTimer();
+      ((Timer) bottomChild).resetTimer();
+    } else if (bottomChild instanceof MoveCounter) {
+      ((MoveCounter) bottomChild).reset();
+    }
   }
 
   /**
@@ -127,27 +184,38 @@ public class Game extends StackPane {
    */
   @FXML
   public void newGame() {
-    Dialog dialog = new Dialog("New Game", "Are you sure you want to start a new game? All progress will be lost.",
-        "Start New Game", "Cancel");
+    final int START_NEW_GAME = 0;
+    final int CANCEL = 1;
+    Dialog dialog = new Dialog("New Game", "Are you sure you want to start a new game? All progress will be lost.");
+
+    dialog.setActions(new Pressable("Start New Game", Pressable.FILLED, true),
+        new Pressable("Cancel", Pressable.OUTLINED, true));
 
     dialog.addDialogActionListener(new DialogActionListener() {
 
       @Override
+      public void dialogShown() {
+        Game.this.gameBoard.disableKeystrokeRecording();
+      }
+
+      @Override
       public void dialogHidden() {
         Game.this.getChildren().remove(dialog);
+        Game.this.gameBoard.enableKeystrokeRecording();
       }
 
       @Override
-      public void primaryAction() {
-        Game.this.resetGame();
-        dialog.hide();
+      public void dialogAction(int childIdx) {
+        switch (childIdx) {
+          case START_NEW_GAME:
+            Game.this.resetGame();
+            dialog.hide();
+            break;
+          case CANCEL:
+            dialog.hide();
+            break;
+        }
       }
-
-      @Override
-      public void secondaryAction() {
-        dialog.hide();
-      }
-
     });
 
     dialog.show();
@@ -161,7 +229,36 @@ public class Game extends StackPane {
   }
 
   private void notifyDependencies() {
+    this.resetGame();
     this.logo.changeMode(this.mode);
     this.gameBoard.setMode(this.mode);
+
+    switch (this.mode) {
+      case GameMode.TIME_TRIAL:
+        Timer timer = new Timer();
+        this.bp.setBottom(timer);
+        timer.addTimerListener(new TimerListener() {
+          @Override
+          public void timerFinished() {
+            Game.this.gameOver();
+          }
+
+        });
+        break;
+      case GameMode.MOVE_LIMIT:
+        MoveCounter moveCounter = new MoveCounter();
+        this.bp.setBottom(moveCounter);
+
+        moveCounter.addMoveCounterListener(new MoveCounterListener() {
+          @Override
+          public void noMoreMovesLeft() {
+            Game.this.gameOver();
+          }
+        });
+        break;
+      default:
+        this.bp.setBottom(null);
+        break;
+    }
   }
 }

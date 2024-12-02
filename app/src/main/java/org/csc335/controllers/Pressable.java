@@ -6,6 +6,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -37,12 +39,30 @@ public class Pressable extends Button {
     return this.grow.get();
   }
 
+  public Pressable(String text, String variant, boolean shouldGrow) {
+    super(text.toUpperCase());
+
+    this.variant = new SimpleStringProperty();
+    this.grow = new SimpleBooleanProperty();
+
+    this.loadAssets();
+    this.initListeners();
+
+    this.setVariant(variant);
+    this.setGrow(shouldGrow);
+  }
+
   public Pressable() {
     super();
 
     this.variant = new SimpleStringProperty();
     this.grow = new SimpleBooleanProperty();
 
+    this.loadAssets();
+    this.initListeners();
+  }
+
+  private void loadAssets() {
     FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/Pressable.fxml"));
 
     loader.setRoot(this);
@@ -55,20 +75,10 @@ public class Pressable extends Button {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
-
-    this.variant.addListener(this.handleOnVariantChanged());
   }
 
-  private void getOrSetStyleClass(int idx, String styleClass) {
-    if (this.getStyleClass().size() >= idx) {
-      this.getStyleClass().add(styleClass);
-    } else {
-      this.getStyleClass().set(idx, styleClass);
-    }
-  }
-
-  private ChangeListener<String> handleOnVariantChanged() {
-    return new ChangeListener<String>() {
+  private void initListeners() {
+    this.variant.addListener(new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         switch (newValue) {
@@ -82,7 +92,15 @@ public class Pressable extends Button {
             throw new RuntimeException(String.format("Invalid attribute for Pressable type: \"%s\"", newValue));
         }
       }
-
-    };
+    });
   }
+
+  private void getOrSetStyleClass(int idx, String styleClass) {
+    if (this.getStyleClass().size() >= idx) {
+      this.getStyleClass().add(styleClass);
+    } else {
+      this.getStyleClass().set(idx, styleClass);
+    }
+  }
+
 }

@@ -4,6 +4,7 @@
 <?import org.csc335.controllers.Scoreboard?>
 <?import org.csc335.controllers.GameLogo?>
 <?import org.csc335.controllers.FAIcon?>
+<?import org.csc335.controllers.Timer?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>

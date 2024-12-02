@@ -7,90 +7,92 @@ import java.util.Scanner;
 import java.io.BufferedWriter;
 
 public class LeaderboardModel {
-    
-    // instance variables
-    private ArrayList<Integer> scores;
 
-    private String top10;
+  // instance variables
+  private ArrayList<Integer> scores;
 
-    public LeaderboardModel() {
-        scores = new ArrayList<>();
+  private String top10;
+
+  private static String FILE_NAME = "leaderboard.txt";
+
+  public LeaderboardModel() {
+    scores = new ArrayList<>();
+  }
+
+  public String load() {
+    // ArrayList<Player> top5 = new ArrayList<>();
+    this.top10 = "";
+    int count = 10;
+    for (int i = 0; i < scores.size(); i++) {
+      int score = scores.get(i);
+      if (count > 0) {
+        this.top10 += String.format("%d.    %d points\n", i + 1, score);
+        count--;
+      }
     }
 
-    public String load() {
-        // ArrayList<Player> top5 = new ArrayList<>();
-        this.top10 = "";
-        int count = 10;
-        for (int i = 0; i < scores.size(); i++) {
-            int score = scores.get(i);
-            if (count > 0) {
-                this.top10 += String.format("%d.    %d points\n", i+1, score);
-                count--;
-            }
+    return top10;
+  }
+
+  // helper method
+  public void addNewScore(int newScore) {
+    if (scores.size() == 0) {
+      scores.add(newScore);
+    } else {
+      for (int i = 0; i < this.scores.size(); i++) {
+        // System.out.println(scores.get(i));
+        if (scores.get(i) < newScore) {
+          scores.add(i, newScore);
+          break;
         }
-
-        return top10;
-    }
-
-    // helper method
-    public void addNewScore(int newScore) {
-        if (scores.size() == 0) {
-            scores.add(newScore);
-        } else {
-            for (int i = 0; i < this.scores.size(); i++) {
-                // System.out.println(scores.get(i));
-                if (scores.get(i) < newScore) {
-                    scores.add(i, newScore);
-                    break;
-                }
-                if (i == this.scores.size()-1) {
-                    scores.add(newScore);
-                    break;
-                }
-            }
+        if (i == this.scores.size() - 1) {
+          scores.add(newScore);
+          break;
         }
+      }
     }
+  }
 
-    // adds players from leaderboard file
-    public void addScores(String fileName) {
-        File file = new File(fileName);
-        Scanner fileReader = null;
+  // adds players from leaderboard file
+  public void addScores() {
+    File file = new File(FILE_NAME);
+    Scanner fileReader = null;
 
-        try {
-            fileReader = new Scanner(file);
+    try {
+      fileReader = new Scanner(file);
 
-            while (fileReader.hasNext()) {
-                int score = Integer.parseInt(fileReader.nextLine().trim());
-                addNewScore(score);
-            }
+      while (fileReader.hasNext()) {
+        int score = Integer.parseInt(fileReader.nextLine().trim());
+        addNewScore(score);
+      }
 
-            fileReader.close();
+      fileReader.close();
 
-        } catch(Exception e) {
-            System.out.println("File does not exist");
-            System.out.println(file.getAbsolutePath());
-        }
+    } catch (Exception e) {
+      System.out.println("File does not exist");
+      System.out.println(file.getAbsolutePath());
     }
+  }
 
-    //write in file
-    public void writeNewPlayerScore(String fileName, int newScore) {
-        try {
-            
-            // get the saved data
-            addScores(fileName);
-            System.out.println(scores);
-            addNewScore(newScore);;
-            System.out.println(scores);
+  // write in file
+  public void writeNewPlayerScore(int newScore) {
+    try {
 
-            BufferedWriter fileWriter = new BufferedWriter(new FileWriter(fileName));
+      // get the saved data
+      addScores();
+      System.out.println(scores);
+      addNewScore(newScore);
+      System.out.println(scores);
 
-            for (int score : scores) {
-                fileWriter.write(String.format("%d\n", score));   
-            }
+      BufferedWriter fileWriter = new BufferedWriter(new FileWriter(FILE_NAME));
 
-            fileWriter.close();
-        } catch(Exception e) {
-            System.out.println("File does not exit.");
-        }
+      for (int score : scores) {
+        fileWriter.write(String.format("%d\n", score));
+      }
+
+      fileWriter.close();
+    } catch (Exception e) {
+      System.out.println("File does not exit.");
     }
+  }
 }

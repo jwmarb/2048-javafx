@@ -27,6 +27,7 @@ public class GameBoard extends GridPane {
   private Tile[][] board;
   private Audio sound;
   private GameMode mode;
+  private boolean shouldRecordKeystrokes;
   private int moves;
 
   public GameBoard() throws URISyntaxException {
@@ -44,8 +45,17 @@ public class GameBoard extends GridPane {
       throw new RuntimeException(e);
     }
     this.board = makeBoard();
+    this.shouldRecordKeystrokes = true;
     initialTileSetup();
     this.initEventListeners();
+  }
+
+  public void enableKeystrokeRecording() {
+    this.shouldRecordKeystrokes = true;
+  }
+
+  public void disableKeystrokeRecording() {
+    this.shouldRecordKeystrokes = false;
   }
 
   public int getMoves() {
@@ -54,6 +64,7 @@ public class GameBoard extends GridPane {
 
   public void reset() {
     // todo
+    this.moves = 0;
   }
 
   private void notifyScoreChanged(int diff) {
@@ -196,6 +207,13 @@ public class GameBoard extends GridPane {
         next += OFFSET;
       }
     }
+
+    if (somethingHappened) {
+      GameBoard.this.moves++;
+      for (GameBoardListener listener : this.listeners) {
+        listener.tileMoved();
+      }
+    }
     return somethingHappened;
   }
 
@@ -256,7 +274,8 @@ public class GameBoard extends GridPane {
         Direction direction = Direction.fromVal(event.getCode().getName());
 
         // don't do anything if key is not WASD or up/down/left/right
-        if (direction == null) {
+        // or if we dont want to record keystrokes
+        if (direction == null || !GameBoard.this.shouldRecordKeystrokes) {
           return;
         }
 
@@ -268,7 +287,6 @@ public class GameBoard extends GridPane {
         updateBlankTiles();
 
         if (somethingHappened) {
-          GameBoard.this.moves++;
           generateRandomValues();
 
           // this is the size BEFORE adding the new tile -> means that right now all tiles
@@ -313,22 +331,20 @@ public class GameBoard extends GridPane {
       }
     }
 
-    /* 
-    temp[0][0].setValue(TileValue.T2);
-    temp[0][1].setValue(TileValue.T4);
-    temp[0][2].setValue(TileValue.T8);
-    temp[0][3].setValue(TileValue.T16);
-    temp[1][3].setValue(TileValue.T2);
-    temp[1][2].setValue(TileValue.T4);
-    temp[1][1].setValue(TileValue.T8);
-    temp[1][0].setValue(TileValue.T16);
-    temp[2][0].setValue(TileValue.T128);
-    temp[2][1].setValue(TileValue.T256);
-    temp[2][2].setValue(TileValue.T8);
-    temp[2][3].setValue(TileValue.T16);
-    temp[3][2].setValue(TileValue.T64);
-    temp[3][3].setValue(TileValue.T32);
-    */
+    // temp[0][0].setValue(TileValue.T2);
+    // temp[0][1].setValue(TileValue.T4);
+    // temp[0][2].setValue(TileValue.T8);
+    // temp[0][3].setValue(TileValue.T16);
+    // temp[1][3].setValue(TileValue.T2);
+    // temp[1][2].setValue(TileValue.T4);
+    // temp[1][1].setValue(TileValue.T8);
+    // temp[1][0].setValue(TileValue.T16);
+    // temp[2][0].setValue(TileValue.T128);
+    // temp[2][1].setValue(TileValue.T256);
+    // temp[2][2].setValue(TileValue.T8);
+    // temp[2][3].setValue(TileValue.T16);
+    // temp[3][2].setValue(TileValue.T64);
+    // temp[3][3].setValue(TileValue.T32);
     return temp;
   }
 

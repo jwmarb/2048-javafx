@@ -13,7 +13,7 @@ public class Leaderboard extends BorderPane {
   @FXML
   private Label top10;
 
-  private LeaderboardModel model;
+  private static LeaderboardModel model = new LeaderboardModel();
 
   public Leaderboard() {
     super();
@@ -29,6 +29,8 @@ public class Leaderboard extends BorderPane {
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
+
+    this.top10.setText(model.load());
   }
 
   @FXML
@@ -37,13 +39,8 @@ public class Leaderboard extends BorderPane {
   }
 
   // set the top five scores
-  public Leaderboard setTop10(String fileName, int newScore) {
-    this.model = new LeaderboardModel();
+  public static void addLeaderboardScore(int newScore) {
+    model.writeNewPlayerScore(newScore);
 
-    model.writeNewPlayerScore(fileName, newScore);
-
-    this.top10.setText(model.load());
-
-    return this;
   }
 }

@@ -1,0 +1,18 @@
+.timer {
+  -fx-padding: 16;
+  -fx-background-color: #eae7d9;
+  -fx-background-radius: 16;
+  -fx-font-size: 24;
+  -fx-font-weight: bold;
+  -fx-text-fill: #988876;
+  -fx-alignment: center;
+}
+
+.timer-container {
+  -fx-padding: 32;
+  -fx-alignment: center;
+}
+
+.timer-warning {
+  -fx-text-fill: rgb(182, 89, 89) !important;
+}

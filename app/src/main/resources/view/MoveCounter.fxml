@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml/1"
+  styleClass="counter-wrapper">
+  <VBox styleClass="counter-container">
+    <Label styleClass="counter-label" text="MOVES REMAINING" />
+    <Label styleClass="counter" fx:id="counter" />
+  </VBox>
+</fx:root>
