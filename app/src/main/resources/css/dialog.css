@@ -1,0 +1,30 @@
+.overlay-container {
+  -fx-background-color: rgba(0, 0, 0, 0.5);
+  -fx-alignment: center;
+}
+
+.dialog-container {
+  -fx-background-color: #eae7d9;
+  -fx-background-radius: 24;
+  -fx-alignment: center;
+  -fx-padding: 32;
+  -fx-pref-width: 480;
+  -fx-max-width: 480;
+  -fx-spacing: 24;
+}
+
+.dialog-title {
+  -fx-text-fill: #756452;
+  -fx-font-weight: bold;
+  -fx-font-size: 40;
+}
+
+.dialog-description {
+  -fx-text-fill: #756452;
+  -fx-font-size: 18;
+  -fx-text-alignment: center;
+}
+
+.dialog-action-container {
+  -fx-spacing: 8;
+}

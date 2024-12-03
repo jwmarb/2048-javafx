@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import org.csc335.controllers.Pressable?>
+
+<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml/1">
+  <left>
+    <Pressable text="Back" onAction="#goBack" variant="filled" />
+  </left>
+  <center>
+    <VBox styleClass="leaderboard-container">
+      <VBox styleClass="title-container">
+        <Label styleClass="leaderboard-title-label" text="Top Ten Scores of All Time!" />
+      </VBox>
+      <VBox styleClass="scores-container">
+        <Label styleClass="leaderboard-label" text="0" fx:id="top10" />
+      </VBox>
+    </VBox>
+  </center>
+</fx:root>

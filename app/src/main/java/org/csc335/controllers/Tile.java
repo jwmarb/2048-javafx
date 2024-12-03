@@ -50,6 +50,17 @@ public class Tile extends VBox {
   public TileValue getTileValue() {
     return this.tileValue.orElse(null);
   }
+  /**
+   * returns the value of the tile as an int. If blank tile, returns 0.
+   * 
+   * @return integer value representing the number the tile is
+   */
+  public int getIntValue() {
+    if (isBlank()) {
+      return 0;
+    }
+    return tileValue.get().value();
+  }
 
   /**
    * returns bool, true if no value (blank), false otherwise
@@ -79,23 +90,22 @@ public class Tile extends VBox {
     this.value.set(value.toString());
   }
 
-  // TODO: something for joesph. want methods that work here to deal direct w/
-  // tile insread of setting attributes
   public void makeBlank() {
     this.value.set(null); // set it to empty
   }
 
-  // public void merge() {
-  // this.tileValue = Optional.of(tileValue.get().next());
-  // this.value.set(this.tileValue.toString()); // update String
-  // }
-  // public static void swap(Tile t1, Tile t2) {
-  // Optional<TileValue> temp = t1.tileValue;
-  // t1.tileValue = t2.tileValue;
-  // t1.setValue(t1.tileValue.get());
-  // t2.tileValue = temp;
-  // t2.setValue(t2.tileValue.get());
-  // }
+  @Override
+  public boolean equals(Object other) {
+    if (other == null) {
+      return false;
+    }
+    if (other.getClass() != this.getClass()) {
+      return false;
+    }
+
+    final Tile otherTile = (Tile) other;
+    return this.getTileValue() == otherTile.getTileValue();
+  }
 
   public Tile() {
     super();

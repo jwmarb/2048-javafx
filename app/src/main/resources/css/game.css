@@ -1,31 +1,9 @@
 .top-container {
-    -fx-alignment: center;
-    -fx-padding: 4;
-    -fx-spacing: 50;
+  -fx-alignment: center;
+  -fx-spacing: 24;
+  -fx-padding: 32;
 }
 
-.score-container {
-    -fx-alignment: center;
-    -fx-font-size: 24;
-    -fx-font-weight: bold;
-    -fx-text-fill: #756e64;
-}
-
-.highscore-container {
-    -fx-alignment: center;
-    -fx-font-size: 24;
-    -fx-font-weight: bold;
-    -fx-text-fill: #756e64;
-}
-
-.score-label {
-    -fx-font-size: 24;
-    -fx-font-weight: bold;
-    -fx-text-fill: #756e64;
-}
-
-.numeric-label {
-    -fx-font-size: 36;
-    -fx-font-weight: bold;
-    -fx-text-fill: #756e64;
+.top-right-container {
+  -fx-alignment: center;
 }

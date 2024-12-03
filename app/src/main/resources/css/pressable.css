@@ -1,0 +1,29 @@
+.btn-base {
+  -fx-padding: 9 13;
+  -fx-cursor: hand;
+  -fx-font-weight: bold;
+  -fx-font-size: 16;
+  -fx-background-radius: 8;
+}
+
+.btn-filled {
+  -fx-text-fill: white;
+  -fx-background-color: #998b7c;
+}
+
+.btn-filled:hover {
+  -fx-background-color: #817669;
+}
+
+.btn-outlined {
+  -fx-text-fill: #998b7c;
+  -fx-border-width: 2;
+  -fx-border-radius: 8;
+  -fx-border-color: #998b7c;
+  -fx-background-color: transparent;
+}
+
+.btn-outlined:hover {
+  -fx-background-color: rgba(129, 118, 105, 0.15);
+  -fx-border-color: #817669;
+}

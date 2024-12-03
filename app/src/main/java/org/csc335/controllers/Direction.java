@@ -1,16 +1,12 @@
 package org.csc335.controllers;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public enum Direction {
-    
     // values
     RIGHT, LEFT, UP, DOWN;
 
     // converting string to enum
-    public static Direction fromVal(String direction) {
-        switch(direction) {
+    public static Direction fromVal(String key) {
+        switch(key) {
             case "W":
             case "Up":
                 return UP;

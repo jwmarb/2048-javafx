@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import org.csc335.controllers.GameBoard?>
+<?import org.csc335.controllers.Scoreboard?>
+<?import org.csc335.controllers.GameLogo?>
+<?import org.csc335.controllers.FAIcon?>
+<?import org.csc335.controllers.Timer?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import org.csc335.controllers.Pressable?>
+<?import org.csc335.controllers.Dialog?>
 
-<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml/1">
-  <top>
-    <HBox styleClass="top-container">
-      <VBox styleClass="score-container">
-        <Label styleClass="score-label" text="Score" />
-        <Label styleClass="numeric-label" text="0" fx:id="score" />
+<fx:root type="javafx.scene.layout.StackPane" xmlns:fx="http://javafx.com/fxml/1">
+  <BorderPane fx:id="bp">
+    <top>
+      <GridPane styleClass="top-container" hgap="10">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" />
+          <ColumnConstraints hgrow="ALWAYS" halignment="CENTER" />
+          <ColumnConstraints halignment="CENTER" />
+        </columnConstraints>
+        <GameLogo GridPane.columnIndex="0" fx:id="logo" />
+        <Scoreboard GridPane.columnIndex="1" fx:id="scoreboard" />
+        <HBox GridPane.columnIndex="2" styleClass="top-right-container">
+          <Pressable text="NEW GAME" variant="filled" onAction="#newGame" />
+        </HBox>
+      </GridPane>
+    </top>
+    <center>
+      <GameBoard fx:id="gameBoard" />
+    </center>
+  </BorderPane>
+  <!-- <VBox styleClass="overlay-container">
+    <VBox styleClass="dialog-container">
+      <Label text="Game Over!" styleClass="dialog-title" />
+      <Label text="You have no more moves left!"
+        styleClass="dialog-description" wrapText="true" />
+      <VBox VBox.vgrow="ALWAYS" styleClass="dialog-action-container">
+        <Pressable text="PLAY AGAIN" variant="filled" grow="true" />
+        <Pressable text="VIEW LEADERBOARD" variant="outlined" grow="true" />
       </VBox>
-      <VBox styleClass="highscore-container">
-        <Label styleClass="score-label" text="Best" />
-        <Label styleClass="numeric-label" text="0" fx:id="best" />
-      </VBox>
-    </HBox>
-  </top>
-  <center>
-    <GameBoard fx:id="gameBoard" />
-  </center>
+    </VBox>
+  </VBox> -->
 </fx:root>

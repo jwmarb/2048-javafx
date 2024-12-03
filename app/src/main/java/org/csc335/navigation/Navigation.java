@@ -50,6 +50,7 @@ public class Navigation {
    */
   public static void goBack() {
     if (stack.size() > 1) {
+
       stack.pop();
       notifyListeners(stack.peek());
     }

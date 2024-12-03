@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import org.csc335.controllers.DrawerMenu?>
+<?import org.csc335.controllers.FAIcon?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+
+<fx:root type="javafx.scene.layout.VBox" xmlns:fx="http://javafx.com/fxml/1"
+  styleClass="drawer-wrapper">
+  <VBox styleClass="drawer-container" fx:id="container">
+  </VBox>
+</fx:root>

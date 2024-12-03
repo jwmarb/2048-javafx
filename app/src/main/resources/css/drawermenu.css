@@ -1,0 +1,10 @@
+.drawer-wrapper {
+  /* -fx-margin: 32; */
+  -fx-padding: 32;
+}
+
+.drawer-container {
+  -fx-padding: 8;
+  -fx-background-color: #e0dad1;
+  -fx-background-radius: 16;
+}
