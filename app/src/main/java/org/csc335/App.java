@@ -22,8 +22,6 @@ public class App extends Application {
   public void start(Stage stage) throws IOException {
     Font.loadFont(this.getClass().getResource("/fonts/fa-solid-900.ttf").toExternalForm(), 12);
 
-    sound = new Audio();
-
     stage.setTitle("2048 FX");
     stage.setWidth(900);
     stage.setHeight(800);
@@ -32,7 +30,7 @@ public class App extends Application {
 
     // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/view/2048menu.fxml")));
 
-    sound.playMainTheme();
+    Audio.playMainTheme();
 
     Navigation.navigate(new Game());
     // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/stories/TileStory.fxml")));

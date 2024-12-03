@@ -46,6 +46,8 @@ public class Scoreboard extends HBox {
 
   public void reset() {
     // todo
+    this.scoreVal.set(0);
+    this.score.setText(String.valueOf(this.scoreVal.get()));
   }
 
 }
