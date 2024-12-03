@@ -30,7 +30,7 @@ public class Leaderboard extends BorderPane {
       throw new RuntimeException(e);
     }
 
-    this.top10.setText(model.load());
+    this.top10.setText(model.toString());
   }
 
   @FXML

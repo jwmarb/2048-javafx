@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.csc335.entity.GameMode;
-import org.csc335.listeners.DrawerOptionListener;
+import org.csc335.interfaces.DrawerOptionListener;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;

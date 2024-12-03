@@ -1,22 +1,22 @@
 package org.csc335.controllers;
 
 import org.csc335.entity.GameMode;
-import org.csc335.listeners.DialogActionListener;
-import org.csc335.listeners.DrawerMenuActionListener;
-import org.csc335.listeners.DrawerOptionListener;
-import org.csc335.listeners.GameBoardListener;
-import org.csc335.listeners.MoveCounterListener;
-import org.csc335.listeners.TimerListener;
+import org.csc335.interfaces.DialogActionCallback;
+import org.csc335.interfaces.DialogActionListener;
+import org.csc335.interfaces.DrawerMenuActionListener;
+import org.csc335.interfaces.DrawerOptionListener;
+import org.csc335.interfaces.GameBoardListener;
+import org.csc335.interfaces.MoveCounterListener;
+import org.csc335.interfaces.TimerListener;
 import org.csc335.navigation.Navigation;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
-public class Game extends StackPane {
+public final class Game extends StackPane {
 
   @FXML
   private GameBoard gameBoard;
@@ -113,28 +113,9 @@ public class Game extends StackPane {
       ((Timer) bottomNode).stopTimer();
     }
 
-    Dialog dialog = new Dialog("Game Over!",
-        String.format("You scored %d points in %d moves", Game.this.scoreboard.getScore(),
-            Game.this.gameBoard.getMoves()));
-    dialog.setActions(new Pressable("Play Again", Pressable.FILLED, true),
-        new Pressable("Quit Game", Pressable.OUTLINED, true),
-        new Pressable("View Leaderboard", Pressable.OUTLINED, true));
+    Dialog dialog = new GameOverDialog(this.scoreboard.getScore(), this.gameBoard.getMoves());
 
-    Leaderboard.addLeaderboardScore(Game.this.scoreboard.getScore());
-
-    dialog.addDialogActionListener(new DialogActionListener() {
-
-      @Override
-      public void dialogShown() {
-        Game.this.gameBoard.disableKeystrokeRecording();
-      }
-
-      @Override
-      public void dialogHidden() {
-        Game.this.getChildren().remove(dialog);
-        Game.this.gameBoard.enableKeystrokeRecording();
-      }
-
+    dialog.addDialogActionListener(this.createDialogActionListener(dialog, new DialogActionCallback() {
       @Override
       public void dialogAction(int childIdx) {
         switch (childIdx) {
@@ -150,8 +131,9 @@ public class Game extends StackPane {
             break;
         }
       }
-    });
+    }));
 
+    Leaderboard.addLeaderboardScore(Game.this.scoreboard.getScore());
     dialog.show();
 
     Game.this.getChildren().add(dialog);
@@ -179,19 +161,8 @@ public class Game extends StackPane {
     }
   }
 
-  /**
-   * Invoked when the user presses "New game"
-   */
-  @FXML
-  public void newGame() {
-    final int START_NEW_GAME = 0;
-    final int CANCEL = 1;
-    Dialog dialog = new Dialog("New Game", "Are you sure you want to start a new game? All progress will be lost.");
-
-    dialog.setActions(new Pressable("Start New Game", Pressable.FILLED, true),
-        new Pressable("Cancel", Pressable.OUTLINED, true));
-
-    dialog.addDialogActionListener(new DialogActionListener() {
+  private DialogActionListener createDialogActionListener(Dialog dialog, DialogActionCallback onDialogAction) {
+    return new DialogActionListener() {
 
       @Override
       public void dialogShown() {
@@ -206,21 +177,35 @@ public class Game extends StackPane {
 
       @Override
       public void dialogAction(int childIdx) {
+        onDialogAction.dialogAction(childIdx);
+      }
+    };
+  }
+
+  /**
+   * Invoked when the user presses "New game"
+   */
+  @FXML
+  public void newGame() {
+    final int START_NEW_GAME = 0;
+    final int CANCEL = 1;
+    Dialog newGameDialog = new NewGameDialog();
+    newGameDialog.addDialogActionListener(this.createDialogActionListener(newGameDialog, new DialogActionCallback() {
+      public void dialogAction(int childIdx) {
         switch (childIdx) {
           case START_NEW_GAME:
             Game.this.resetGame();
-            dialog.hide();
+            newGameDialog.hide();
             break;
           case CANCEL:
-            dialog.hide();
+            newGameDialog.hide();
             break;
         }
       }
-    });
+    }));
+    newGameDialog.show();
 
-    dialog.show();
-
-    this.getChildren().add(dialog);
+    this.getChildren().add(newGameDialog);
   }
 
   private void setMode(GameMode mode) {
@@ -230,9 +215,8 @@ public class Game extends StackPane {
 
   private void notifyDependencies() {
     this.resetGame();
-    this.logo.changeMode(this.mode);
-    this.gameBoard.setMode(this.mode);
-    Audio.selectMusic(this.mode);
+    this.mode.playTheme();
+    this.logo.gameModeChanged(this.mode);
 
     switch (this.mode) {
       case GameMode.TIME_TRIAL:

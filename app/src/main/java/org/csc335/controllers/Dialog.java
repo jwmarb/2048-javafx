@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.swing.event.HyperlinkEvent.EventType;
 
-import org.csc335.listeners.DialogActionListener;
+import org.csc335.interfaces.DialogActionListener;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;

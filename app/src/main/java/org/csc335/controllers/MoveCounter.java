@@ -3,7 +3,7 @@ package org.csc335.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.csc335.listeners.MoveCounterListener;
+import org.csc335.interfaces.MoveCounterListener;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
