@@ -5,18 +5,15 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.csc335.entity.GameMode;
 import org.csc335.entity.TileValue;
-import org.csc335.listeners.GameBoardListener;
+import org.csc335.interfaces.GameBoardListener;
 import org.csc335.navigation.Navigation;
 import org.csc335.util.Logger;
 
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 
 /**
  * Represents the game board in a grid layout.
@@ -25,7 +22,6 @@ public class GameBoard extends GridPane {
   private List<GameBoardListener> listeners;
   private ArrayList<Tile> emptyTiles = new ArrayList<>();
   private Tile[][] board;
-  private GameMode mode;
   private boolean shouldRecordKeystrokes;
   private int moves;
 
@@ -190,7 +186,7 @@ public class GameBoard extends GridPane {
 
           nextTile.makeBlank();
           first += OFFSET;
-          Audio.playMergeSound();
+          Audio.MERGE_SOUND.play();
         } else if (firstTile.isBlank()) { // move tile to new spot
           somethingHappened = true;
 
@@ -353,10 +349,6 @@ public class GameBoard extends GridPane {
 
   public void addGameBoardListener(GameBoardListener listener) {
     listeners.add(listener);
-  }
-
-  public void setMode(GameMode mode) {
-    this.mode = mode;
   }
 
   private void notifyGameOver() {

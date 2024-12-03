@@ -1,63 +1,47 @@
 package org.csc335.controllers;
 
-import org.csc335.entity.GameMode;
+import org.csc335.util.Logger;
 
+import javafx.application.Platform;
 import javafx.scene.media.AudioClip;
 
-public class Audio {
-    private static AudioClip mergeSound = new AudioClip(
-            Audio.class.getResource("/sounds/mergesound.mp3").toExternalForm());
-    private static AudioClip mainTheme = new AudioClip(
-            Audio.class.getResource("/sounds/mainTheme.mp3").toExternalForm());
-    private static AudioClip timeTheme = new AudioClip(
-            Audio.class.getResource("/sounds/timeTheme.mp3").toExternalForm());
-    private static AudioClip moveTheme = new AudioClip(
-            Audio.class.getResource("/sounds/moveTheme.mp3").toExternalForm());
+public enum Audio {
 
-    private Audio() {
+  TIME_THEME("/sounds/timeTheme.mp3", 0.05, true),
+  MOVE_THEME("/sounds/moveTheme.mp3", 0.03, true),
+  MAIN_THEME("/sounds/mainTheme.mp3", 0.05, true),
+  MERGE_SOUND("/sounds/mergesound.mp3", 0.15, false);
+
+  private final AudioClip audioClip;
+  private final boolean isMusic;
+
+  private Audio(String filePath, double volume, boolean isMusic) {
+    this.audioClip = new AudioClip(this.getClass().getResource(filePath).toExternalForm());
+    this.isMusic = isMusic;
+    if (isMusic) {
+      this.audioClip.setCycleCount(AudioClip.INDEFINITE);
+    } else {
+      this.audioClip.setCycleCount(1);
+    }
+    this.audioClip.setVolume(volume);
+  }
+
+  private static void forceStop() {
+    for (Audio audio : Audio.values()) {
+      if (audio.audioClip.isPlaying()) {
+        audio.audioClip.stop();
+      }
+
+    }
+  }
+
+  public void play() {
+    if (this.isMusic) {
+      Audio.forceStop();
     }
 
-    public static void selectMusic(GameMode mode) {
-        stopMusic();
-        switch (mode) {
-            case TRADITIONAL:
-                playMainTheme();
-                break;
-            case TIME_TRIAL:
-                playTimeTheme();
-                break;
-            case MOVE_LIMIT:
-                playMoveTheme();
-                break;
-        }
-    }
+    this.audioClip.play();
 
-    public static void playMainTheme() {
-        mainTheme.setVolume(0.05);
-        mainTheme.play();
-        mainTheme.setCycleCount(AudioClip.INDEFINITE);
-    }
+  }
 
-    public static void playMoveTheme() {
-        moveTheme.setVolume(0.03);
-        moveTheme.play();
-        moveTheme.setCycleCount(AudioClip.INDEFINITE);
-    }
-
-    public static void playTimeTheme() {
-        timeTheme.setVolume(0.05);
-        timeTheme.play();
-        timeTheme.setCycleCount(AudioClip.INDEFINITE);
-    }
-
-    public static void playMergeSound() {
-        mergeSound.setVolume(0.15);
-        mergeSound.play();
-    }
-
-    public static void stopMusic() {
-        mainTheme.stop();
-        moveTheme.stop();
-        timeTheme.stop();
-    }
 }

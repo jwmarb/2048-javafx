@@ -5,19 +5,14 @@ package org.csc335;
 
 import java.io.IOException;
 
-import org.csc335.controllers.Audio;
 import org.csc335.controllers.Game;
-import org.csc335.controllers.GameBoard;
 import org.csc335.navigation.Navigation;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class App extends Application {
-  private Audio sound;
-
   @Override
   public void start(Stage stage) throws IOException {
     Font.loadFont(this.getClass().getResource("/fonts/fa-solid-900.ttf").toExternalForm(), 12);

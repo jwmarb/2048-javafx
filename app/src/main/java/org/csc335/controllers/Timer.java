@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.csc335.listeners.TimerListener;
+import org.csc335.interfaces.TimerListener;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;

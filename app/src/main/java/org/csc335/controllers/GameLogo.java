@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.csc335.entity.GameMode;
-import org.csc335.listeners.DrawerMenuActionListener;
+import org.csc335.interfaces.DrawerMenuActionListener;
+import org.csc335.interfaces.GameListener;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class GameLogo extends VBox {
+public class GameLogo extends VBox implements GameListener {
 
   private List<DrawerMenuActionListener> listeners;
 
@@ -42,7 +43,7 @@ public class GameLogo extends VBox {
     }
   }
 
-  public void changeMode(GameMode mode) {
+  public void gameModeChanged(GameMode mode) {
     this.icon.setIcon(mode.ICON);
     this.modeLabel.setText(mode.TITLE);
     if (this.gameModeContainer.getStyleClass().size() > 1) {
