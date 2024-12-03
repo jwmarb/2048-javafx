@@ -52,6 +52,8 @@ public class LeaderboardModel {
           }
       }
     };
+
+    addScores();
   }
 
   public String load() {
@@ -63,11 +65,14 @@ public class LeaderboardModel {
     for (Object score : t) {
       top10 += String.format("%d.    %d points\n", ++c, (int)score);
     }
+    while (c < 10) {
+      top10 += String.format("%d.    0 points\n", ++c);
+    }
 
     return top10;
   }
 
-  public void addScores() {
+  private void addScores() {
     File file = leaderboardPath.toFile();
     Scanner fileReader = null;
 
@@ -93,13 +98,7 @@ public class LeaderboardModel {
     try {
 
       // get the saved data
-      addScores();
-      System.out.println(maxHeap);
-
       maxHeap.add(newScore);
-      System.out.println(maxHeap);
-
-
 
       BufferedWriter fileWriter = new BufferedWriter(new FileWriter(leaderboardPath.toFile()));
       Object[] t = maxHeap.toArray();
