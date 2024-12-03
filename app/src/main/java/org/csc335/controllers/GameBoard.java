@@ -72,6 +72,10 @@ public class GameBoard extends GridPane {
     }
   }
 
+  /**
+   * generateRandomValues method that puts 2 tiles on the board, ensuring that the placed tiles are
+   * not on the same space
+   */
   private void initialTileSetup() {
     updateBlankTiles();
 
@@ -81,7 +85,6 @@ public class GameBoard extends GridPane {
       idx2 = (int) (Math.random() * emptyTiles.size());
     } while (idx2 == idx1);
 
-    // Tile randomTile = emptyTiles.get(randomIndex);
     emptyTiles.get(idx1).setValue(
         (Math.random() < 0.75) ? TileValue.T2 : TileValue.T4);
     emptyTiles.get(idx2).setValue(
@@ -127,9 +130,14 @@ public class GameBoard extends GridPane {
     }
   }
 
-  /*
-   * shift logic
-   * returns true if anything actaully happened on board
+  /**
+   * Shift logic switch. Passes in proper params to shiftOperation, and returns the result of that
+   * function call. If the direction is null, then nothing happens (prevent random keypress from
+   * performing actions on board)
+   * 
+   * @param direction Direction enum representing which directonal key was pressed (WASD)
+   * 
+   * @return boolean, true if something actually happened on the board, false otherwise
    */
   private boolean shift(Direction direction) {
     switch (direction) {
@@ -146,8 +154,18 @@ public class GameBoard extends GridPane {
     return false;
   }
 
-  /*
-   * @param collapseTowards0: true if up/left, false if down, right
+  /**
+   * merge logic for the game, generalized to work with all directional input to avoid code
+   * duplication. Uses 2 pointers within each field (row/col we are looping over), to determine
+   * tile merge behavior. Behavior is: Tile merges with empty space -> tile moves into empty space;
+   * Tile merges with same-value tile -> combine the tiles into the next value tile; Tile merges
+   * with a different-value tile -> tile moves to adjacent space instead. If any action occurs (IE
+   * any tile moves/merges), then we set bool flag to true to represent something happening, and
+   * that flag is returned at the end of the method
+   * 
+   * @param collapseTowards0
+   * @param loopOverCols
+   * @return
    */
   private boolean shiftOperation(boolean collapseTowards0, boolean loopOverCols) {
     boolean somethingHappened = false;
@@ -155,6 +173,8 @@ public class GameBoard extends GridPane {
     // toMerge is general name for what we collapse (rows or cols)
     for (int toMerge = 0; toMerge < board.length; toMerge++) {
 
+      // if we collapse towards 0, pointers move right and shift left, so offset would be 1 to 
+      // enable ++, etc... (vice versa if we collapse towards end of board)
       final int OFFSET = (collapseTowards0) ? 1 : -1;
 
       // determine starting point within row/column
@@ -162,13 +182,14 @@ public class GameBoard extends GridPane {
       int next = (collapseTowards0) ? 1 : board.length - 2;
 
       while (true) {
-        boolean loopCondition = (collapseTowards0) ? next < board.length : next >= 0;
+        boolean loopCondition = (collapseTowards0) ? (next < board.length) : (next >= 0);
         if (!loopCondition)
           break;
 
         // if loop over cols, we need loop idx to be in col pos!
         Tile nextTile = (loopOverCols) ? board[next][toMerge] : board[toMerge][next];
 
+        // keep moving next pointer until we hit a non-blank tile
         if (nextTile.isBlank()) {
           next += OFFSET;
           continue;
@@ -181,10 +202,9 @@ public class GameBoard extends GridPane {
           somethingHappened = true;
 
           firstTile.setValue(firstTile.getTileValue().next());
-
           this.notifyScoreChanged(firstTile.getIntValue());
-
           nextTile.makeBlank();
+
           first += OFFSET;
           Audio.MERGE_SOUND.play();
         } else if (firstTile.isBlank()) { // move tile to new spot
@@ -193,14 +213,13 @@ public class GameBoard extends GridPane {
           firstTile.setValue(nextTile.getValue());
           nextTile.makeBlank();
         } else {
-          // unroll ternary so it doesn't look so bad
+          // firstTile != nextTile -> move nextTile to location adjacent to firstTile
+
+          // determine if toMerge represents rows or cols
           int row = (!loopOverCols) ? toMerge : (first + OFFSET);
           int col = (loopOverCols) ? toMerge : (first + OFFSET);
 
-          if (swap(board[row][col], nextTile)) {
-            somethingHappened = true;
-          }
-
+          somethingHappened = swap(board[row][col], nextTile);
           first += OFFSET;
         }
         next += OFFSET;
@@ -213,6 +232,7 @@ public class GameBoard extends GridPane {
         listener.tileMoved();
       }
     }
+    
     return somethingHappened;
   }
 
@@ -330,6 +350,7 @@ public class GameBoard extends GridPane {
       }
     }
 
+    // TODO: remove
     // temp[0][0].setValue(TileValue.T2);
     // temp[0][1].setValue(TileValue.T4);
     // temp[0][2].setValue(TileValue.T8);
