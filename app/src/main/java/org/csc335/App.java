@@ -30,8 +30,6 @@ public class App extends Application {
 
     // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/view/2048menu.fxml")));
 
-    Audio.playMainTheme();
-
     Navigation.navigate(new Game());
     // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/stories/TileStory.fxml")));
     // GameBoard g = null;

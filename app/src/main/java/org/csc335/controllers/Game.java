@@ -232,6 +232,7 @@ public class Game extends StackPane {
     this.resetGame();
     this.logo.changeMode(this.mode);
     this.gameBoard.setMode(this.mode);
+    Audio.selectMusic(this.mode);
 
     switch (this.mode) {
       case GameMode.TIME_TRIAL:

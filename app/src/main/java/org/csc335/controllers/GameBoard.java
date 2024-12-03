@@ -25,7 +25,6 @@ public class GameBoard extends GridPane {
   private List<GameBoardListener> listeners;
   private ArrayList<Tile> emptyTiles = new ArrayList<>();
   private Tile[][] board;
-  private Audio sound;
   private GameMode mode;
   private boolean shouldRecordKeystrokes;
   private int moves;
