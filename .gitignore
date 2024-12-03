@@ -10,3 +10,4 @@ bin/
 settings.json
 *.class
 .settings/org.eclipse.buildship.core.prefs
+leaderboard.txt
