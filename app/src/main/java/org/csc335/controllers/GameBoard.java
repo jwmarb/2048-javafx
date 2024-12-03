@@ -25,7 +25,6 @@ public class GameBoard extends GridPane {
   private List<GameBoardListener> listeners;
   private ArrayList<Tile> emptyTiles = new ArrayList<>();
   private Tile[][] board;
-  private Audio sound;
   private GameMode mode;
   private boolean shouldRecordKeystrokes;
   private int moves;
@@ -36,8 +35,6 @@ public class GameBoard extends GridPane {
     loader.setController(this);
     super.getStylesheets().add(this.getClass().getResource("/css/gameboard.css").toExternalForm());
     this.listeners = new ArrayList<>();
-    sound = new Audio();
-    sound.stopMainTheme();
     // super.getStyleClass().add("gameboard");
     try {
       loader.load();
@@ -64,6 +61,12 @@ public class GameBoard extends GridPane {
 
   public void reset() {
     // todo
+    for (int i = 0; i < board.length; ++i) {
+      for (int j = 0; j < board[i].length; ++j) {
+        board[i][j].makeBlank();
+      }
+    }
+    initialTileSetup();
     this.moves = 0;
   }
 
@@ -187,7 +190,7 @@ public class GameBoard extends GridPane {
 
           nextTile.makeBlank();
           first += OFFSET;
-          sound.playMergeSound();
+          Audio.playMergeSound();
         } else if (firstTile.isBlank()) { // move tile to new spot
           somethingHappened = true;
 
