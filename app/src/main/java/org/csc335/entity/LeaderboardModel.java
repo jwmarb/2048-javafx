@@ -1,20 +1,38 @@
 package org.csc335.entity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.io.File;
 import java.io.FileWriter;
+import java.nio.file.Paths;
 import java.util.Scanner;
+import java.util.stream.Stream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.io.BufferedWriter;
 
 public class LeaderboardModel {
 
   private final PriorityQueue<Integer> maxHeap;
 
-  private static final String FILE_NAME = "leaderboard.txt";
+  private static Path leaderboardPath;
+  static {
+    try (Stream<Path> walkStream = Files.walk(Paths.get("."))) {
+      walkStream.filter(p -> p.toFile().isFile()).forEach(f -> {
+          if (f.toString().endsWith("leaderboard.txt")) {
+            leaderboardPath = f;
+          }
+      });
+    } catch (Exception e) {
+      System.out.println("Error reading files...");
+    }
+
+    if (leaderboardPath == null) {
+      System.out.println("Leaderboard file does not exist");
+      System.exit(1);
+    }
+  }
 
   public LeaderboardModel() {
     maxHeap = new PriorityQueue<Integer>(10){
@@ -23,14 +41,14 @@ public class LeaderboardModel {
       @Override
       public boolean add(Integer e) {
           if (size() < maxSize) {
-              return super.add(e);
+            return super.add(e);
           } else {
-              if (comparator().compare(e, peek()) > 0) { // Assuming a max heap
-                  poll(); // Remove the smallest element
-                  return super.add(e);
-              } else {
-                  return false; // Element not added
-              }
+            if (e.compareTo(peek()) > 0) {
+              poll(); // Remove the smallest element
+              return super.add(e);
+            } else {
+              return false;
+            }
           }
       }
     };
@@ -50,7 +68,7 @@ public class LeaderboardModel {
   }
 
   public void addScores() {
-    File file = new File(FILE_NAME);
+    File file = leaderboardPath.toFile();
     Scanner fileReader = null;
 
     try {
@@ -79,10 +97,11 @@ public class LeaderboardModel {
       System.out.println(maxHeap);
 
       maxHeap.add(newScore);
-      //addNewScore(newScore);
       System.out.println(maxHeap);
 
-      BufferedWriter fileWriter = new BufferedWriter(new FileWriter(FILE_NAME));
+
+
+      BufferedWriter fileWriter = new BufferedWriter(new FileWriter(leaderboardPath.toFile()));
       Object[] t = maxHeap.toArray();
       Arrays.sort(t, Collections.reverseOrder());
       for (Object score : t) {
@@ -92,6 +111,7 @@ public class LeaderboardModel {
       fileWriter.close();
     } catch (Exception e) {
       System.out.println("File does not exit.");
+      e.printStackTrace();
     }
   }
 }
