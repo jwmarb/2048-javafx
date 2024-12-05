@@ -45,7 +45,7 @@ git clone https://github.com/jwmarb/2048-javafx
 Once you have cloned the repository, navigate to the root directory of the project and run the following command in your terminal:
 
 ```sh
-./gradlew run
+chmod +x ./gradlew && ./gradlew run
 ```
 
 After that, the desktop application should appear on your screen.
