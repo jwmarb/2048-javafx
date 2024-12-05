@@ -46,9 +46,6 @@ public class LeaderboardModel {
     // if leaderboard.txt DNE, create it and set path
     if (leaderboardPath == null) {
       fileGen(new File("leaderboard.txt"));
-      // try {
-      //   (new File("leaderboard.txt")).createNewFile();
-      // } catch (Exception e) {}
     }
     leaderboardPath = Paths.get("leaderboard.txt");
   }
