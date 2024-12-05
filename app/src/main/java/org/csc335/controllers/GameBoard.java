@@ -5,9 +5,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.csc335.entity.TileValue;
+import org.csc335.entity.Audio;
+import org.csc335.entity.Direction;
 import org.csc335.interfaces.GameBoardListener;
 import org.csc335.navigation.Navigation;
+import org.csc335.util.EZLoader;
 import org.csc335.util.Logger;
 
 import javafx.event.EventHandler;
@@ -40,16 +42,8 @@ public class GameBoard extends GridPane {
   // Counter to track the number of moves made during the game.
   private int moves;
 
-  public GameBoard() throws URISyntaxException {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/GameBoard.fxml"));
-    loader.setRoot(this);
-    loader.setController(this);
-    super.getStylesheets().add(this.getClass().getResource("/css/gameboard.css").toExternalForm());
-    try {
-      loader.load();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+  public GameBoard() {
+    EZLoader.load(this, GameBoard.class);
     this.listeners = new ArrayList<>();
     this.board = makeBoard();
     this.shouldRecordKeystrokes = true;

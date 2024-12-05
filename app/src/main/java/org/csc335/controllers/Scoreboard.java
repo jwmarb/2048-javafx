@@ -1,5 +1,7 @@
 package org.csc335.controllers;
 
+import org.csc335.util.EZLoader;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -19,19 +21,8 @@ public class Scoreboard extends HBox {
 
   public Scoreboard() {
     super();
-
-    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/Scoreboard.fxml"));
-    loader.setRoot(this);
-    loader.setController(this);
-    this.getStylesheets().add(this.getClass().getResource("/css/scoreboard.css").toExternalForm());
-
+    EZLoader.load(this, Scoreboard.class);
     this.scoreVal = new SimpleIntegerProperty();
-
-    try {
-      loader.load();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
   }
 
   public void addScore(int scoreVal) {

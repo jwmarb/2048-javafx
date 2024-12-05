@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.csc335.entity.GameMode;
 import org.csc335.interfaces.DrawerOptionListener;
+import org.csc335.util.EZLoader;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
@@ -12,7 +13,6 @@ import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -28,19 +28,11 @@ public class DrawerMenu extends VBox {
 
   private List<DrawerOptionListener> listeners;
 
-  public DrawerMenu() {
-    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/DrawerMenu.fxml"));
-    this.listeners = new ArrayList<>();
-    loader.setRoot(this);
-    loader.setController(this);
-    this.getStylesheets().add(this.getClass().getResource("/css/drawermenu.css").toExternalForm());
-    try {
-      loader.load();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
+  public DrawerMenu(GameMode defaultMode) {
+    EZLoader.load(this, DrawerMenu.class);
 
-    this.createOptions();
+    this.listeners = new ArrayList<>();
+    this.createOptions(defaultMode);
   }
 
   public void show() {
@@ -83,11 +75,15 @@ public class DrawerMenu extends VBox {
     });
   }
 
-  private void createOptions() {
+  private void createOptions(GameMode defaultMode) {
     GameMode[] modes = GameMode.values();
+    DrawerOption defaultOption = null;
 
     for (GameMode mode : modes) {
       DrawerOption option = mode.createDrawerOption();
+      if (defaultOption == null && option.getMode().equals(defaultMode)) {
+        defaultOption = option;
+      }
       option.setOnMouseClicked(new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent event) {
@@ -97,8 +93,14 @@ public class DrawerMenu extends VBox {
       container.getChildren().add(option);
     }
 
-    // Automatically select the first child as the first selected option by default
-    this.setSelected(((DrawerOption) container.getChildren().get(0)));
+    // If an option is already selected, display that it has been selected
+    if (defaultOption != null) {
+      this.setSelected(defaultOption);
+    } else {
+      // Otherwise select the first child as the first selected option by default
+      this.setSelected(((DrawerOption) container.getChildren().get(0)));
+
+    }
   }
 
   private void setSelected(DrawerOption option) {

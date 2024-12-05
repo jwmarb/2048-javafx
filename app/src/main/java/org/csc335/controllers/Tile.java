@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.csc335.entity.TileValue;
+import org.csc335.util.EZLoader;
 
 /**
  * A controller class for a Tile in the game. The Tile is represented by a VBox
@@ -140,18 +141,9 @@ public class Tile extends VBox {
 
   public Tile() {
     super();
+    EZLoader.load(this, Tile.class);
     this.value = new SimpleStringProperty();
     this.tileValue = Optional.empty();
-    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/Tile.fxml"));
-    super.getStylesheets().add(this.getClass().getResource("/css/tile.css").toExternalForm());
-    loader.setRoot(this);
-    loader.setController(this);
-    try {
-      loader.load();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-
     super.setEffect(new InnerShadow(BlurType.GAUSSIAN, Color.GRAY, 2, 0, 0, 1));
     this.initListeners();
     this.changeLabelClass();

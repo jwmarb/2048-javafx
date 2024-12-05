@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.csc335.interfaces.MoveCounterListener;
+import org.csc335.util.EZLoader;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,23 +22,9 @@ public class MoveCounter extends HBox {
 
   public MoveCounter() {
     super();
-    this.load();
+    EZLoader.load(this, MoveCounter.class);
     this.listeners = new ArrayList<>();
     this.counter.setText(MOVES + "");
-  }
-
-  private void load() {
-    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/MoveCounter.fxml"));
-    loader.setRoot(this);
-    loader.setController(this);
-
-    this.getStylesheets().add(this.getClass().getResource("/css/movecounter.css").toExternalForm());
-
-    try {
-      loader.load();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
   }
 
   public void totalMovesMade(int movesMade) {
