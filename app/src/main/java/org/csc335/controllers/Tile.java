@@ -22,6 +22,7 @@ import org.csc335.entity.TileValue;
  * and contains a Label that displays the value of the tile.
  */
 public class Tile extends VBox {
+  private static final double T4_CHANCE = 0.75;
 
   private Optional<TileValue> tileValue;
 
@@ -50,6 +51,7 @@ public class Tile extends VBox {
   public TileValue getTileValue() {
     return this.tileValue.orElse(null);
   }
+
   /**
    * returns the value of the tile as an int. If blank tile, returns 0.
    * 
@@ -90,6 +92,13 @@ public class Tile extends VBox {
     this.value.set(value.toString());
   }
 
+  public void setRandomValue() {
+    this.value.set(Math.random() < T4_CHANCE ? TileValue.T2.toString() : TileValue.T4.toString());
+  }
+
+  /**
+   * Sets the tile to a blank state, removing any current value.
+   */
   public void makeBlank() {
     this.value.set(null); // set it to empty
   }
