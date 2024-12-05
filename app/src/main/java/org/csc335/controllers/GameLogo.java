@@ -6,6 +6,7 @@ import java.util.List;
 import org.csc335.entity.GameMode;
 import org.csc335.interfaces.DrawerMenuActionListener;
 import org.csc335.interfaces.GameListener;
+import org.csc335.util.EZLoader;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,19 +29,8 @@ public class GameLogo extends VBox implements GameListener {
 
   public GameLogo() {
     super();
-
+    EZLoader.load(this, GameLogo.class);
     this.listeners = new ArrayList<>();
-    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/GameLogo.fxml"));
-
-    loader.setRoot(this);
-    loader.setController(this);
-    this.getStylesheets().add(this.getClass().getResource("/css/gamelogo.css").toExternalForm());
-
-    try {
-      loader.load();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
   }
 
   public void gameModeChanged(GameMode mode) {

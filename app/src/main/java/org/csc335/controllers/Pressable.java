@@ -1,13 +1,13 @@
 package org.csc335.controllers;
 
+import org.csc335.util.EZLoader;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -41,40 +41,20 @@ public class Pressable extends Button {
 
   public Pressable(String text, String variant, boolean shouldGrow) {
     super(text.toUpperCase());
-
+    EZLoader.load(this, Pressable.class);
     this.variant = new SimpleStringProperty();
     this.grow = new SimpleBooleanProperty();
-
-    this.loadAssets();
     this.initListeners();
-
     this.setVariant(variant);
     this.setGrow(shouldGrow);
   }
 
   public Pressable() {
     super();
-
     this.variant = new SimpleStringProperty();
     this.grow = new SimpleBooleanProperty();
-
-    this.loadAssets();
+    EZLoader.load(this, Pressable.class);
     this.initListeners();
-  }
-
-  private void loadAssets() {
-    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/Pressable.fxml"));
-
-    loader.setRoot(this);
-    loader.setController(this);
-
-    this.getStylesheets().add(this.getClass().getResource("/css/pressable.css").toExternalForm());
-
-    try {
-      loader.load();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
   }
 
   private void initListeners() {

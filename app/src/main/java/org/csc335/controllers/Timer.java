@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.csc335.interfaces.TimerListener;
+import org.csc335.util.EZLoader;
 
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -34,7 +35,7 @@ public class Timer extends HBox {
 
   public Timer() {
     super();
-    this.load();
+    EZLoader.load(this, Timer.class);
     this.isDone = true;
     this.listeners = new ArrayList<>();
     this.duration = Duration.ofMinutes(DEFAULT_TIME);
@@ -51,22 +52,6 @@ public class Timer extends HBox {
     });
     this.timer.setCycleCount(Animation.INDEFINITE);
     Timer.this.handleDurationChange();
-  }
-
-  private void load() {
-    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/Timer.fxml"));
-
-    loader.setRoot(this);
-    loader.setController(this);
-
-    this.getStylesheets().add(this.getClass().getResource("/css/timer.css").toExternalForm());
-
-    try {
-      loader.load();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-
   }
 
   public boolean isTimerActive() {

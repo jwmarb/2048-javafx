@@ -1,9 +1,10 @@
 package org.csc335.controllers;
 
 import org.csc335.entity.GameMode;
+import org.csc335.util.EZLoader;
+import org.csc335.util.Logger;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
@@ -21,22 +22,10 @@ public class DrawerOption extends HBox {
 
   public DrawerOption(String title, String description, String icon, GameMode mode) {
     super();
-    FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/view/DrawerOption.fxml"));
+    EZLoader.load(this, DrawerOption.class);
 
     this.mode = mode;
-
-    loader.setRoot(this);
-    loader.setController(this);
-
-    this.getStylesheets().add(this.getClass().getResource("/css/draweroption.css").toExternalForm());
-
-    try {
-      loader.load();
-      this.icon.setIcon(icon);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-
+    this.icon.setIcon(icon);
     this.title.setText(title);
     this.description.setText(description);
   }
