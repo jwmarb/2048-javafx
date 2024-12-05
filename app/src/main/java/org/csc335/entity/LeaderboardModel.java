@@ -19,12 +19,19 @@ public class LeaderboardModel {
   private static Path leaderboardPath;
 
   /**
-   * Static assignment block to init leaderboardPath. Recursively walks over all files under
-   * current working directory (cwd) to find a match of leaderboard.txt. If the file is found, then
-   * it will set our leaderboardPath to the path. If no such file is found, it generates a filepath
-   * pointing to a leaderboard.txt in cwd and then makes that file
+   * Static assignment block to init leaderboardPath
    */
   static {
+    getLeaderboard();
+  }
+
+  /**
+   * Recursively walks over all files under current working directory (cwd) to find a match of
+   * leaderboard.txt. If the file is found, then it will set our leaderboardPath to the path. If
+   * no such file is found, it generates a filepath pointing to a leaderboard.txt in cwd and then
+   * makes that file
+   */
+  private static void getLeaderboard() {
     // recursively find file leaderboard.txt
     try (Stream<Path> walkStream = Files.walk(Paths.get("."))) {
       walkStream.filter(p -> p.toFile().isFile()).forEach(f -> {
@@ -38,9 +45,10 @@ public class LeaderboardModel {
 
     // if leaderboard.txt DNE, create it and set path
     if (leaderboardPath == null) {
-      try {
-        (new File("leaderboard.txt")).createNewFile();
-      } catch (Exception e) {}
+      fileGen(new File("leaderboard.txt"));
+      // try {
+      //   (new File("leaderboard.txt")).createNewFile();
+      // } catch (Exception e) {}
     }
     leaderboardPath = Paths.get("leaderboard.txt");
   }
@@ -137,6 +145,7 @@ public class LeaderboardModel {
    */
   public void writeNewPlayerScore(int newScore) {
     leaderboard.add(newScore);
+    fileGen(leaderboardPath.toFile());
     try {
       BufferedWriter fileWriter = new BufferedWriter(new FileWriter(leaderboardPath.toFile()));
 
@@ -152,6 +161,23 @@ public class LeaderboardModel {
       System.out.println("leaderboard.txt file does not exist");
       e.printStackTrace();
       System.exit(1);
+    }
+  }
+
+  /**
+   * creates the given file if it does not exist
+   * 
+   * @pre file != null
+   * @param file the file object that may or may not exist
+   */
+  private static void fileGen(File file) {
+    if (!file.exists()) {
+      try {
+        file.createNewFile();
+      } catch (Exception e) {
+        System.out.println("Error with leaderboard file. Path was not resolved");
+        System.exit(1);
+      }
     }
   }
 }
