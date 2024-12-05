@@ -45,13 +45,13 @@ public class LeaderboardModel {
 
     // if leaderboard.txt DNE, create it and set path
     if (leaderboardPath == null) {
-      fileGen(new File("leaderboard.txt"));
+      leaderboardPath = Paths.get("leaderboard.txt");
     }
-    leaderboardPath = Paths.get("leaderboard.txt");
   }
 
   // constructor
   public LeaderboardModel() {
+    fileGen(leaderboardPath.toFile());
 
     // fixed size maxheap
     leaderboard = new PriorityQueue<Integer>(){
@@ -125,7 +125,7 @@ public class LeaderboardModel {
       fileReader.close();
 
     } catch (Exception e) {
-      System.out.println("leaderboard.txt file does not exist");
+      System.out.println("leaderboard.txt does not exist");
       e.printStackTrace();
       System.exit(1);
     }
