@@ -22,13 +22,24 @@ import org.csc335.entity.TileValue;
  * and contains a Label that displays the value of the tile.
  */
 public class Tile extends VBox {
+
+  // Constant representing the probability of a specific tile value (T4)
+  // appearing. This value is used to determine the likelihood of a tile being
+  // assigned a value of 4.
   private static final double T4_CHANCE = 0.75;
 
+  // Holds the optional value of the tile, which can be empty if the tile has no
+  // assigned value.
   private Optional<TileValue> tileValue;
 
+  // JavaFX StringProperty used to bind the tile's value to UI elements.
+  // This allows for automatic updates of the UI when the tile's value changes.
   @FXML
   private StringProperty value;
 
+  // JavaFX Label used to display the tile's value in the UI.
+  // This label is bound to the 'value' StringProperty, ensuring the UI reflects
+  // any changes to the tile's value.
   @FXML
   private Label label;
 
@@ -92,6 +103,17 @@ public class Tile extends VBox {
     this.value.set(value.toString());
   }
 
+  /**
+   * Sets a random value to the tile. The value is determined by a random
+   * probability where there is a specific chance (T4_CHANCE) of setting the
+   * tile's value to T4. If the random probability does not meet the T4_CHANCE,
+   * the tile's value is set to T2.
+   *
+   * @pre The Tile object has been instantiated, and the T4_CHANCE constant
+   *      is defined and within a valid probability range (0.0 to 1.0).
+   * @post The tile's value is set to either T2 or T4 based on the random
+   *       probability. The tile object is modified with the new value.
+   */
   public void setRandomValue() {
     this.value.set(Math.random() < T4_CHANCE ? TileValue.T2.toString() : TileValue.T4.toString());
   }
