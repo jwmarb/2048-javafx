@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -64,7 +65,7 @@ public class Navigation {
   public static void setOnKeyPressed(EventHandler<? super KeyEvent> eventHandler) {
     addListener(new NavigationListener() {
       public void handleMount(Scene scene) {
-        scene.setOnKeyPressed(eventHandler);
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, eventHandler);
         removeListener(this);
       }
     });
@@ -78,7 +79,7 @@ public class Navigation {
   public static void setOnKeyReleased(EventHandler<? super KeyEvent> eventHandler) {
     addListener(new NavigationListener() {
       public void handleMount(Scene scene) {
-        scene.setOnKeyReleased(eventHandler);
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, eventHandler);
         removeListener(this);
       }
     });
@@ -96,6 +97,7 @@ public class Navigation {
         stage.show();
       }
     });
+
   }
 
   /**
