@@ -10,7 +10,8 @@
 </p>
 
 <div align="center">
-todo: add image previews of the application here
+<img src="assets/preview1.png" width="33%">
+<img src="assets/preview2.png" width="33%">
 </div>
 
 ## What is 2048FX?
