@@ -375,7 +375,6 @@ public class GameBoard extends GridPane {
         // If `firstTile` and `nextTile` are not equal and `firstTile` is not blank,
         // move `nextTile` next to `firstTile`.
         else {
-          somethingHappened = true;
 
           // Determine the target position for `nextTile` based on whether we're iterating
           // over columns or rows.
@@ -402,6 +401,7 @@ public class GameBoard extends GridPane {
 
     // Return the flag indicating if any changes were made to the board during this
     // process.
+    Logger.println("Something Happened: " + somethingHappened);
     return somethingHappened;
   }
 
