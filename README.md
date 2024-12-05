@@ -12,6 +12,7 @@
 <div align="center">
 <img src="assets/preview1.png" width="33%">
 <img src="assets/preview2.png" width="33%">
+<img src="assets/preview3.png" width="33%">
 </div>
 
 ## What is 2048FX?
