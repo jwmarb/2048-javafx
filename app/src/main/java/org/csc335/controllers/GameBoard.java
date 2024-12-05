@@ -382,7 +382,9 @@ public class GameBoard extends GridPane {
           int col = (loopOverCols) ? toMerge : (first + OFFSET);
 
           // Swap the positions of `nextTile` and the tile at the target position.
-          somethingHappened = swap(board[row][col], nextTile);
+          if (swap(board[row][col], nextTile)) {
+            somethingHappened = true;
+          }
           first += OFFSET;
         }
         // Move `next` pointer to the next tile to process.
