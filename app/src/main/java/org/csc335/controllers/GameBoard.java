@@ -1,19 +1,18 @@
 package org.csc335.controllers;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.csc335.entity.Audio;
 import org.csc335.entity.Direction;
+import org.csc335.entity.TileValue;
 import org.csc335.interfaces.GameBoardListener;
 import org.csc335.navigation.Navigation;
 import org.csc335.util.EZLoader;
 import org.csc335.util.Logger;
 
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
@@ -345,13 +344,13 @@ public class GameBoard extends GridPane {
         Tile firstTile = (loopOverCols) ? board[first][toMerge] : board[toMerge][first];
 
         // If values of `nextTile` and `firstTile` are equal, we can merge them.
-        if (nextTile.getValue().equals(firstTile.getValue())) {
+        if (nextTile.equals(firstTile)) {
           somethingHappened = true;
 
           // Update `firstTile` with the next value in the sequence.
-          firstTile.setValue(firstTile.getTileValue().next());
+          firstTile.setValue(firstTile.getNextTileValue());
           // Notify listeners about the score change.
-          this.notifyScoreChanged(firstTile.getIntValue());
+          this.notifyScoreChanged(firstTile.getNumericValue());
           // Make `nextTile` blank after merging.
           nextTile.makeBlank();
 
@@ -363,7 +362,7 @@ public class GameBoard extends GridPane {
         else if (firstTile.isBlank()) {
           somethingHappened = true;
 
-          firstTile.setValue(nextTile.getValue());
+          firstTile.setValue(nextTile.getTileValue());
           nextTile.makeBlank();
         }
         // If `firstTile` and `nextTile` are not equal and `firstTile` is not blank,
@@ -422,8 +421,8 @@ public class GameBoard extends GridPane {
    *         value.
    */
   private boolean swap(Tile t1, Tile t2) {
-    String temp = t1.getValue();
-    t1.setValue(t2.getValue());
+    Optional<TileValue> temp = t1.getTileValue();
+    t1.setValue(t2.getTileValue());
     t2.setValue(temp);
     return t1 != t2;
   }
@@ -598,7 +597,7 @@ public class GameBoard extends GridPane {
       for (int col = 0; col < SIZE; col++) {
         Tile tile = new Tile();
         temp[row][col] = tile;
-        this.add(tile, col, row);
+        this.add(tile.getView(), col, row);
       }
     }
 

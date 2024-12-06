@@ -1,97 +1,86 @@
 package org.csc335.controllers;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.InnerShadow;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import org.csc335.entity.TileValue;
-import org.csc335.util.EZLoader;
+import org.csc335.interfaces.Controller;
+import org.csc335.models.TileModel;
 
 /**
- * A controller class for a Tile in the game. The Tile is represented by a VBox
- * and contains a Label that displays the value of the tile.
+ * A controller class for a Tile in the game of 2048.
  */
-public class Tile extends VBox {
-
-  // Constant representing the probability of a specific tile value (T4)
-  // appearing. This value is used to determine the likelihood of a tile being
-  // assigned a value of 4.
-  private static final double T4_CHANCE = 0.75;
-
-  // Holds the optional value of the tile, which can be empty if the tile has no
-  // assigned value.
-  private Optional<TileValue> tileValue;
-
-  // JavaFX StringProperty used to bind the tile's value to UI elements.
-  // This allows for automatic updates of the UI when the tile's value changes.
-  @FXML
-  private StringProperty value;
-
-  // JavaFX Label used to display the tile's value in the UI.
-  // This label is bound to the 'value' StringProperty, ensuring the UI reflects
-  // any changes to the tile's value.
+public class Tile extends Controller<VBox, TileModel> {
   @FXML
   private Label label;
 
   /**
-   * Returns the current value of the tile. Reserved for FXML attributes.
+   * Retrieves the current value of the tile represented as an enum.
    *
-   * @return the current value of the tile as a string
+   * @return An {@code Optional<TileValue>} containing the current tile value
+   *         represented as an enum. If the tile value is null, returns an empty
+   *         {@code Optional}.
+   */
+  public Optional<TileValue> getTileValue() {
+
+    return this.model.getValue();
+  }
+
+  /**
+   * Retrieves the next tile value from the model.
+   *
+   * @returns An Optional containing the next TileValue if available, or an empty
+   *          Optional if no more values are present.
+   */
+  public Optional<TileValue> getNextTileValue() {
+    return this.model.getNextValue();
+  }
+
+  /**
+   * Retrieves the string representation of the value associated with this tile.
+   *
+   * @pre The tile's model is initialized and contains a value or is empty.
+   * @post The tile's model and its value remain unchanged.
+   *
+   * @returns The string representation of the tile's value if it exists,
+   *          otherwise an empty string.
    */
   public String getValue() {
-    return this.value.get();
-  }
+    Optional<TileValue> tileValue = this.model.getValue();
 
-  /**
-   * returns tile value enum
-   * 
-   * @pre isBlank method is called first -> always returns non-null
-   * 
-   * @return the current tile value rep as the enum
-   */
-  public TileValue getTileValue() {
-    return this.tileValue.orElse(null);
-  }
-
-  /**
-   * returns the value of the tile as an int. If blank tile, returns 0.
-   * 
-   * @return integer value representing the number the tile is
-   */
-  public int getIntValue() {
-    if (isBlank()) {
-      return 0;
+    if (tileValue.isEmpty()) {
+      return "";
     }
-    return tileValue.get().value();
+
+    return tileValue.get().toString();
   }
 
   /**
-   * returns bool, true if no value (blank), false otherwise
-   * 
-   * @return boolean representing if tile is blank or not
+   * Retrieves the numeric value of the tile. If the tile is blank, it returns 0.
+   *
+   * @return The integer value representing the number on the tile, or 0 if the
+   *         tile is blank.
+   */
+  public int getNumericValue() {
+    return this.model.getNumericValue();
+  }
+
+  /**
+   * Checks if the tile is blank (i.e., has no value assigned).
+   *
+   * @return A boolean value indicating whether the tile is blank (true) or not
+   *         (false).
    */
   public boolean isBlank() {
-    return !this.tileValue.isPresent();
-  }
-
-  /**
-   * Sets the value of the tile. Reserved for FXML attributes.
-   *
-   * @param value the new value to be set on the tile
-   */
-  public void setValue(String value) {
-    this.value.set(value);
+    return this.model.isBlank();
   }
 
   /**
@@ -101,7 +90,18 @@ public class Tile extends VBox {
    * @param value the new TileValue to be set on the tile
    */
   public void setValue(TileValue value) {
-    this.value.set(value.toString());
+    this.model.setValue(value);
+  }
+
+  /**
+   * Sets the value of the tile using the provided Optional TileValue.
+   *
+   * @param value An Optional containing the TileValue to set for the tile.
+   *              If the Optional is empty, the tile's value will be set to an
+   *              empty value.
+   */
+  public void setValue(Optional<TileValue> value) {
+    this.model.setValue(value);
   }
 
   /**
@@ -116,14 +116,14 @@ public class Tile extends VBox {
    *       probability. The tile object is modified with the new value.
    */
   public void setRandomValue() {
-    this.value.set(Math.random() < T4_CHANCE ? TileValue.T2.toString() : TileValue.T4.toString());
+    this.model.random();
   }
 
   /**
    * Sets the tile to a blank state, removing any current value.
    */
   public void makeBlank() {
-    this.value.set(null); // set it to empty
+    this.model.makeBlank();
   }
 
   @Override
@@ -136,15 +136,22 @@ public class Tile extends VBox {
     }
 
     final Tile otherTile = (Tile) other;
-    return this.getTileValue() == otherTile.getTileValue();
+
+    if (this.isBlank() != otherTile.isBlank()) {
+      return false;
+    }
+
+    if (this.isBlank() && otherTile.isBlank()) {
+      return true;
+    }
+
+    return this.getTileValue().get().equals(otherTile.getTileValue().get());
   }
 
   public Tile() {
-    super();
-    EZLoader.load(this, Tile.class);
-    this.value = new SimpleStringProperty();
-    this.tileValue = Optional.empty();
-    super.setEffect(new InnerShadow(BlurType.GAUSSIAN, Color.GRAY, 2, 0, 0, 1));
+    super(new VBox(), new TileModel());
+    super.initialize();
+    this.view.setEffect(new InnerShadow(BlurType.GAUSSIAN, Color.GRAY, 2, 0, 0, 1));
     this.initListeners();
     this.changeLabelClass();
     this.changeTileClass();
@@ -155,17 +162,17 @@ public class Tile extends VBox {
    */
   private void changeTileClass() {
     // Remove all existing classes from the tile
-    this.getStyleClass().clear();
+    this.view.getStyleClass().clear();
 
     // Add base class to all tiles
-    this.getStyleClass().add("tile-base");
+    this.view.getStyleClass().add("tile-base");
 
     // If a tile value is present, add the corresponding CSS class
-    if (this.tileValue.isPresent()) {
-      this.getStyleClass().add("tile-" + this.tileValue.get().toString());
+    if (!Tile.this.model.isBlank()) {
+      this.view.getStyleClass().add("tile-" + this.model.getValue().get().toString());
     } else {
       // If no value is present, add the blank tile class
-      this.getStyleClass().add("tile-blank");
+      this.view.getStyleClass().add("tile-blank");
     }
 
   }
@@ -176,8 +183,8 @@ public class Tile extends VBox {
   private void changeLabelClass() {
     Tile.this.label.getStyleClass().clear(); // Clear any existing styles on the label
 
-    if (Tile.this.tileValue.isPresent()) { // Check if there is a tile value present
-      String value = Tile.this.tileValue.get().toString(); // Convert TileValue to string
+    if (!Tile.this.model.isBlank()) { // Check if there is a tile value present
+      String value = Tile.this.model.getValue().get().toString(); // Convert TileValue to string
       Tile.this.label.setText(value); // Set the label text to the value
       Tile.this.label.getStyleClass().add("value-" + value); // Add CSS class based on the value
     } else {
@@ -189,13 +196,12 @@ public class Tile extends VBox {
    * Initializes listeners for changes to the tile's value property.
    */
   private void initListeners() {
-    ChangeListener<String> valueListener = new ChangeListener<String>() {
-      public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        Tile.this.tileValue = TileValue.fromString(newValue);
+    ChangeListener<TileValue> valueListener = new ChangeListener<TileValue>() {
+      public void changed(ObservableValue<? extends TileValue> observable, TileValue oldValue, TileValue newValue) {
         Tile.this.changeLabelClass();
         Tile.this.changeTileClass();
       }
     };
-    this.value.addListener(valueListener);
+    this.model.addListener(valueListener);
   }
 }
