@@ -141,4 +141,27 @@ public class TileModel {
   public void makeBlank() {
     this.tileValue.set(null);
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == null) {
+      return false;
+    }
+
+    if (other instanceof TileModel == false) {
+      return false;
+    }
+
+    TileModel otherModel = (TileModel) other;
+
+    if (otherModel.isBlank() != this.isBlank()) {
+      return false;
+    }
+
+    if (otherModel.isBlank() && this.isBlank()) {
+      return true;
+    }
+
+    return otherModel.getValue().get().equals(this.getValue().get());
+  }
 }
