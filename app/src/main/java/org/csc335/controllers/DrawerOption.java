@@ -7,6 +7,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
+/**
+ * Represents a custom drawer option within a graphical user interface,
+ * extending the HBox layout to provide a structured and styled container for
+ * various UI components such as buttons, labels, or images, typically used in
+ * side navigation menus or toolbars.
+ *
+ * This class is designed to encapsulate the functionality and appearance of
+ * individual drawer options, ensuring consistent styling and behavior across
+ * different parts of the application.
+ */
 public class DrawerOption extends HBox {
   @FXML
   private FAIcon icon;

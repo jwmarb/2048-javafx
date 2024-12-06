@@ -15,6 +15,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+/**
+ * Represents the DrawerMenu class, which extends VBox to provide a vertical
+ * layout for a menu that can be used as a drawer in a user interface. This
+ * class is designed to manage menu items and their interactions within a JavaFX
+ * application.
+ */
 public class DrawerMenu extends VBox {
 
   // Duration for the mount animation of the drawer menu in milliseconds.

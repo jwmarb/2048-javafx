@@ -1,54 +1,31 @@
 package org.csc335.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.csc335.interfaces.DialogActionListener;
+import org.csc335.models.DialogModel;
 import org.csc335.util.EZLoader;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+/**
+ * Represents a dialog component extending from VBox. This class is designed to
+ * encapsulate the layout and behavior of a dialog box, providing a structured
+ * way to display information or prompt for user input within a JavaFX
+ * application.
+ */
 public class Dialog extends VBox {
 
-  private List<DialogActionListener> listeners;
-
-  private boolean hidden;
+  private DialogModel model;
 
   @FXML
   private VBox dialogContainer;
-
-  @FXML
-  private StringProperty title;
-
-  public void setTitle(String title) {
-    this.title.set(title);
-  }
-
-  public void setDescription(String description) {
-    this.description.set(description);
-  }
-
-  public String getTitle() {
-    return this.title.get();
-  }
-
-  public String getDescription() {
-    return this.description.get();
-  }
-
-  @FXML
-  private StringProperty description;
 
   @FXML
   private Label titleLabel;
@@ -61,37 +38,57 @@ public class Dialog extends VBox {
 
   public Dialog(String title, String description) {
     super();
-    this.description = new SimpleStringProperty();
-    this.title = new SimpleStringProperty();
-
-    EZLoader.load(this, Dialog.class);
-
-    this.hidden = true;
-    this.listeners = new ArrayList<>();
-    this.title.bindBidirectional(this.titleLabel.textProperty());
-    this.description.bindBidirectional(this.descriptionLabel.textProperty());
-    this.setTitle(title);
-    this.setDescription(description);
+    EZLoader.load(this, Dialog.class); // Load the FXML associated with this Dialog class.
+    this.model = new DialogModel();
+    this.model.titleProperty().bindBidirectional(this.titleLabel.textProperty()); // Bind the model's title property to
+                                                                                  // the title label's text property for
+                                                                                  // two-way synchronization.
+    this.model.descriptionProperty().bindBidirectional(this.descriptionLabel.textProperty()); // Bind the model's
+                                                                                              // description property to
+                                                                                              // the description label's
+                                                                                              // text property for
+                                                                                              // two-way
+                                                                                              // synchronization.
+    this.setTitle(title); // Set the title of the dialog using the provided title parameter.
+    this.setDescription(description); // Set the description of the dialog using the provided description parameter.
   }
 
   /**
-   * Sets the hidden state of the dialog and notifies listeners if the dialog is
-   * hidden.
+   * Sets the title of the dialog.
    *
-   * @pre The dialog's state can be either hidden or not hidden.
-   * @post If the dialog is set to hidden, all registered DialogActionListeners
-   *       are notified.
-   * @param hidden a boolean indicating whether the dialog should be hidden (true)
-   *               or shown (false).
+   * @post The title of the dialog has been updated to the specified title.
+   * @param title The new title to be set for the dialog.
    */
-  private void setHidden(boolean hidden) {
-    this.hidden = hidden;
+  public void setTitle(String title) {
+    this.model.setTitle(title);
+  }
 
-    if (this.hidden) {
-      for (DialogActionListener listener : this.listeners) {
-        listener.dialogHidden();
-      }
-    }
+  /**
+   * Sets the description for the dialog.
+   *
+   * @post The description of the dialog is updated to the provided value.
+   * @param description the new description to be set for the dialog.
+   */
+  public void setDescription(String description) {
+    this.model.setDescription(description);
+  }
+
+  /**
+   * Retrieves the title of the dialog from the associated model.
+   *
+   * @return The title of the dialog as a String.
+   */
+  public String getTitle() {
+    return this.model.getTitle();
+  }
+
+  /**
+   * Retrieves the description from the associated model.
+   *
+   * @returns The description string stored in the model.
+   */
+  public String getDescription() {
+    return this.model.getDescription();
   }
 
   /**
@@ -103,7 +100,7 @@ public class Dialog extends VBox {
    * @param listener the DialogActionListener to be added; must not be null
    */
   public void addDialogActionListener(DialogActionListener listener) {
-    this.listeners.add(listener);
+    this.model.addListener(listener);
   }
 
   /**
@@ -117,14 +114,10 @@ public class Dialog extends VBox {
    * 
    * @post The dialog is not marked as hidden; it becomes visible with full
    *       opacity and its container is at the intended on-screen position.
-   *
-   * @returns None
    */
   public void show() {
     // Notify all registered listeners that the dialog is being shown.
-    for (DialogActionListener listener : this.listeners) {
-      listener.dialogShown();
-    }
+    this.model.setHidden(false);
 
     // Create a fade transition to gradually change the opacity of the dialog from
     // 0.0 to 1.0 over 250 milliseconds.
@@ -138,15 +131,6 @@ public class Dialog extends VBox {
     tt.setFromY(-50.0);
     tt.setToY(0.0);
     tt.setInterpolator(Interpolator.EASE_OUT); // Use an ease-out interpolator for a smooth ending of the transition.
-
-    // Set an event handler to mark the dialog as not hidden once the translation
-    // transition is complete.
-    tt.setOnFinished(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        Dialog.this.setHidden(false);
-      }
-    });
 
     // Start the translation and fade transitions simultaneously.
     tt.play();
@@ -182,7 +166,7 @@ public class Dialog extends VBox {
     tt.setOnFinished(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        Dialog.this.setHidden(true); // Hide the dialog after the animation finishes.
+        Dialog.this.model.setHidden(true); // Hide the dialog after the animation finishes.
       }
     });
 
@@ -217,10 +201,7 @@ public class Dialog extends VBox {
 
         @Override
         public void handle(ActionEvent event) {
-          // Notify all registered listeners about the action with the button index.
-          for (DialogActionListener listener : Dialog.this.listeners) {
-            listener.dialogAction(k);
-          }
+          Dialog.this.model.invokeAction(k);
         }
 
       });
