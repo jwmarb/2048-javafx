@@ -1,4 +1,4 @@
-package org.csc335.controller_tests;
+package org.csc335.entity_tests;
 
 import static org.junit.Assert.assertEquals;
 
