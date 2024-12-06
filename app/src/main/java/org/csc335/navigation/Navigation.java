@@ -7,7 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javafx.event.Event;
+import org.csc335.interfaces.NavigationListener;
+
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

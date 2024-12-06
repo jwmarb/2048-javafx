@@ -12,6 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Represents the model for a drawer menu, responsible for managing the state
+ * of the menu, including visibility and the currently selected game mode.
+ *
+ * This class maintains the hidden/visible state of the drawer menu and keeps
+ * track of the selected game mode. It provides methods to update and retrieve
+ * this information, as well as to notify listeners of changes.
+ */
 public class DrawerMenuModel {
   private Optional<GameMode> selected;
   private BooleanProperty isHidden;

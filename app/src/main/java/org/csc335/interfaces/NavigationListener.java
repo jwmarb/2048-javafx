@@ -1,4 +1,4 @@
-package org.csc335.navigation;
+package org.csc335.interfaces;
 
 import javafx.scene.Scene;
 
