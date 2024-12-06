@@ -14,7 +14,7 @@ import java.io.BufferedWriter;
 
 public class LeaderboardModel {
 
-  private final PriorityQueue<Integer> leaderboard;
+  private final PriorityQueue<Integer> LEADERBOARD;
   private final int LEADERBOARD_SIZE = 10;
   private static Path leaderboardPath;
 
@@ -26,18 +26,21 @@ public class LeaderboardModel {
   }
 
   /**
-   * Recursively walks over all files under current working directory (cwd) to find a match of
-   * leaderboard.txt. If the file is found, then it will set our leaderboardPath to the path. If
-   * no such file is found, it generates a filepath pointing to a leaderboard.txt in cwd and then
+   * Recursively walks over all files under current working directory (cwd) to
+   * find a match of
+   * leaderboard.txt. If the file is found, then it will set our leaderboardPath
+   * to the path. If
+   * no such file is found, it generates a filepath pointing to a leaderboard.txt
+   * in cwd and then
    * makes that file
    */
   private static void getLeaderboard() {
     // recursively find file leaderboard.txt
     try (Stream<Path> walkStream = Files.walk(Paths.get("."))) {
       walkStream.filter(p -> p.toFile().isFile()).forEach(f -> {
-          if (f.toString().endsWith("leaderboard.txt")) {
-            leaderboardPath = f;
-          }
+        if (f.toString().endsWith("leaderboard.txt")) {
+          leaderboardPath = f;
+        }
       });
     } catch (Exception e) {
       System.out.println("Error reading files...");
@@ -54,26 +57,28 @@ public class LeaderboardModel {
     fileGen(leaderboardPath.toFile());
 
     // fixed size maxheap
-    leaderboard = new PriorityQueue<Integer>(){
+    LEADERBOARD = new PriorityQueue<Integer>() {
       private final int maxSize = LEADERBOARD_SIZE;
 
       @Override
       /**
-       * overloaded add method such that each added element will ensure that the size of priority
-       * queue is <= maxSize. Enforces max queue by polling (poppin smallest element) each time
+       * overloaded add method such that each added element will ensure that the size
+       * of priority
+       * queue is <= maxSize. Enforces max queue by polling (poppin smallest element)
+       * each time
        * a new added element makes size larger than maxSize.
        */
       public boolean add(Integer e) {
-          if (size() < maxSize) {
+        if (size() < maxSize) {
+          return super.add(e);
+        } else {
+          if (e.compareTo(peek()) > 0) {
+            poll();
             return super.add(e);
           } else {
-            if (e.compareTo(peek()) > 0) {
-              poll();
-              return super.add(e);
-            } else {
-              return false;
-            }
+            return false;
           }
+        }
       }
     };
 
@@ -81,7 +86,8 @@ public class LeaderboardModel {
   }
 
   /**
-   * Loops over scores in the maxheap, returns a String representation of the leaderboard. If there
+   * Loops over scores in the maxheap, returns a String representation of the
+   * leaderboard. If there
    * are less than LEADERBOARD_SIZE scores in the heap, fill with 0 pt scores.
    * 
    * @return String representation of data contained w/in leaderboard
@@ -92,11 +98,11 @@ public class LeaderboardModel {
 
     int c = 0;
 
-    Object[] scores = leaderboard.toArray();
+    Object[] scores = LEADERBOARD.toArray();
     Arrays.sort(scores, Collections.reverseOrder());
 
     for (Object score : scores) {
-      top10 += String.format("%d.    %d points\n", ++c, (int)score);
+      top10 += String.format("%d.    %d points\n", ++c, (int) score);
     }
     while (c < LEADERBOARD_SIZE) {
       top10 += String.format("%d.    0 points\n", ++c);
@@ -119,7 +125,7 @@ public class LeaderboardModel {
 
       while (fileReader.hasNext()) {
         int score = Integer.parseInt(fileReader.nextLine().trim());
-        leaderboard.add(score);
+        LEADERBOARD.add(score);
       }
 
       fileReader.close();
@@ -132,8 +138,10 @@ public class LeaderboardModel {
   }
 
   /**
-   * adds the current game score to the leaderboard. If it is lower than the lowest entry it is not
-   * added (see constructor def for leaderboard object). Then it writes the priority queue contents
+   * adds the current game score to the leaderboard. If it is lower than the
+   * lowest entry it is not
+   * added (see constructor def for leaderboard object). Then it writes the
+   * priority queue contents
    * out to the leaderbaord file
    * 
    * @pre leaderboard,leaderboardPath != null
@@ -141,16 +149,16 @@ public class LeaderboardModel {
    * @param newScore the current game score we will attempt to add to leaderboard
    */
   public void writeNewPlayerScore(int newScore) {
-    leaderboard.add(newScore);
+    LEADERBOARD.add(newScore);
     fileGen(leaderboardPath.toFile());
     try {
       BufferedWriter fileWriter = new BufferedWriter(new FileWriter(leaderboardPath.toFile()));
 
-      Object[] t = leaderboard.toArray();
+      Object[] t = LEADERBOARD.toArray();
       Arrays.sort(t, Collections.reverseOrder());
 
       for (Object score : t) {
-        fileWriter.write(String.format("%d\n", (int)score));
+        fileWriter.write(String.format("%d\n", (int) score));
       }
 
       fileWriter.close();
