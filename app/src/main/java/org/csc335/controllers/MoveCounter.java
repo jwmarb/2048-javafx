@@ -14,6 +14,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 
+/**
+ * Represents a move counter user interface component that extends HBox.
+ * This class is designed to display and manage a count of moves, typically
+ * used in games or applications that require tracking of user actions.
+ * It implements the Resettable interface to allow the move count to be reset.
+ */
 public class MoveCounter extends HBox implements Resettable {
 
   @FXML
