@@ -27,11 +27,6 @@ public class GameBoardModel implements Resettable {
     this.board = this.makeBoard(size);
     this.shouldRecordKeystrokes = true;
     this.moves = new SimpleIntegerProperty(0);
-    this.moves.addListener((__, ___, ____) -> {
-      for (GameBoardListener listener : this.listeners) {
-        listener.tileMoved();
-      }
-    });
 
     this.initialTileSetup();
     printBoard();
@@ -353,6 +348,9 @@ public class GameBoardModel implements Resettable {
     // listeners.
     if (somethingHappened) {
       this.moves.set(this.moves.get() + 1);
+      for (GameBoardListener listener : this.listeners) {
+        listener.tileMoved();
+      }
     }
 
     // Return the flag indicating if any changes were made to the board during this

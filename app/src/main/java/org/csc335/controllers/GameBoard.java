@@ -141,6 +141,7 @@ public class GameBoard extends GridPane implements Resettable {
 
   public void reset() {
     this.model.reset();
+    this.rerenderTiles();
   }
 
   private void rerenderTiles() {
