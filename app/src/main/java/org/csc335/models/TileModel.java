@@ -96,7 +96,7 @@ public class TileModel {
   /**
    * Retrieves the next value for the current tile, if available.
    *
-   * @pre The current tile value is either present or empty.
+   * @pre The current tile value is either present or empty, TileValue != T2048
    *
    * @returns An Optional containing the next TileValue if it exists;
    *          otherwise, returns Optional.empty() if the current tile value
