@@ -14,6 +14,11 @@ import org.csc335.util.Logger;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
+/**
+ * Represents the model for the 2048 game, handling the game logic. This class
+ * manages the game board state, including tile values, movements, and game
+ * progression.
+ */
 public class GameBoardModel implements Resettable {
   private List<GameBoardListener> listeners;
   private TileModel[][] board;
@@ -443,18 +448,38 @@ public class GameBoardModel implements Resettable {
     return true;
   }
 
+  /**
+   * Retrieves the total number of moves made on the game board.
+   *
+   * @return The current count of moves.
+   */
   public int getMoves() {
     return this.moves.get();
   }
 
+  /**
+   * Enables the recording of keystrokes.
+   *
+   * @post Keystroke recording is enabled.
+   */
   public void enableKeystrokeRecording() {
     this.shouldRecordKeystrokes = true;
   }
 
+  /**
+   * Disables the recording of keystrokes.
+   *
+   * @post Keystroke recording is disabled.
+   */
   public void disableKeystrokeRecording() {
     this.shouldRecordKeystrokes = false;
   }
 
+  /**
+   * Checks if keystroke recording is enabled.
+   *
+   * @return True if keystroke recording is enabled, false otherwise.
+   */
   public boolean shouldRecordKeystrokes() {
     return this.shouldRecordKeystrokes;
   }
@@ -492,6 +517,18 @@ public class GameBoardModel implements Resettable {
     }
   }
 
+  /**
+   * Handles the movement of tiles in the specified direction on the game board.
+   * This method shifts the tiles, updates the list of blank tiles, and generates
+   * a new random tile if any tiles moved. It also checks if the game has ended
+   * when the board is full.
+   *
+   * @post The tiles are shifted in the specified direction, the list of blank
+   *       tiles is updated, a new random tile is generated if necessary, and the
+   *       game state is checked for completion.
+   * @param direction The direction in which the tiles should be shifted (UP,
+   *                  DOWN, LEFT, RIGHT).
+   */
   public void handleDirection(Direction direction) {
 
     // Shift the tiles in the specified direction and check if any tiles moved.
@@ -537,6 +574,17 @@ public class GameBoardModel implements Resettable {
     }
   }
 
+  /**
+   * Retrieves the value of the tile at the specified row and column on the game
+   * board.
+   *
+   * @pre The indices i and j are within the valid range of the board dimensions.
+   * @param i the row index of the tile (0-based index)
+   * @param j the column index of the tile (0-based index)
+   *
+   * @returns An Optional containing the value of the tile at position (i, j) if
+   *          it exists, otherwise an empty Optional.
+   */
   public Optional<TileValue> getValue(int i, int j) {
     return this.board[i][j].getValue();
   }

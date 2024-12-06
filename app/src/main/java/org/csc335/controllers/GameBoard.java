@@ -1,9 +1,7 @@
 package org.csc335.controllers;
 
-import java.util.List;
 import java.util.Optional;
 
-import org.csc335.adapters.GameBoardAdapter;
 import org.csc335.entity.Direction;
 import org.csc335.entity.TileValue;
 import org.csc335.interfaces.GameBoardListener;
@@ -37,14 +35,31 @@ public class GameBoard extends GridPane implements Resettable {
     this.initEventListeners();
   }
 
+  /**
+   * Enables the recording of keystrokes.
+   *
+   * @post Keystroke recording is enabled in the model.
+   */
   public void enableKeystrokeRecording() {
     this.model.enableKeystrokeRecording();
   }
 
+  /**
+   * Disables the recording of keystrokes in the game model.
+   *
+   * @post Keystroke recording is disabled in the game model.
+   *
+   * @returns None
+   */
   public void disableKeystrokeRecording() {
     this.model.disableKeystrokeRecording();
   }
 
+  /**
+   * Retrieves the total number of moves made in the game.
+   *
+   * @return The total number of moves made in the game.
+   */
   public int getMoves() {
     return this.model.getMoves();
   }
@@ -139,11 +154,30 @@ public class GameBoard extends GridPane implements Resettable {
     this.model.addGameBoardListener(listener);
   }
 
+  /**
+   * Resets the game board to its initial state. This involves resetting the
+   * underlying model and then re-rendering the tiles on the board to reflect the
+   * reset state.
+   * 
+   * @post The game board and its model are reset to their initial states.
+   */
   public void reset() {
     this.model.reset();
     this.rerenderTiles();
   }
 
+  /**
+   * Rerenders the tiles on the game board by updating each tile's value based on
+   * the current state of the game model. For each tile position, it retrieves the
+   * corresponding value from the model and sets it on the tile. If no value is
+   * present in the model for a given position, the tile is set to blank.
+   *
+   * @pre The game model is initialized and contains the current state of the
+   *      board.
+   *      The tiles array is properly initialized with Tile objects.
+   * @post Each tile on the board reflects the current value from the game model.
+   *       Tiles with no corresponding value in the model are set to blank.
+   */
   private void rerenderTiles() {
     for (int i = 0; i < SIZE; ++i) {
       for (int j = 0; j < SIZE; ++j) {
@@ -159,6 +193,16 @@ public class GameBoard extends GridPane implements Resettable {
     }
   }
 
+  /**
+   * Initializes the game board tiles by creating a 2D array of Tile objects with
+   * dimensions defined by the constant SIZE. Each tile is instantiated and added
+   * to the game board at its corresponding position. After all tiles are
+   * initialized, the board is rerendered to reflect the new tile setup.
+   *
+   * @post The tiles array is fully populated with Tile objects, and each tile is
+   *       added to the game board at the correct position. The game board is
+   *       rerendered.
+   */
   private void initializeTiles() {
     this.tiles = new Tile[SIZE][SIZE];
     for (int i = 0; i < SIZE; ++i) {
