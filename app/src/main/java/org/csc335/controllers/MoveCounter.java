@@ -8,8 +8,6 @@ import org.csc335.interfaces.Resettable;
 import org.csc335.models.MoveCounterModel;
 import org.csc335.util.EZLoader;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -34,7 +32,7 @@ public class MoveCounter extends HBox implements Resettable {
     EZLoader.load(this, MoveCounter.class);
     this.model = new MoveCounterModel();
     this.listeners = new ArrayList<>();
-    this.counter.setText(this.model.getRemainingMoves());
+    this.counter.setText(this.model.getRemainingMoves().toString());
     this.initListeners();
   }
 
@@ -51,17 +49,10 @@ public class MoveCounter extends HBox implements Resettable {
    *       registered MoveCounterListeners are notified.
    */
   private void initListeners() {
-    this.model.addListener(new ChangeListener<Number>() {
-
+    this.model.addListener(new MoveCounterListener() {
       @Override
-      public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-        MoveCounter.this.counter.setText(MoveCounter.this.model.getRemainingMoves());
-
-        if (MoveCounter.this.model.hasNoMoreMoves()) {
-          for (MoveCounterListener listener : MoveCounter.this.listeners) {
-            listener.noMoreMovesLeft();
-          }
-        }
+      public void userMoved(int movesLeft) {
+        MoveCounter.this.counter.setText(MoveCounter.this.model.getRemainingMoves().toString());
       }
 
     });
