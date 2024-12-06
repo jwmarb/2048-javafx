@@ -1,15 +1,21 @@
 package org.csc335.controllers;
 
+import org.csc335.interfaces.Resettable;
+import org.csc335.interfaces.ScoreboardListener;
+import org.csc335.models.ScoreboardModel;
 import org.csc335.util.EZLoader;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-public class Scoreboard extends HBox {
+/**
+ * Represents a Scoreboard component that extends HBox and implements the
+ * Resettable interface. This class is responsible for displaying and managing
+ * the scores for 2048. It provides functionality to reset the scoreboard to its
+ * initial state.
+ */
+public class Scoreboard extends HBox implements Resettable {
 
   @FXML
   private Label score;
@@ -17,28 +23,50 @@ public class Scoreboard extends HBox {
   @FXML
   private Label best;
 
-  private IntegerProperty scoreVal;
+  private ScoreboardModel model;
 
   public Scoreboard() {
     super();
+    this.model = new ScoreboardModel();
     EZLoader.load(this, Scoreboard.class);
-    this.scoreVal = new SimpleIntegerProperty();
+    // Register a listener to update the scoreboard when the score changes.
+    this.model.addListener(new ScoreboardListener() {
+      // Update the displayed score and best score when the score changes.
+      public void scoreChanged(int current, int best) {
+        // Set the text of the score label to the current score.
+        Scoreboard.this.score.setText(String.valueOf(current));
+        // Set the text of the best score label to the best score.
+        Scoreboard.this.best.setText(String.valueOf(best));
+      }
+    });
   }
 
+  /**
+   * Adds a new score to the scoreboard.
+   *
+   * @pre The scoreVal is a positive integer.
+   * @post The scoreVal has been added to the scoreboard model.
+   * @param scoreVal The score value to be added to the scoreboard.
+   */
   public void addScore(int scoreVal) {
-    this.scoreVal.setValue(this.scoreVal.getValue() + scoreVal);
-    this.score.setText(String.valueOf(this.scoreVal.get()));
-    this.best.setText(String.valueOf(Math.max(this.scoreVal.get(), Integer.parseInt(best.getText()))));
+    this.model.addScore(scoreVal);
   }
 
+  /**
+   * Retrieves the current score from the model.
+   *
+   * @returns The current score as an integer.
+   */
   public int getScore() {
-    return this.scoreVal.get();
+    return this.model.getScore();
   }
 
+  /**
+   * Resets the scoreboard to its initial state.
+   *
+   * @post The scoreboard and its model are reset to their initial state.
+   */
   public void reset() {
-    // todo
-    this.scoreVal.set(0);
-    this.score.setText(String.valueOf(this.scoreVal.get()));
+    this.model.reset();
   }
-
 }
