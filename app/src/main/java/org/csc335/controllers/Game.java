@@ -48,8 +48,8 @@ public final class Game extends StackPane {
           drawerMenu.show();
           Game.this.bp.setLeft(drawerMenu);
           drawerMenu.addOptionListener(new DrawerOptionListener() {
-            public void selectOption(DrawerOption selected) {
-              Game.this.setMode(selected.getMode());
+            public void selectOption(GameMode selected) {
+              Game.this.setMode(selected);
             }
 
             public void becameHidden() {
