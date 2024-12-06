@@ -8,8 +8,10 @@ import org.csc335.interfaces.DialogActionListener;
 import org.csc335.interfaces.DrawerMenuActionListener;
 import org.csc335.interfaces.DrawerOptionListener;
 import org.csc335.interfaces.GameBoardListener;
+import org.csc335.interfaces.GameListener;
 import org.csc335.interfaces.MoveCounterListener;
 import org.csc335.interfaces.TimerListener;
+import org.csc335.models.GameModel;
 import org.csc335.navigation.Navigation;
 import org.csc335.util.EZLoader;
 
@@ -18,6 +20,12 @@ import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
+/**
+ * Represents the main game panel for the 2048 game. This class extends
+ * StackPane and serves as the container for the game's UI components, including
+ * the game grid and score display. It manages the game's state, handles user
+ * input, and updates the UI accordingly.
+ */
 public final class Game extends StackPane {
 
   @FXML
@@ -32,31 +40,116 @@ public final class Game extends StackPane {
   @FXML
   private BorderPane bp;
 
-  private GameMode mode;
+  private GameModel model;
 
   public Game() {
+    super();
     EZLoader.load(this, Game.class);
 
-    this.setMode(GameMode.TRADITIONAL);
+    this.model = new GameModel();
+    this.initListeners();
+  }
+
+  /**
+   * Initializes listeners for the game components, including the game model,
+   * logo, and game board. Sets up listeners to handle changes in game mode, menu
+   * actions, and game board events.
+   *
+   * @pre The game model, logo, and game board are properly initialized.
+   * @post Listeners are added to the game model, logo, and game board to handle
+   *       various game events.
+   */
+  private void initListeners() {
+    this.model.addListener(new GameListener() {
+      @Override
+      public void gameModeChanged(GameMode newMode) {
+        // Reset the game state before starting a new mode.
+        Game.this.resetGame();
+
+        // Play the theme music for the current game mode.
+        newMode.playTheme();
+
+        // Inform the logo about the change in game mode.
+        Game.this.logo.gameModeChanged(newMode);
+
+        // Switch behavior based on the current game mode.
+        switch (newMode) {
+          case GameMode.TIME_TRIAL:
+            // Create a timer for time trial mode.
+            Timer timer = new Timer();
+
+            // Set the timer at the bottom of the game board.
+            Game.this.bp.setBottom(timer);
+
+            // Add a listener to handle the end of the timer.
+            timer.addTimerListener(new TimerListener() {
+
+              @Override
+              public void timerChanged(Duration timeLeft) {
+                if (timeLeft.isZero()) {
+                  Game.this.gameOver();
+                }
+              }
+
+            });
+            break;
+          case GameMode.MOVE_LIMIT:
+            // Create a move counter for move limit mode.
+            MoveCounter moveCounter = new MoveCounter();
+
+            // Set the move counter at the bottom of the game board.
+            Game.this.bp.setBottom(moveCounter);
+
+            // Add a listener to handle running out of moves.
+            moveCounter.addMoveCounterListener(new MoveCounterListener() {
+              @Override
+              public void userMoved(int movesLeft) {
+                // End the game once there are no more moves left.
+                if (movesLeft == 0) {
+                  Game.this.gameOver();
+                }
+              }
+            });
+            break;
+          default:
+            // Clear any previously set bottom component if the mode is unrecognized.
+            Game.this.bp.setBottom(null);
+            break;
+        }
+      }
+    });
 
     this.logo.addMenuActionListener(new DrawerMenuActionListener() {
       @Override
       public void menuClick() {
+        // Retrieve the DrawerMenu from the left property of the BorderPane.
         DrawerMenu drawerMenu = (DrawerMenu) Game.this.bp.leftProperty().get();
+
+        // If the DrawerMenu is not initialized, create a new one and set it up.
         if (drawerMenu == null) {
-          drawerMenu = new DrawerMenu(Game.this.mode);
+          // Initialize the DrawerMenu with the current game mode from the model.
+          drawerMenu = new DrawerMenu(Game.this.model.getGameMode());
+
+          // Display the DrawerMenu.
           drawerMenu.show();
+
+          // Set the DrawerMenu as the left node of the BorderPane.
           Game.this.bp.setLeft(drawerMenu);
+
+          // Add an option listener to handle menu selections and visibility changes.
           drawerMenu.addOptionListener(new DrawerOptionListener() {
+            // Update the game mode in the model when a new option is selected.
             public void selectOption(GameMode selected) {
-              Game.this.setMode(selected);
+              Game.this.model.setGameMode(selected);
             }
 
+            // Remove the DrawerMenu from the BorderPane when it becomes hidden.
             public void becameHidden() {
               Game.this.bp.setLeft(null);
             }
           });
         } else {
+          // Hide the DrawerMenu if it is already initialized.
           drawerMenu.hide();
         }
       }
@@ -66,17 +159,22 @@ public final class Game extends StackPane {
     this.gameBoard.addGameBoardListener(new GameBoardListener() {
       @Override
       public void tileMoved() {
-        switch (Game.this.mode) {
+        // Handle actions based on the current game mode.
+        switch (Game.this.model.getGameMode()) {
+          // For time trial mode, start the timer if it is not already active.
           case GameMode.TIME_TRIAL:
             Timer timer = (Timer) Game.this.bp.getBottom();
             if (!timer.isTimerActive()) {
               timer.startTimer();
             }
             break;
+          // For move limit mode, update the move counter with the total number of moves
+          // made on the game board.
           case GameMode.MOVE_LIMIT:
             MoveCounter counter = (MoveCounter) Game.this.bp.getBottom();
             counter.totalMovesMade(Game.this.gameBoard.getMoves());
             break;
+          // Default case for any unrecognized game mode.
           default:
             break;
         }
@@ -91,44 +189,69 @@ public final class Game extends StackPane {
       public void gameOver() {
         Game.this.gameOver();
       }
-
     });
   }
 
+  /**
+   * Handles the game over scenario by displaying a GameOverDialog to the user.
+   * The dialog shows the user's final score and the number of moves made. It
+   * provides options to play again, quit the game, or view the leaderboard. Based
+   * on the user's selection, the method either resets the game, exits the
+   * application, or navigates to the leaderboard screen.
+   *
+   * @pre The game has ended, and the final score and number of moves are
+   *      available.
+   * @post The GameOverDialog is displayed, and the user's choice is processed.
+   *       Depending on the user's choice, the game may be reset, the application
+   *       may exit, or the leaderboard may be shown.
+   */
   private void gameOver() {
+    // Define constants for dialog action indices for better readability
     final int PLAY_AGAIN = 0;
     final int QUIT_GAME = 1;
     final int VIEW_LEADERBOARD = 2;
 
+    // Retrieve the bottom node from the BorderPane to check if it's a Timer
     Node bottomNode = this.bp.getBottom();
 
+    // If the bottom node is a Timer, stop it to clean up resources
     if (bottomNode instanceof Timer) {
       ((Timer) bottomNode).stopTimer();
     }
 
+    // Create a GameOverDialog instance with the current score and moves
     Dialog dialog = new GameOverDialog(this.scoreboard.getScore(), this.gameBoard.getMoves());
 
+    // Add an action listener to handle user interactions with the dialog
     dialog.addDialogActionListener(this.createDialogActionListener(dialog, new DialogActionCallback() {
       @Override
       public void dialogAction(int childIdx) {
+        // Handle the action based on the index of the pressed button
         switch (childIdx) {
           case PLAY_AGAIN:
+            // Reset the game state and hide the dialog
             Game.this.resetGame();
             dialog.hide();
             break;
           case QUIT_GAME:
+            // Exit the application
             System.exit(0);
             break;
           case VIEW_LEADERBOARD:
+            // Navigate to the Leaderboard view
             Navigation.navigate(new Leaderboard());
             break;
         }
       }
     }));
 
+    // Add the current score to the leaderboard
     Leaderboard.addLeaderboardScore(Game.this.scoreboard.getScore());
+
+    // Display the GameOverDialog
     dialog.show();
 
+    // Add the dialog to the game's children for rendering
     Game.this.getChildren().add(dialog);
   }
 
@@ -217,106 +340,24 @@ public final class Game extends StackPane {
    */
   @FXML
   public void newGame() {
-    final int START_NEW_GAME = 0;
-    final int CANCEL = 1;
-    Dialog newGameDialog = new NewGameDialog();
+    final int START_NEW_GAME = 0; // Constant representing the action to start a new game
+    final int CANCEL = 1; // Constant representing the action to cancel the dialog
+    Dialog newGameDialog = new NewGameDialog(); // Create a new game dialog instance
     newGameDialog.addDialogActionListener(this.createDialogActionListener(newGameDialog, new DialogActionCallback() {
       public void dialogAction(int childIdx) {
         switch (childIdx) {
-          case START_NEW_GAME:
-            Game.this.resetGame();
-            newGameDialog.hide();
+          case START_NEW_GAME: // User chose to start a new game
+            Game.this.resetGame(); // Reset the current game state
+            newGameDialog.hide(); // Hide the dialog after starting the game
             break;
-          case CANCEL:
-            newGameDialog.hide();
+          case CANCEL: // User chose to cancel the dialog
+            newGameDialog.hide(); // Hide the dialog without taking any action
             break;
         }
       }
     }));
-    newGameDialog.show();
+    newGameDialog.show(); // Display the new game dialog to the user
 
-    this.getChildren().add(newGameDialog);
-  }
-
-  /**
-   * Sets the current game mode and notifies all dependent components of the
-   * change.
-   *
-   * @post The game mode of the game is updated and all dependencies are notified.
-   * @param mode The new game mode to be set.
-   */
-  private void setMode(GameMode mode) {
-    this.mode = mode;
-    this.notifyDependencies();
-  }
-
-  /**
-   * Notifies all dependent components of a change in the game mode. This method
-   * resets the game state, plays the theme music for the current game mode,
-   * informs the logo, and sets up the necessary listeners based on the current
-   * mode.
-   *
-   * @pre The game mode is set and this.mode is a valid GameMode. The game board
-   *      panel (bp) and mode-specific components (Timer, MoveCounter) are
-   *      properly initialized.
-   * @post The game state is reset, theme music plays, the logo is updated, and
-   *       mode-specific listeners are attached. The game board's bottom component
-   *       is set to the timer or move counter based on the game mode, or cleared
-   *       if the mode is unrecognized.
-   */
-  private void notifyDependencies() {
-    // Reset the game state before starting a new mode.
-    this.resetGame();
-
-    // Play the theme music for the current game mode.
-    this.mode.playTheme();
-
-    // Inform the logo about the change in game mode.
-    this.logo.gameModeChanged(this.mode);
-
-    // Switch behavior based on the current game mode.
-    switch (this.mode) {
-      case GameMode.TIME_TRIAL:
-        // Create a timer for time trial mode.
-        Timer timer = new Timer();
-
-        // Set the timer at the bottom of the game board.
-        this.bp.setBottom(timer);
-
-        // Add a listener to handle the end of the timer.
-        timer.addTimerListener(new TimerListener() {
-
-          @Override
-          public void timerChanged(Duration timeLeft) {
-            if (timeLeft.isZero()) {
-              Game.this.gameOver();
-            }
-          }
-
-        });
-        break;
-      case GameMode.MOVE_LIMIT:
-        // Create a move counter for move limit mode.
-        MoveCounter moveCounter = new MoveCounter();
-
-        // Set the move counter at the bottom of the game board.
-        this.bp.setBottom(moveCounter);
-
-        // Add a listener to handle running out of moves.
-        moveCounter.addMoveCounterListener(new MoveCounterListener() {
-          @Override
-          public void userMoved(int movesLeft) {
-            // End the game once there are no more moves left.
-            if (movesLeft == 0) {
-              Game.this.gameOver();
-            }
-          }
-        });
-        break;
-      default:
-        // Clear any previously set bottom component if the mode is unrecognized.
-        this.bp.setBottom(null);
-        break;
-    }
+    this.getChildren().add(newGameDialog); // Add the dialog to the game's child components
   }
 }
