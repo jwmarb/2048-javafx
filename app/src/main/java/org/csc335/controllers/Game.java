@@ -48,8 +48,8 @@ public final class Game extends StackPane {
           drawerMenu.show();
           Game.this.bp.setLeft(drawerMenu);
           drawerMenu.addOptionListener(new DrawerOptionListener() {
-            public void selectOption(DrawerOption selected) {
-              Game.this.setMode(selected.getMode());
+            public void selectOption(GameMode selected) {
+              Game.this.setMode(selected);
             }
 
             public void becameHidden() {
@@ -305,9 +305,11 @@ public final class Game extends StackPane {
         // Add a listener to handle running out of moves.
         moveCounter.addMoveCounterListener(new MoveCounterListener() {
           @Override
-          public void noMoreMovesLeft() {
+          public void userMoved(int movesLeft) {
             // End the game once there are no more moves left.
-            Game.this.gameOver();
+            if (movesLeft == 0) {
+              Game.this.gameOver();
+            }
           }
         });
         break;

@@ -1,9 +1,9 @@
 package org.csc335.interfaces;
 
-import org.csc335.controllers.DrawerOption;
+import org.csc335.entity.GameMode;
 
 public interface DrawerOptionListener {
-  public void selectOption(DrawerOption selected);
+  public void selectOption(GameMode selected);
 
   public void becameHidden();
 }

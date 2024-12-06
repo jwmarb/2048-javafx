@@ -1,10 +1,10 @@
 package org.csc335.models;
 
-import org.csc335.interfaces.Resettable;
+import java.util.ArrayList;
+import java.util.List;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
+import org.csc335.interfaces.MoveCounterListener;
+import org.csc335.interfaces.Resettable;
 
 /**
  * Represents a model for counting moves, implementing the Resettable interface.
@@ -13,10 +13,12 @@ import javafx.beans.value.ChangeListener;
  */
 public class MoveCounterModel implements Resettable {
   public static final int TOTAL_MOVES = 1000;
-  private IntegerProperty movesMade;
+  private int movesMade;
+  private List<MoveCounterListener> listeners;
 
   public MoveCounterModel() {
-    this.movesMade = new SimpleIntegerProperty(0);
+    this.movesMade = 0;
+    this.listeners = new ArrayList<>();
   }
 
   /**
@@ -27,27 +29,19 @@ public class MoveCounterModel implements Resettable {
    * @param moves The number of moves to set.
    */
   public void setMovesMade(int moves) {
-    this.movesMade.set(moves);
+    this.movesMade = moves;
+    for (MoveCounterListener listener : this.listeners) {
+      listener.userMoved(this.getRemainingMoves());
+    }
   }
 
   /**
-   * Adds a listener to be notified when the number of moves changes.
+   * Returns the number of remaining moves as an Integer.
    *
-   * @pre The listener is not null.
-   * @post The provided listener is added to the list of listeners.
-   * @param listener The listener to add.
+   * @return The number of remaining moves as an Integer.
    */
-  public void addListener(ChangeListener<? super Number> listener) {
-    this.movesMade.addListener(listener);
-  }
-
-  /**
-   * Returns the number of remaining moves as a string.
-   *
-   * @return The number of remaining moves as a string.
-   */
-  public String getRemainingMoves() {
-    return (TOTAL_MOVES - this.movesMade.get()) + "";
+  public Integer getRemainingMoves() {
+    return (TOTAL_MOVES - this.movesMade);
   }
 
   /**
@@ -56,7 +50,7 @@ public class MoveCounterModel implements Resettable {
    * @return True if no more moves are remaining, otherwise false.
    */
   public boolean hasNoMoreMoves() {
-    return TOTAL_MOVES - this.movesMade.get() == 0;
+    return TOTAL_MOVES - this.movesMade == 0;
   }
 
   /**
@@ -64,7 +58,16 @@ public class MoveCounterModel implements Resettable {
    *
    */
   public void reset() {
-    this.movesMade.set(0);
+    this.movesMade = 0;
   }
 
+  /**
+   * Adds a listener to the list of listeners that are notified of move count
+   * changes.
+   *
+   * @param listener The MoveCounterListener to be added.
+   */
+  public void addListener(MoveCounterListener listener) {
+    this.listeners.add(listener);
+  }
 }

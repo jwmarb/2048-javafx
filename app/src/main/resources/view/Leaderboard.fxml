@@ -4,7 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import org.csc335.controllers.Pressable?>
 
-<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="javafx.scene.layout.BorderPane" xmlns:fx="http://javafx.com/fxml/1"
+  styleClass="container">
   <left>
     <Pressable text="Back" onAction="#goBack" variant="filled" />
   </left>
