@@ -1,5 +1,7 @@
 package org.csc335.controllers;
 
+import java.time.Duration;
+
 import org.csc335.entity.GameMode;
 import org.csc335.interfaces.DialogActionCallback;
 import org.csc335.interfaces.DialogActionListener;
@@ -46,8 +48,8 @@ public final class Game extends StackPane {
           drawerMenu.show();
           Game.this.bp.setLeft(drawerMenu);
           drawerMenu.addOptionListener(new DrawerOptionListener() {
-            public void selectOption(DrawerOption selected) {
-              Game.this.setMode(selected.getMode());
+            public void selectOption(GameMode selected) {
+              Game.this.setMode(selected);
             }
 
             public void becameHidden() {
@@ -283,11 +285,14 @@ public final class Game extends StackPane {
 
         // Add a listener to handle the end of the timer.
         timer.addTimerListener(new TimerListener() {
+
           @Override
-          public void timerFinished() {
-            // End the game once the timer finishes.
-            Game.this.gameOver();
+          public void timerChanged(Duration timeLeft) {
+            if (timeLeft.isZero()) {
+              Game.this.gameOver();
+            }
           }
+
         });
         break;
       case GameMode.MOVE_LIMIT:

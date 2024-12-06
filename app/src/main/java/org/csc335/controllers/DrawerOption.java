@@ -2,7 +2,6 @@ package org.csc335.controllers;
 
 import org.csc335.entity.GameMode;
 import org.csc335.util.EZLoader;
-import org.csc335.util.Logger;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -18,7 +17,7 @@ public class DrawerOption extends HBox {
   @FXML
   private Label description;
 
-  private GameMode mode;
+  private GameMode mode; // this is the model
 
   public DrawerOption(String title, String description, String icon, GameMode mode) {
     super();
@@ -30,18 +29,35 @@ public class DrawerOption extends HBox {
     this.description.setText(description);
   }
 
+  /**
+   * Selects the option
+   */
   public void select() {
     this.getStyleClass().add("drawer-option-selected");
   }
 
+  /**
+   * Deselects the option
+   */
   public void deselect() {
     this.getStyleClass().remove("drawer-option-selected");
   }
 
+  /**
+   * Determines whether the current DrawerOption is selected.
+   *
+   * @returns true if the DrawerOption's style class contains
+   *          "drawer-option-selected", false otherwise.
+   */
   public boolean isSelected() {
     return this.getStyleClass().contains("drawer-option-selected");
   }
 
+  /**
+   * Gets the option (aka mode) of this drawer option
+   * 
+   * @return The gamemode value of this option
+   */
   public GameMode getMode() {
     return this.mode;
   }

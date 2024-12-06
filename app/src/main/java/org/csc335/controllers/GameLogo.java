@@ -9,7 +9,6 @@ import org.csc335.interfaces.GameListener;
 import org.csc335.util.EZLoader;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
