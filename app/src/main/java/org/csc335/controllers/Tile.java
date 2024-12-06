@@ -12,15 +12,17 @@ import javafx.scene.paint.Color;
 import java.util.Optional;
 
 import org.csc335.entity.TileValue;
-import org.csc335.interfaces.Controller;
 import org.csc335.models.TileModel;
+import org.csc335.util.EZLoader;
 
 /**
  * A controller class for a Tile in the game of 2048.
  */
-public class Tile extends Controller<VBox, TileModel> {
+public class Tile extends VBox {
   @FXML
   private Label label;
+
+  private TileModel model;
 
   /**
    * Retrieves the current value of the tile represented as an enum.
@@ -149,9 +151,9 @@ public class Tile extends Controller<VBox, TileModel> {
   }
 
   public Tile() {
-    super(new VBox(), new TileModel());
-    super.initialize();
-    this.view.setEffect(new InnerShadow(BlurType.GAUSSIAN, Color.GRAY, 2, 0, 0, 1));
+    this.model = new TileModel();
+    EZLoader.load(this, Tile.class);
+    this.setEffect(new InnerShadow(BlurType.GAUSSIAN, Color.GRAY, 2, 0, 0, 1));
     this.initListeners();
     this.changeLabelClass();
     this.changeTileClass();
@@ -162,17 +164,17 @@ public class Tile extends Controller<VBox, TileModel> {
    */
   private void changeTileClass() {
     // Remove all existing classes from the tile
-    this.view.getStyleClass().clear();
+    this.getStyleClass().clear();
 
     // Add base class to all tiles
-    this.view.getStyleClass().add("tile-base");
+    this.getStyleClass().add("tile-base");
 
     // If a tile value is present, add the corresponding CSS class
     if (!Tile.this.model.isBlank()) {
-      this.view.getStyleClass().add("tile-" + this.model.getValue().get().toString());
+      this.getStyleClass().add("tile-" + this.model.getValue().get().toString());
     } else {
       // If no value is present, add the blank tile class
-      this.view.getStyleClass().add("tile-blank");
+      this.getStyleClass().add("tile-blank");
     }
 
   }

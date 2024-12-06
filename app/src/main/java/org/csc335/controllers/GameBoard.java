@@ -597,7 +597,7 @@ public class GameBoard extends GridPane {
       for (int col = 0; col < SIZE; col++) {
         Tile tile = new Tile();
         temp[row][col] = tile;
-        this.add(tile.getView(), col, row);
+        this.add(tile, col, row);
       }
     }
 
