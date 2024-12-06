@@ -20,6 +20,7 @@ public enum Audio {
   MERGE_SOUND("/sounds/mergesound.mp3", 0.15, false);
 
   private Optional<AudioClip> audioClip;
+
   private boolean isMusic;
 
   /**
