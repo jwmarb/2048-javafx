@@ -23,6 +23,30 @@
 
 Although it is a web application, we (a group of students at the time of creating this) wanted to recreate the game as a desktop application using JavaFX while being faithful to the original design and mechanics.
 
+## Features
+
+- 🎮 **Three Game Modes:**
+
+  - **Traditional Mode:** Experience the original challenge and aim to reach the number 2048.
+  - **Time Trial Mode:** Beat the game within a time limit and strive for the highest score before time runs out!
+  - **Move Limit Mode:** Challenge yourself with a limited number of moves and strategize wisely.
+
+- 🎮 **Keyboard Support:**
+
+  - Use **W, A, S, D** or **Arrow Keys** for seamless control over your tiles. Navigate through the board effortlessly!
+
+- 🏆 **Local Leaderboard Tracking:**
+
+  - Compete against yourself and track your top 10 best scores locally.
+  - Scores are persisted on disk, ensuring your achievements remain safe even after closing the game.
+
+- 🎨 **Robust UI/UX:**
+
+  - Enjoy an intuitive, smooth user experience with a visually appealing interface that stays true to the original game's design.
+
+- 🌐 **Offline-First Approach:**
+  - Play 2048 locally without the need for an internet connection. Engage in gameplay anytime, anywhere!
+
 ## OS Compatibility
 
 Due to the implementation of this being in Java, 2048FX is compatible on all operating systems that support Java: **Windows, Linux, MacOS**.
