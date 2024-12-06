@@ -48,6 +48,7 @@ public final class Game extends StackPane {
 
     this.model = new GameModel();
     this.initListeners();
+    this.model.setGameMode(GameMode.TRADITIONAL);
   }
 
   /**
