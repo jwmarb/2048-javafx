@@ -50,3 +50,18 @@ chmod +x ./gradlew && ./gradlew run
 ```
 
 After that, the desktop application should appear on your screen.
+
+## How to Play
+
+The controls are simple. You can use W, A, S, D or the arrow keys to move the tiles.
+
+- **W** / Up Arrow: Move all tiles upwards.
+- **A** / Left Arrow: Move all tiles to the left.
+- **S** / Down Arrow: Move all tiles downwards.
+- **D** / Right Arrow: Move all tiles to the right.
+
+Your goal is to combine the numbers on the tiles until you reach 2048. Each time two identical numbers collide, they merge into a tile with the value equal to their sum. The game ends when no more moves are possible.
+
+# Contributing
+
+See [CONTRIBUTING](/CONTRIBUTING.md).
