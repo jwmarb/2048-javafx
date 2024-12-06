@@ -3,8 +3,8 @@
  */
 package org.csc335;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.*;
+import org.junit.jupiter.api.Test;
 
 public class AppTest {
   @Test
