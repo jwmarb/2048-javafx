@@ -25,13 +25,10 @@ public class MoveCounter extends HBox implements Resettable {
 
   private MoveCounterModel model;
 
-  private List<MoveCounterListener> listeners;
-
   public MoveCounter() {
     super();
     EZLoader.load(this, MoveCounter.class);
     this.model = new MoveCounterModel();
-    this.listeners = new ArrayList<>();
     this.counter.setText(this.model.getRemainingMoves().toString());
     this.initListeners();
   }
@@ -76,7 +73,7 @@ public class MoveCounter extends HBox implements Resettable {
    * @param listener the MoveCounterListener to be added.
    */
   public void addMoveCounterListener(MoveCounterListener listener) {
-    this.listeners.add(listener);
+    this.model.addListener(listener);
   }
 
   /**
