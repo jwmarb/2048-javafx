@@ -3,5 +3,4 @@
 <?import org.csc335.controllers.FAIcon?>
 <?import javafx.scene.control.Label?>
 
-<fx:root type="javafx.control.Label" xmlns:fx="http://javafx.com/fxml/1">
-</fx:root>
+<fx:root type="javafx.scene.control.Label" xmlns:fx="http://javafx.com/fxml/1" />
