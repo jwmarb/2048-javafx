@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 
 public class Timer extends HBox {
 
-  private static final String timerWarning = "timer-warning";
+  private static final String TIMERWARNING = "timer-warning";
 
   @FXML
   private Label timerLabel;
@@ -25,13 +25,13 @@ public class Timer extends HBox {
     this.model.addListener(new TimerListener() { // Add a listener to the model to handle timer changes.
       public void timerChanged(Duration timeLeft) { // This method is called when the timer value changes.
         Timer.this.timerLabel.setText(Timer.this.getTime(timeLeft)); // Update the timer label with the new time.
-        if (timeLeft.getSeconds() <= 60 && !Timer.this.timerLabel.getStyleClass().contains(timerWarning)) {
+        if (timeLeft.getSeconds() <= 60 && !Timer.this.timerLabel.getStyleClass().contains(TIMERWARNING)) {
           // If time left is 60 seconds or less and the warning style is not already
           // applied, add the warning style.
-          Timer.this.timerLabel.getStyleClass().add(timerWarning);
+          Timer.this.timerLabel.getStyleClass().add(TIMERWARNING);
         } else {
           // Otherwise, remove the warning style if it is applied.
-          Timer.this.timerLabel.getStyleClass().remove(timerWarning);
+          Timer.this.timerLabel.getStyleClass().remove(TIMERWARNING);
         }
       }
     });
