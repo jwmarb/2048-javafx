@@ -36,9 +36,9 @@ public class MoveCounterModel implements Resettable {
   }
 
   /**
-   * Returns the number of remaining moves as a string.
+   * Returns the number of remaining moves as an Integer.
    *
-   * @return The number of remaining moves as a string.
+   * @return The number of remaining moves as an Integer.
    */
   public Integer getRemainingMoves() {
     return (TOTAL_MOVES - this.movesMade);
