@@ -215,7 +215,7 @@ public class GameBoardModel implements Resettable {
    *         occurred
    *         (e.g., due to a null direction or no available shifts).
    */
-  public boolean shift(Direction direction) {
+  private boolean shift(Direction direction) {
     switch (direction) {
       case UP:
         return shiftOperation(true, true);
