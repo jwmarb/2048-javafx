@@ -174,7 +174,9 @@ public class LeaderboardModelTest {
 
             assert (field.get(model) == null);
 
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
         try {
             Method method = LeaderboardModel.class.getDeclaredMethod("getLeaderboard");
@@ -188,7 +190,9 @@ public class LeaderboardModelTest {
             Field field = LeaderboardModel.class.getDeclaredField("leaderboardPath");
             field.setAccessible(true);
             assert (field.get(model) != null);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
