@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.PriorityQueue;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -124,10 +126,8 @@ public class LeaderboardModel {
 
       fileReader.close();
 
-    } catch (Exception e) {
-      System.out.println("leaderboard.txt does not exist");
-      e.printStackTrace();
-      System.exit(1);
+    } catch (IOException io) {
+      throw new UncheckedIOException("leaderboard.txt file does not exist", io);
     }
   }
 
@@ -154,10 +154,8 @@ public class LeaderboardModel {
       }
 
       fileWriter.close();
-    } catch (Exception e) {
-      System.out.println("leaderboard.txt file does not exist");
-      e.printStackTrace();
-      System.exit(1);
+    } catch (IOException io) {
+      throw new UncheckedIOException("leaderboard.txt file does not exist", io);
     }
   }
 
@@ -171,9 +169,8 @@ public class LeaderboardModel {
     if (!file.exists()) {
       try {
         file.createNewFile();
-      } catch (Exception e) {
-        System.out.println("Error with leaderboard file. Path was not resolved");
-        System.exit(1);
+      }  catch (IOException io) {
+        throw new UncheckedIOException("error creating file, path unresolvable", io);
       }
     }
   }
