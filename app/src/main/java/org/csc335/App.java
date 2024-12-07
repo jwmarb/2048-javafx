@@ -23,17 +23,7 @@ public class App extends Application {
 
     Navigation.setStage(stage);
 
-    // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/view/2048menu.fxml")));
-
     Navigation.navigate(new Game());
-    // Navigation.navigate(FXMLLoader.load(this.getClass().getResource("/stories/TileStory.fxml")));
-    // GameBoard g = null;
-    // try {
-    // g = new GameBoard();
-    // } catch (Exception e) {
-    // System.exit(1);
-    // }
-    // g.printBoard();
   }
 
   public static void main(String[] args) {
