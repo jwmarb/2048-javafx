@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.csc335.entity.Direction;
+import org.csc335.entity.TileValue;
 import org.csc335.models.GameBoardModel;
 import org.csc335.models.LeaderboardModel;
 import org.csc335.models.TileModel;
@@ -78,7 +80,10 @@ public class GameBoardModelTest {
         System.out.println("success");
       }
 
-      assert (boolean) method.invoke(model, Direction.valueOf("abc")) == false;
+      // System.out.println("cool")
+
+      // System.out.println((boolean) method.invoke(model, Direction.fromVal("abc")));
+      assert (boolean) method.invoke(model, Direction.fromVal("abc")) == false;
 
       /*
        * assertTrue((boolean)method.invoke(model, Direction.RIGHT));
@@ -89,6 +94,48 @@ public class GameBoardModelTest {
        */
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  @Test
+  public void gameEndTest() {
+    GameBoardModel model = new GameBoardModel(4);
+
+    try {
+        Method method1 = GameBoardModel.class.getDeclaredMethod("testGameEndMethod");
+        Field field = GameBoardModel.class.getDeclaredField("board");
+        field.setAccessible(true);
+        method1.setAccessible(true);
+
+        TileModel[][] tiles = (TileModel[][])field.get(field);
+        tiles[0][0].setValue(TileValue.T1024);
+        tiles[1][0].setValue(TileValue.T64);
+        tiles[0][1].setValue(TileValue.T64);
+        tiles[1][1].setValue(TileValue.T32);
+
+
+        tiles[3][3].setValue(TileValue.T2048);
+        tiles[3][2].setValue(TileValue.T2);
+        tiles[2][3].setValue(TileValue.T2);
+        tiles[2][2].setValue(TileValue.T8);
+
+
+        tiles[0][3].setValue(TileValue.T128);
+        tiles[0][2].setValue(TileValue.T4);
+        tiles[1][3].setValue(TileValue.T4);
+        tiles[1][2].setValue(TileValue.T128);
+
+        tiles[3][0].setValue(TileValue.T32);
+        tiles[3][1].setValue(TileValue.T16);
+        tiles[2][0].setValue(TileValue.T16);
+        tiles[2][1].setValue(TileValue.T1024);
+
+        assert (boolean)method1.invoke(model) == true;
+
+        
+
+    } catch (Exception e) {
+        System.out.println(e);
     }
   }
 
