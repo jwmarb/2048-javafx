@@ -10,6 +10,9 @@ import java.io.UncheckedIOException;
 import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.stream.Stream;
+
+import org.csc335.util.Logger;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.BufferedWriter;
@@ -48,7 +51,7 @@ public class LeaderboardModel {
         }
       });
     } catch (Exception e) {
-      System.out.println("Error reading files...");
+      Logger.println("Error reading files...");
     }
 
     // if leaderboard.txt DNE, create it and set path
@@ -208,7 +211,7 @@ public class LeaderboardModel {
     if (!file.exists()) {
       try {
         file.createNewFile();
-      }  catch (IOException io) {
+      } catch (IOException io) {
         throw new UncheckedIOException("error creating file, path unresolvable", io);
       }
     }
