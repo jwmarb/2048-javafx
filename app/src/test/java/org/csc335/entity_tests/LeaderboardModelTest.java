@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import org.csc335.entity.LeaderboardModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class LeaderboardModelTest {
     private Path leaderboardPath;

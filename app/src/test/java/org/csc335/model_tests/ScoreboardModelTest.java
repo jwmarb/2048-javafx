@@ -2,7 +2,7 @@ package org.csc335.model_tests;
 
 import org.csc335.interfaces.ScoreboardListener;
 import org.csc335.models.ScoreboardModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ScoreboardModelTest {
 
