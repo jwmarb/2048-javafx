@@ -1,6 +1,8 @@
 package org.csc335.model_tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -15,6 +17,8 @@ import org.csc335.models.GameBoardModel;
 import org.csc335.models.LeaderboardModel;
 import org.csc335.models.TileModel;
 import org.junit.jupiter.api.Test;
+
+import javafx.scene.control.skin.TextInputControlSkin.Direction;
 
 public class GameBoardModelTest {
 
@@ -57,6 +61,36 @@ public class GameBoardModelTest {
             updateBlankTiles(game);
             generateRandomValues(game);
             assertEquals(i, emptyTiles.size() - 1);
+        }
+    }
+
+    @Test
+    public void shiftTest() {
+        GameBoardModel model = new GameBoardModel(4);
+
+
+        try {
+            Method method = GameBoardModel.class.getDeclaredMethod("shift", Direction.class);
+            method.setAccessible(true);
+
+            // testing the shifts
+
+            for (Direction direction : Direction.values()) {
+                assert (boolean)method.invoke(model, direction) == true;
+                System.out.println("success");
+            }
+
+            assert (boolean)method.invoke(model, Direction.valueOf("abc")) == false;
+
+            /* 
+            assertTrue((boolean)method.invoke(model, Direction.RIGHT));
+            assertTrue((boolean)method.invoke(model, Direction.LEFT));
+            assertTrue((boolean)method.invoke(model, Direction.UP));
+            assertTrue((boolean)method.invoke(model, Direction.DOWN));
+            assertFalse((boolean)method.invoke(model, Direction.valueOf("abc")));
+            */
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
