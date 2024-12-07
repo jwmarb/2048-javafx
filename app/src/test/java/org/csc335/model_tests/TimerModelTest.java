@@ -37,13 +37,13 @@ public class TimerModelTest {
     public void testIsDone() {
         TimerModel model = new TimerModel();
 
-        assert (model.isDone() == true);
+        assert (model.isDone());
 
         try {
             Field field = TimerModel.class.getDeclaredField("isDone");
             field.setAccessible(true);
             field.set(model, false);
-            assert (model.isDone() == false);
+            assert (!model.isDone());
         } catch (Exception e) {
             e.printStackTrace();
         }
