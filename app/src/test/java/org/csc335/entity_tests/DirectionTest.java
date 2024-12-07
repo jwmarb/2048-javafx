@@ -17,5 +17,6 @@ public class DirectionTest {
     assertEquals(Direction.RIGHT, Direction.fromVal("D"));
     assertEquals(Direction.LEFT, Direction.fromVal("Left"));
     assertEquals(Direction.LEFT, Direction.fromVal("A"));
+    assertEquals(null, Direction.fromVal("n/a"));
   }
 }
