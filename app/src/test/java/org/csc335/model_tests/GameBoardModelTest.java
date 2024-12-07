@@ -17,21 +17,20 @@ import org.csc335.models.TileModel;
 import org.junit.jupiter.api.Test;
 
 public class GameBoardModelTest {
-    
+
     @Test
     public void testReset() {
 
     }
 
-        
     @Test
     public void testAddNewTiles() {
         GameBoardModel game = new GameBoardModel(4);
-        
+
         for (int i = 0; i < 14; i++) {
 
         }
-        
+
     }
 
     @Test
@@ -52,12 +51,12 @@ public class GameBoardModelTest {
 
         List<TileModel> emptyTiles = getEmptyTileList(game);
 
-        assert(emptyTiles.size() == 14);
+        assert (emptyTiles.size() == 14);
 
         for (int i = 13; i >= 0; i--) {
             updateBlankTiles(game);
             generateRandomValues(game);
-            assertEquals(i, emptyTiles.size()-1);
+            assertEquals(i, emptyTiles.size() - 1);
         }
     }
 

@@ -42,7 +42,7 @@ public class TileModelTest {
 
         for (int i = 0; i < values.length - 1; i++) {
             tile.setValue(values[i]);
-            assert (Optional.of(values[i+1]).equals(tile.getNextValue()));
+            assert (Optional.of(values[i + 1]).equals(tile.getNextValue()));
         }
     }
 
@@ -66,7 +66,7 @@ public class TileModelTest {
         int t4num = 0;
         int t2num = 0;
 
-        for (int i = 0; i < Integer.MAX_VALUE/4; i++) {
+        for (int i = 0; i < Integer.MAX_VALUE / 4; i++) {
             tile.random();
             if (tile.getNumericValue() == 2) {
                 t2num++;
