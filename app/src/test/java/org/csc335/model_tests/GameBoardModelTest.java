@@ -11,8 +11,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.csc335.entity.LeaderboardModel;
 import org.csc335.models.GameBoardModel;
+import org.csc335.models.LeaderboardModel;
 import org.csc335.models.TileModel;
 import org.junit.jupiter.api.Test;
 

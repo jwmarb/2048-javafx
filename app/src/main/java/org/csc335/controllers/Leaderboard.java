@@ -1,6 +1,6 @@
 package org.csc335.controllers;
 
-import org.csc335.entity.LeaderboardModel;
+import org.csc335.models.LeaderboardModel;
 import org.csc335.navigation.Navigation;
 import org.csc335.util.EZLoader;
 

@@ -1,4 +1,4 @@
-package org.csc335.entity_tests;
+package org.csc335.model_tests;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import org.csc335.entity.LeaderboardModel;
+import org.csc335.models.LeaderboardModel;
 import org.junit.jupiter.api.Test;
 
 public class LeaderboardModelTest {

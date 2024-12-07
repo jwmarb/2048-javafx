@@ -1,4 +1,4 @@
-package org.csc335.entity;
+package org.csc335.models;
 
 import java.util.Arrays;
 import java.util.Collections;
