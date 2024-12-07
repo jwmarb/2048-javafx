@@ -58,7 +58,7 @@ public class MoveCounterModel implements Resettable {
    *
    */
   public void reset() {
-    this.movesMade = 0;
+    this.setMovesMade(0);
   }
 
   /**
