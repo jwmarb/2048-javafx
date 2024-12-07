@@ -25,13 +25,16 @@ javafx {
 dependencies {
     // This dependency is used by the application.
     implementation libs.guava
+    testImplementation(platform('org.junit:junit-bom:5.11.3'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testRuntimeOnly('org.junit.platform:junit-platform-launcher')
 }
 
 testing {
     suites {
         // Configure the built-in test suite
         test {
-            useJUnitJupiter('5.8.1')
+            useJUnitJupiter('5.11.3')
         }
     }
 }
