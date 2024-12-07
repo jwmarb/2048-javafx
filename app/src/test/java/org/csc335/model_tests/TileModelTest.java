@@ -2,7 +2,7 @@ package org.csc335.model_tests;
 
 import org.csc335.entity.TileValue;
 import org.csc335.models.TileModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 

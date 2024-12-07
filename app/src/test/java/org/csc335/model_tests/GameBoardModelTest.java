@@ -1,6 +1,6 @@
 package org.csc335.model_tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import org.csc335.entity.LeaderboardModel;
 import org.csc335.models.GameBoardModel;
 import org.csc335.models.TileModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class GameBoardModelTest {
     
