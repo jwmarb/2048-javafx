@@ -13,7 +13,7 @@ import java.time.Duration;
 
 public class TimerModelTest {
   @Test
-  public void testDecrementSecondAndGetTimeLeft() {
+  public void testGetTimeLeft() {
     TimerModel model = new TimerModel();
 
     assert (model.getTimeLeft().toMinutes() == 15);
@@ -70,7 +70,7 @@ public class TimerModelTest {
   Duration time = Duration.ofMinutes(15);
 
   @Test
-  public void testHandleDurationChangeAndAddListener() {
+  public void testHandleDurationChange() {
     TimerModel model = new TimerModel();
 
     TimerListener listener = new TimerListener() {

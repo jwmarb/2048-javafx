@@ -25,7 +25,7 @@ public class GameModelTest {
     GameMode mode = GameMode.TRADITIONAL;
 
     @Test
-    public void testNotifyDependenciesAndAddListener() {
+    public void testNotifyDependencies() {
         GameModel model = new GameModel();
 
         GameListener listener = new GameListener() {
