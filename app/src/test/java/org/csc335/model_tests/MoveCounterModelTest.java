@@ -2,7 +2,7 @@ package org.csc335.model_tests;
 
 import org.csc335.interfaces.MoveCounterListener;
 import org.csc335.models.MoveCounterModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MoveCounterModelTest {
 

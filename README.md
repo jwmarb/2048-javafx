@@ -23,6 +23,30 @@
 
 Although it is a web application, we (a group of students at the time of creating this) wanted to recreate the game as a desktop application using JavaFX while being faithful to the original design and mechanics.
 
+## Features
+
+- 🎮 **Three Game Modes:**
+
+  - **Traditional Mode:** Experience the original challenge and aim to reach the number 2048.
+  - **Time Trial Mode:** Beat the game within a time limit and strive for the highest score before time runs out!
+  - **Move Limit Mode:** Challenge yourself with a limited number of moves and strategize wisely.
+
+- 🎮 **Keyboard Support:**
+
+  - Use **W, A, S, D** or **Arrow Keys** for seamless control over your tiles. Navigate through the board effortlessly!
+
+- 🏆 **Local Leaderboard Tracking:**
+
+  - Compete against yourself and track your top 10 best scores locally.
+  - Scores are persisted on disk, ensuring your achievements remain safe even after closing the game.
+
+- 🎨 **Robust UI/UX:**
+
+  - Enjoy an intuitive, smooth user experience with a visually appealing interface that stays true to the original game's design.
+
+- 🌐 **Offline-First Approach:**
+  - Play 2048 locally without the need for an internet connection. Engage in gameplay anytime, anywhere!
+
 ## OS Compatibility
 
 Due to the implementation of this being in Java, 2048FX is compatible on all operating systems that support Java: **Windows, Linux, MacOS**.
@@ -50,3 +74,18 @@ chmod +x ./gradlew && ./gradlew run
 ```
 
 After that, the desktop application should appear on your screen.
+
+## How to Play
+
+The controls are simple. You can use W, A, S, D or the arrow keys to move the tiles.
+
+- **W** / Up Arrow: Move all tiles upwards.
+- **A** / Left Arrow: Move all tiles to the left.
+- **S** / Down Arrow: Move all tiles downwards.
+- **D** / Right Arrow: Move all tiles to the right.
+
+Your goal is to combine the numbers on the tiles until you reach 2048. Each time two identical numbers collide, they merge into a tile with the value equal to their sum. The game ends when no more moves are possible.
+
+# Contributing
+
+See [CONTRIBUTING](/CONTRIBUTING.md).

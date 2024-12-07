@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.csc335.controllers.DrawerOption;
 import org.csc335.entity.GameMode;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class GameModeTest {
     

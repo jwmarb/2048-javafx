@@ -2,7 +2,7 @@ package org.csc335.model_tests;
 
 import org.csc335.entity.PressableVariant;
 import org.csc335.models.PressableModel;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PressableModelTest {
 
