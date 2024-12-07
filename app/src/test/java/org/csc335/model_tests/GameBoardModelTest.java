@@ -97,6 +97,8 @@ public class GameBoardModelTest {
     }
   }
 
+
+  /*
   @Test
   public void gameEndTest() {
     GameBoardModel model = new GameBoardModel(4);
@@ -137,6 +139,103 @@ public class GameBoardModelTest {
     } catch (Exception e) {
         System.out.println(e);
     }
+  }
+  */
+
+  @Test
+  public void testGameEndLose() {
+    GameBoardModel game = new GameBoardModel(4);
+    TileModel[][] actualBoard = forceGameStartState(game);
+
+    gameAlmostOver(actualBoard);
+    // 1024 512  1024 512
+    // 512  1024 512  1024
+    // 1024 512  1024 512
+    // 256  128  64
+    actualBoard[3][2].setValue(TileValue.T64);
+
+    shift(game, Direction.LEFT);
+    assert (actualBoard[3][3].isBlank());
+
+    shift(game, Direction.RIGHT);
+    assert (!actualBoard[3][0].isBlank());
+
+    assert (isGameOver(game));
+  }
+
+  @Test
+  public void testGameEndWin() {
+    GameBoardModel game = new GameBoardModel(4);
+    TileModel[][] actualBoard = forceGameStartState(game);
+
+    gameAlmostOver(actualBoard);
+    // 1024 512  1024 512
+    // 512  1024 512  1024
+    // 1024 512  1024 512
+    // 256  128  1024
+    actualBoard[3][2].setValue(TileValue.T1024);
+
+    shift(game, Direction.UP);
+
+    assert (actualBoard[2][2].getNumericValue() == 2048);
+  }
+
+  @Test
+  public void testKeyStrokeRecording() {
+    GameBoardModel game = new GameBoardModel(4);
+
+    assert(game.shouldRecordKeystrokes());
+
+    game.disableKeystrokeRecording();
+    assert(!game.shouldRecordKeystrokes());
+    
+    game.enableKeystrokeRecording();
+    assert(game.shouldRecordKeystrokes());
+  }
+
+  private void gameAlmostOver(TileModel[][] actualBoard) {
+    actualBoard[0][0].setValue(TileValue.T1024);
+    actualBoard[0][1].setValue(TileValue.T512);
+    actualBoard[0][2].setValue(TileValue.T1024);
+    actualBoard[0][3].setValue(TileValue.T512);
+    // 1024 512 1024 512
+
+    actualBoard[1][0].setValue(TileValue.T512);
+    actualBoard[1][1].setValue(TileValue.T1024);
+    actualBoard[1][2].setValue(TileValue.T512);
+    actualBoard[1][3].setValue(TileValue.T1024);
+    // 512 1024 512 1024
+
+    actualBoard[2][0].setValue(TileValue.T1024);
+    actualBoard[2][1].setValue(TileValue.T512);
+    actualBoard[2][2].setValue(TileValue.T1024);
+    actualBoard[2][3].setValue(TileValue.T512);
+    // 1024 512 1024 512
+
+    actualBoard[3][0].setValue(TileValue.T256);
+    actualBoard[3][1].setValue(TileValue.T128);
+    // 256 128
+  }
+
+  private void shift(GameBoardModel game, Direction d) {
+    try {
+      Method method = GameBoardModel.class.getDeclaredMethod("handleDirection", Direction.class);
+      method.setAccessible(true);
+      method.invoke(game, d);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  private boolean isGameOver(GameBoardModel game) {
+    try {
+      Method method = GameBoardModel.class.getDeclaredMethod("testGameEndMethod");
+      method.setAccessible(true);
+      return (boolean) method.invoke(game);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
   private List<TileModel> getEmptyTileList(GameBoardModel game) {
