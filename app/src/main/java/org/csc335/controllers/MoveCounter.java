@@ -1,8 +1,5 @@
 package org.csc335.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.csc335.interfaces.MoveCounterListener;
 import org.csc335.interfaces.Resettable;
 import org.csc335.models.MoveCounterModel;

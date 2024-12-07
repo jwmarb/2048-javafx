@@ -2,8 +2,6 @@ package org.csc335.entity;
 
 import java.util.Optional;
 
-import org.csc335.controllers.Tile;
-
 /**
  * Enum representing possible values for tiles in 2048.
  */
