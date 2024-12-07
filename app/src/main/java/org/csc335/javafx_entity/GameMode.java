@@ -1,4 +1,4 @@
-package org.csc335.entity;
+package org.csc335.javafx_entity;
 
 import org.csc335.controllers.DrawerOption;
 import org.csc335.controllers.FAIcon;

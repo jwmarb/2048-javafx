@@ -1,6 +1,6 @@
 package org.csc335.controllers;
 
-import org.csc335.entity.GameMode;
+import org.csc335.javafx_entity.GameMode;
 import org.csc335.util.EZLoader;
 
 import javafx.fxml.FXML;

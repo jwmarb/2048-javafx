@@ -1,7 +1,7 @@
 package org.csc335.models;
 
-import org.csc335.entity.GameMode;
 import org.csc335.interfaces.DrawerOptionListener;
+import org.csc335.javafx_entity.GameMode;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

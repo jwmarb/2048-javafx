@@ -1,8 +1,8 @@
 package org.csc335.controllers;
 
-import org.csc335.entity.GameMode;
 import org.csc335.interfaces.DrawerMenuActionListener;
 import org.csc335.interfaces.GameListener;
+import org.csc335.javafx_entity.GameMode;
 import org.csc335.models.GameLogoModel;
 import org.csc335.util.EZLoader;
 

@@ -1,4 +1,4 @@
-package org.csc335.entity;
+package org.csc335.javafx_entity;
 
 import java.util.Optional;
 
