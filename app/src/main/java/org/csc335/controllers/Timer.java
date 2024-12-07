@@ -5,6 +5,11 @@ import org.csc335.interfaces.TimerListener;
 import org.csc335.models.TimerModel;
 import org.csc335.util.EZLoader;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -18,12 +23,17 @@ public class Timer extends HBox {
 
   private TimerModel model;
 
+  private Timeline timer;
+
   public Timer() {
     super(); // Initialize the superclass components.
     EZLoader.load(this, Timer.class); // Load resources and settings specific to the Timer class.
     this.model = new TimerModel(); // Create a new instance of the TimerModel to manage timer data.
     this.model.addListener(new TimerListener() { // Add a listener to the model to handle timer changes.
       public void timerChanged(Duration timeLeft) { // This method is called when the timer value changes.
+        if (timeLeft.isZero()) {
+          Timer.this.stopTimer();
+        }
         Timer.this.timerLabel.setText(Timer.this.getTime(timeLeft)); // Update the timer label with the new time.
         if (timeLeft.getSeconds() <= 60 && !Timer.this.timerLabel.getStyleClass().contains(TIMERWARNING)) {
           // If time left is 60 seconds or less and the warning style is not already
@@ -37,6 +47,25 @@ public class Timer extends HBox {
     });
     this.timerLabel.setText(this.getTime(this.model.getTimeLeft())); // Initialize the timer label with the current
                                                                      // time.
+
+    // Set up a timeline to decrement the timer every second.
+    this.timer = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), ev -> {
+      this.model.decrementSecond();
+    }));
+
+    // Define the action to take when the timer finishes.
+    this.timer.setOnFinished(new EventHandler<ActionEvent>() {
+
+      @Override
+      public void handle(ActionEvent event) {
+        // Mark the timer as done when it finishes.
+        Timer.this.model.setIsDone(true);
+      }
+
+    });
+
+    // Set the timer to repeat indefinitely.
+    this.timer.setCycleCount(Animation.INDEFINITE);
   }
 
   /**
@@ -68,7 +97,8 @@ public class Timer extends HBox {
    * @post The timer begins counting down
    */
   public void startTimer() {
-    this.model.start();
+    this.timer.play();
+    this.model.setIsDone(false);
   }
 
   /**
@@ -88,7 +118,8 @@ public class Timer extends HBox {
    * @pre The timer is running
    */
   public void stopTimer() {
-    this.model.stop();
+    this.timer.stop();
+    this.model.setIsDone(true);
   }
 
   /**

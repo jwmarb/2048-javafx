@@ -7,12 +7,6 @@ import java.util.List;
 import org.csc335.interfaces.Resettable;
 import org.csc335.interfaces.TimerListener;
 
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-
 /**
  * Represents a timer model that manages a countdown timer with the ability to
  * start, stop, reset, and notify listeners of time changes.
@@ -26,8 +20,6 @@ public class TimerModel implements Resettable {
 
   private Duration duration;
 
-  private Timeline timer;
-
   private boolean isDone;
 
   public TimerModel() {
@@ -37,27 +29,19 @@ public class TimerModel implements Resettable {
     // Create a list to hold listeners for timer events.
     this.listeners = new ArrayList<>();
 
-    // Set up a timeline to decrement the timer every second.
-    this.timer = new Timeline(new KeyFrame(javafx.util.Duration.seconds(1), ev -> {
-      this.decrementSecond();
-    }));
-
-    // Define the action to take when the timer finishes.
-    this.timer.setOnFinished(new EventHandler<ActionEvent>() {
-
-      @Override
-      public void handle(ActionEvent event) {
-        // Mark the timer as done when it finishes.
-        TimerModel.this.isDone = true;
-      }
-
-    });
-
-    // Set the timer to repeat indefinitely.
-    this.timer.setCycleCount(Animation.INDEFINITE);
-
     // Reset the timer to its default duration.
     this.reset();
+  }
+
+  /**
+   * Sets the completion status of the TimerModel.
+   *
+   * @param isDone The new completion status for the TimerModel. True if the task
+   *               associated with this model is considered completed, false
+   *               otherwise.
+   */
+  public void setIsDone(boolean isDone) {
+    this.isDone = isDone;
   }
 
   /**
@@ -76,7 +60,7 @@ public class TimerModel implements Resettable {
    * @post The duration is reduced by one second; handleDurationChange() is
    *       invoked to process the change.
    */
-  private void decrementSecond() {
+  public void decrementSecond() {
     this.duration = this.duration.minusSeconds(1);
     this.handleDurationChange();
   }
@@ -105,28 +89,6 @@ public class TimerModel implements Resettable {
   }
 
   /**
-   * Stops the timer and marks it as done.
-   *
-   * @pre The timer is currently running.
-   * @post The timer has been stopped and isDone is set to true.
-   */
-  public void stop() {
-    this.timer.stop();
-    this.isDone = true;
-  }
-
-  /**
-   * Starts the timer.
-   *
-   * @pre The timer is in a stopped state.
-   * @post The timer is started and isDone is set to false.
-   */
-  public void start() {
-    this.timer.play();
-    this.isDone = false;
-  }
-
-  /**
    * Handles the change in the duration of the timer.
    * If the duration is zero, the timer is stopped.
    * Notifies all registered TimerListeners about the change in the timer
@@ -137,9 +99,6 @@ public class TimerModel implements Resettable {
    *       of the duration change.
    */
   private void handleDurationChange() {
-    if (this.duration.isZero()) {
-      this.stop();
-    }
     for (TimerListener listener : this.listeners) {
       listener.timerChanged(this.duration);
     }
