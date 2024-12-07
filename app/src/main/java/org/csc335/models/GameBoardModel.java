@@ -159,13 +159,15 @@ public class GameBoardModel implements Resettable {
     // Check if the logger is in development mode. If true, print the board to the
     // console.
     if (Logger.isDevelopment()) {
-      // Print the top border of the board.
-      System.out.println("+----+----+----+----+");
+      String boardString = "";
+
+      // top border of the board.
+      boardString += "+----+----+----+----+\n";
 
       // Iterate over each row of the board.
       for (int row = 0; row < board.length; row++) {
-        // Print the left border of the current row.
-        System.out.print("|");
+        // left border of the current row.
+        boardString += "|";
 
         // Iterate over each column within the current row.
         for (int col = 0; col < board[row].length; col++) {
@@ -175,13 +177,14 @@ public class GameBoardModel implements Resettable {
 
           String tileValue = value.isEmpty() ? "" : value.get().toString();
 
-          // Print the value, padded to 4 characters, followed by the column separator.
-          System.out.printf("%4s|", tileValue);
+          // value, padded to 4 characters, followed by the column separator.
+          boardString += String.format("%4s|", tileValue);
         }
 
-        // Move to the next row and print the row's bottom border.
-        System.out.println("\n+----+----+----+----+");
+        // Move to the next row and put the row's bottom border.
+        boardString += "\n+----+----+----+----+\n";
       }
+      System.out.println(boardString);
     }
   }
 
