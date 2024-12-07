@@ -2,7 +2,6 @@ package org.csc335.controllers;
 
 import java.time.Duration;
 
-import org.csc335.entity.GameMode;
 import org.csc335.interfaces.DialogActionCallback;
 import org.csc335.interfaces.DialogActionListener;
 import org.csc335.interfaces.DrawerMenuActionListener;
@@ -11,6 +10,7 @@ import org.csc335.interfaces.GameBoardListener;
 import org.csc335.interfaces.GameListener;
 import org.csc335.interfaces.MoveCounterListener;
 import org.csc335.interfaces.TimerListener;
+import org.csc335.javafx_entity.GameMode;
 import org.csc335.models.GameModel;
 import org.csc335.navigation.Navigation;
 import org.csc335.util.EZLoader;

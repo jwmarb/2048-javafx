@@ -3,8 +3,8 @@ package org.csc335.models;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.csc335.entity.GameMode;
 import org.csc335.interfaces.GameListener;
+import org.csc335.javafx_entity.GameMode;
 
 /**
  * Represents the model component of the 2048 game, managing the game's state

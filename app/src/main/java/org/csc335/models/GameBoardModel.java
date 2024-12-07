@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.csc335.entity.Audio;
 import org.csc335.entity.Direction;
 import org.csc335.entity.TileValue;
 import org.csc335.interfaces.GameBoardListener;
 import org.csc335.interfaces.Resettable;
+import org.csc335.javafx_entity.Audio;
 import org.csc335.util.Logger;
 
 import javafx.beans.property.IntegerProperty;

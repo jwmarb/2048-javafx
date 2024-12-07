@@ -4,8 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.time.Duration;
 
-import org.csc335.entity.GameMode;
 import org.csc335.interfaces.GameListener;
+import org.csc335.javafx_entity.GameMode;
 import org.csc335.models.GameModel;
 import org.csc335.models.TimerModel;
 import org.junit.jupiter.api.Test;
